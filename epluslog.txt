@@ -16,7 +16,7 @@ IDD file    : C:\EnergyPlusV9-2-0\Energy+.idd
 Weather File: C:\EnergyPlusV9-2-0\WeatherData\ITA_TORINO-CASELLE_IGDG.epw
 Begin EnergyPlus processing . . . 
 EnergyPlus Starting
-EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.03.24 17:20
+EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.03.24 17:24
 Initializing Response Factors
 Calculating CTFs for "PAVIMENTO", Construction # 1
 Calculating CTFs for "PAVIMENTO", Construction # 1
@@ -38,3 +38,143 @@ Calculating CTFs for "PARETE 4", Construction # 4
 Calculating CTFs for "PARETE 4", Construction # 4
 Calculating CTFs for "PARETE 4", Construction # 4
 Calculating CTFs for "PARETE 4", Construction # 4
+Calculating CTFs for "PARETE 5", Construction # 5
+Calculating CTFs for "PARETE 5", Construction # 5
+Calculating CTFs for "PARETE 5", Construction # 5
+Calculating CTFs for "PARETE 5", Construction # 5
+Calculating CTFs for "PARETE 6", Construction # 6
+Calculating CTFs for "PARETE 6", Construction # 6
+Calculating CTFs for "PARETE 6", Construction # 6
+Calculating CTFs for "PARETE 6", Construction # 6
+Calculating CTFs for "PARETE 6", Construction # 6
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 7", Construction # 7
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 8", Construction # 8
+Calculating CTFs for "PARETE 9", Construction # 9
+Calculating CTFs for "PARETE 9", Construction # 9
+Calculating CTFs for "PARETE 9", Construction # 9
+Calculating CTFs for "PARETE 9", Construction # 9
+Calculating CTFs for "PARETE 10", Construction # 10
+Calculating CTFs for "PARETE 10", Construction # 10
+Calculating CTFs for "PARETE 10", Construction # 10
+Calculating CTFs for "PARETE 10", Construction # 10
+Calculating CTFs for "PARETE 10", Construction # 10
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 11", Construction # 11
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 12", Construction # 12
+Calculating CTFs for "PARETE 13", Construction # 13
+Calculating CTFs for "PARETE 13", Construction # 13
+Calculating CTFs for "PARETE 13", Construction # 13
+Calculating CTFs for "PARETE SC - AS2", Construction # 14
+Calculating CTFs for "PARETE SC - AS2", Construction # 14
+Calculating CTFs for "PARETE SC - AS2", Construction # 14
+Calculating CTFs for "PARETE SC - AS2", Construction # 14
+Calculating CTFs for "PARETE SC - AS2", Construction # 14
+Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
+Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
+Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
+Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
+Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
+Calculating CTFs for "PARETE AS1 - LT", Construction # 18
+Calculating CTFs for "PARETE AS1 - LT", Construction # 18
+Calculating CTFs for "PARETE AS1 - LT", Construction # 18
+Calculating CTFs for "PARETE AS1 - LT", Construction # 18
+Calculating CTFs for "PORTONE IN LEGNO", Construction # 23
+Initializing Window Optical Properties
+Initializing Solar Calculations
+Allocate Solar Module Arrays
+Initializing Zone and Enclosure Report Variables
+Initializing Surface (Shading) Report Variables
+Computing Interior Solar Absorption Factors
+Determining Shadowing Combinations
+Computing Window Shade Absorption Factors
+Proceeding with Initializing Solar Calculations
+Initializing Surfaces
+Initializing Outdoor environment for Surfaces
+Setting up Surface Reporting Variables
+Initializing Temperature and Flux Histories
+Initializing Window Shading
+Computing Interior Absorption Factors
+Computing Interior Diffuse Solar Absorption Factors
+Computing Interior Diffuse Solar Exchange through Interzone Windows
+Initializing Solar Heat Gains
+Initializing Internal Heat Gains
+Initializing Interior Solar Distribution
+Initializing Interior Convection Coefficients
+Gathering Information for Predefined Reporting
+Completed Initializing Surface Heat Balance
+Calculate Outside Surface Heat Balance
+Calculate Inside Surface Heat Balance
+Calculate Air Heat Balance
+Initializing HVAC
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Performing Zone Sizing Simulation
+...for Sizing Period: #1 INVERNO
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Warming up
+Performing Zone Sizing Simulation
+...for Sizing Period: #2 ESTATE
+Adjusting Air System Sizing
+Adjusting Standard 62.1 Ventilation Sizing
+Initializing Simulation
+Reporting Surfaces
+Beginning Primary Simulation
+Initializing New Environment Parameters
+Warming up {1}
+Instantiating Building Controls Virtual Test Bed
+ExternalInterface initializes.
+Number of outputs in ExternalInterface = 16
+Number of inputs  in ExternalInterface = 5
+Warming up {2}
+Warming up {3}
+Warming up {4}
+Warming up {5}
+Warming up {6}
+Starting Simulation at 06/01/2010 for TYPOYEAR
+ExternalInterface starts first data exchange.
+Continuing Simulation at 06/14/2010 for TYPOYEAR
+Continuing Simulation at 06/28/2010 for TYPOYEAR
+Continuing Simulation at 07/12/2010 for TYPOYEAR
+Continuing Simulation at 07/26/2010 for TYPOYEAR
+Continuing Simulation at 08/09/2010 for TYPOYEAR
