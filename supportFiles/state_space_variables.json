@@ -1,0 +1,23 @@
+{
+  "eplus_observations": {
+    "outdoor_air_temperature": "True",
+    "ambient_air_temperature": "False",
+    "storage_soc": "True",
+    "cooling_load": "True",
+    "electricity_price": "True",
+    "pv_power_generation": "True",
+    "auxiliary_load": "True",
+    "battery_soc": "True"
+  },
+  "lagged_observations": {
+    "storage_soc": 2
+  },
+  "predicted_observations": {
+    "horizon": 24,
+    "variables": [
+      "electricity_price",
+      "cooling_load",
+      "pv_power_generation"
+    ]
+  }
+}

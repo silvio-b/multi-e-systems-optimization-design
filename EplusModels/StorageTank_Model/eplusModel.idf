@@ -1,0 +1,3618 @@
+!- Windows Line endings 
+
+Version,
+    9.2;                      !- Version Identifier
+
+SimulationControl,
+    Yes,                      !- Do Zone Sizing Calculation
+    Yes,                      !- Do System Sizing Calculation
+    Yes,                      !- Do Plant Sizing Calculation
+    No,                       !- Run Simulation for Sizing Periods
+    Yes;                      !- Run Simulation for Weather File Run Periods
+
+Building,
+    PVZEN,                    !- Name
+    26,                       !- North Axis
+    ,                         !- Terrain
+    ,                         !- Loads Convergence Tolerance Value
+    ,                         !- Temperature Convergence Tolerance Value
+    ,                         !- Solar Distribution
+    ,                         !- Maximum Number of Warmup Days
+    ;                         !- Minimum Number of Warmup Days
+
+ShadowCalculation,
+    TimestepFrequency,        !- Calculation Method
+    ,                         !- Calculation Frequency
+    15000,                    !- Maximum Figures in Shadow Overlap Calculations
+    SutherlandHodgman,        !- Polygon Clipping Algorithm
+    SimpleSkyDiffuseModeling;    !- Sky Diffuse Modeling Algorithm
+
+Timestep,
+    12;                       !- Number of Timesteps per Hour
+
+ConvergenceLimits,
+    1,                        !- Minimum System Timestep
+    500,                      !- Maximum HVAC Iterations
+    200,                      !- Minimum Plant Iterations
+    800;                      !- Maximum Plant Iterations
+
+Site:Location,
+    Turin,                    !- Name
+    45.0657,                  !- Latitude
+    7.6584,                   !- Longitude
+    1,                        !- Time Zone
+    0;                        !- Elevation
+
+SizingPeriod:DesignDay,
+    Inverno,                  !- Name
+    1,                        !- Month
+    13,                       !- Day of Month
+    WinterDesignDay,          !- Day Type
+    -8,                       !- Maximum DryBulb Temperature
+    0,                        !- Daily DryBulb Temperature Range
+    DefaultMultipliers,       !- DryBulb Temperature Range Modifier Type
+    ,                         !- DryBulb Temperature Range Modifier Day Schedule Name
+    WetBulb,                  !- Humidity Condition Type
+    -8.5,                     !- Wetbulb or DewPoint at Maximum DryBulb
+    ,                         !- Humidity Condition Day Schedule Name
+    ,                         !- Humidity Ratio at Maximum DryBulb
+    ,                         !- Enthalpy at Maximum DryBulb
+    ,                         !- Daily WetBulb Temperature Range
+    ,                         !- Barometric Pressure
+    0.8,                      !- Wind Speed
+    26,                       !- Wind Direction
+    No,                       !- Rain Indicator
+    No,                       !- Snow Indicator
+    No,                       !- Daylight Saving Time Indicator
+    ASHRAEClearSky,           !- Solar Model Indicator
+    ,                         !- Beam Solar Day Schedule Name
+    ,                         !- Diffuse Solar Day Schedule Name
+    ,                         !- ASHRAE Clear Sky Optical Depth for Beam Irradiance taub
+    ,                         !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance taud
+    0;                        !- Sky Clearness
+
+SizingPeriod:DesignDay,
+    Estate,                   !- Name
+    7,                        !- Month
+    22,                       !- Day of Month
+    SummerDesignDay,          !- Day Type
+    30.8,                     !- Maximum DryBulb Temperature
+    11,                       !- Daily DryBulb Temperature Range
+    DefaultMultipliers,       !- DryBulb Temperature Range Modifier Type
+    ,                         !- DryBulb Temperature Range Modifier Day Schedule Name
+    WetBulb,                  !- Humidity Condition Type
+    23,                       !- Wetbulb or DewPoint at Maximum DryBulb
+    ,                         !- Humidity Condition Day Schedule Name
+    ,                         !- Humidity Ratio at Maximum DryBulb
+    ,                         !- Enthalpy at Maximum DryBulb
+    ,                         !- Daily WetBulb Temperature Range
+    ,                         !- Barometric Pressure
+    0.8,                      !- Wind Speed
+    26,                       !- Wind Direction
+    No,                       !- Rain Indicator
+    No,                       !- Snow Indicator
+    No,                       !- Daylight Saving Time Indicator
+    ASHRAEClearSky,           !- Solar Model Indicator
+    ,                         !- Beam Solar Day Schedule Name
+    ,                         !- Diffuse Solar Day Schedule Name
+    ,                         !- ASHRAE Clear Sky Optical Depth for Beam Irradiance taub
+    ,                         !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance taud
+    1;                        !- Sky Clearness
+
+RunPeriod,
+    TypoYear,                 !- Name
+    6,                        !- Begin Month
+    1,                        !- Begin Day of Month
+    ,                         !- Begin Year
+    8,                        !- End Month
+    29,                       !- End Day of Month
+    ,                         !- End Year
+    Tuesday,                  !- Day of Week for Start Day
+    No,                       !- Use Weather File Holidays and Special Days
+    No,                       !- Use Weather File Daylight Saving Period
+    No,                       !- Apply Weekend Holiday Rule
+    Yes,                      !- Use Weather File Rain Indicators
+    Yes;                      !- Use Weather File Snow Indicators
+
+ScheduleTypeLimits,
+    Fraction,                 !- Name
+    0,                        !- Lower Limit Value
+    1,                        !- Upper Limit Value
+    Continuous,               !- Numeric Type
+    Dimensionless;            !- Unit Type
+
+ScheduleTypeLimits,
+    Temperatura,              !- Name
+    0,                        !- Lower Limit Value
+    50,                       !- Upper Limit Value
+    Continuous,               !- Numeric Type
+    Temperature;              !- Unit Type
+
+ScheduleTypeLimits,
+    Temperature,              !- Name
+    -60,                      !- Lower Limit Value
+    200,                      !- Upper Limit Value
+    CONTINUOUS,               !- Numeric Type
+    Temperature;              !- Unit Type
+
+ScheduleTypeLimits,
+    Control Type,             !- Name
+    0,                        !- Lower Limit Value
+    4,                        !- Upper Limit Value
+    DISCRETE;                 !- Numeric Type
+
+ScheduleTypeLimits,
+    On/Off,                   !- Name
+    0,                        !- Lower Limit Value
+    1,                        !- Upper Limit Value
+    DISCRETE;                 !- Numeric Type
+
+ScheduleTypeLimits,
+    Any Number;               !- Name
+
+ScheduleTypeLimits,
+    HumidityRatio,            !- Name
+    0.0001,                   !- Lower Limit Value
+    0.012,                    !- Upper Limit Value
+    CONTINUOUS;               !- Numeric Type
+
+Schedule:Compact,
+    AS OCCUPANCY SCHEDULE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:30,              !- Field 3
+    0.0,                      !- Field 4
+    Until:18:00,              !- Field 5
+    1.0,                      !- Field 6
+    Until:24:00,              !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
+    Until:24:00,              !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    SC OCCUPANCY SCHEDULE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:30,              !- Field 3
+    0.0,                      !- Field 4
+    Until:18:00,              !- Field 5
+    1.0,                      !- Field 6
+    Until:24:00,              !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
+    Until:24:00,              !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    HVAC OPERATION SCHEDULE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:30,              !- Field 3
+    0.0,                      !- Field 4
+    Until:18:00,              !- Field 5
+    1.0,                      !- Field 6
+    Until:24:00,              !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
+    Until:24:00,              !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    AS INFILTRATION SCHEDULE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:30,              !- Field 3
+    1.0,                      !- Field 4
+    Until:18:00,              !- Field 5
+    0.0,                      !- Field 6
+    Until:24:00,              !- Field 7
+    1.0,                      !- Field 8
+    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
+    Until:24:00,              !- Field 10
+    1.0;                      !- Field 11
+
+Schedule:Compact,
+    AS ELEC_HEATGAINS SCHEDULE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:30,              !- Field 3
+    0.0,                      !- Field 4
+    Until:18:00,              !- Field 5
+    1.0,                      !- Field 6
+    Until:24:00,              !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
+    Until:24:00,              !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    SC ELEC_HEATGAINS SCHEDULE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:30,              !- Field 3
+    0.0,                      !- Field 4
+    Until:18:00,              !- Field 5
+    1.0,                      !- Field 6
+    Until:24:00,              !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
+    Until:24:00,              !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    ActivityLevel,            !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Alldays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    126.00;                   !- Field 4
+
+Schedule:Compact,
+    OFF,                      !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Alldays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    0.00;                     !- Field 4
+
+Schedule:Compact,
+    ON,                       !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Alldays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    1.00;                     !- Field 4
+
+Schedule:Compact,
+    ChW LOOP TEMP SCHEDULE,    !- Name
+    TEMPERATURE,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Alldays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    7;                        !- Field 4
+
+Schedule:Compact,
+    HW LOOP TEMP SCHEDULE,    !- Name
+    TEMPERATURE,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Alldays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    50.00;                    !- Field 4
+
+Schedule:Compact,
+    HEATING SETPOINTS,        !- Name
+    TEMPERATURE,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays Weekends Holidays CustomDay1 CustomDay2,    !- Field 2
+    Until: 7:00,              !- Field 3
+    17.00,                    !- Field 4
+    Until: 18:00,             !- Field 5
+    20.00,                    !- Field 6
+    Until: 24:00,             !- Field 7
+    17.00,                    !- Field 8
+    For: SummerDesignDay,     !- Field 9
+    Until: 24:00,             !- Field 10
+    17.00,                    !- Field 11
+    For: WinterDesignDay,     !- Field 12
+    Until: 24:00,             !- Field 13
+    20.00;                    !- Field 14
+
+Schedule:Compact,
+    COOLING SETPOINTS,        !- Name
+    TEMPERATURE,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays Weekends Holidays CustomDay1 CustomDay2,    !- Field 2
+    Until: 7:00,              !- Field 3
+    30.00,                    !- Field 4
+    Until: 18:00,             !- Field 5
+    26.00,                    !- Field 6
+    Until: 24:00,             !- Field 7
+    30.00,                    !- Field 8
+    For: SummerDesignDay,     !- Field 9
+    Until: 24:00,             !- Field 10
+    26.00,                    !- Field 11
+    For: WinterDesignDay,     !- Field 12
+    Until: 24:00,             !- Field 13
+    50.00;                    !- Field 14
+
+Schedule:Compact,
+    ZONE CONTROL TYPE SCHED,    !- Name
+    CONTROL TYPE,             !- Schedule Type Limits Name
+    Through: 3/31,            !- Field 1
+    For: Alldays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    1,                        !- Field 4
+    Through: 9/30,            !- Field 5
+    For: Alldays,             !- Field 6
+    Until: 24:00,             !- Field 7
+    2,                        !- Field 8
+    Through: 12/31,           !- Field 9
+    For: Alldays,             !- Field 10
+    Until: 24:00,             !- Field 11
+    1;                        !- Field 12
+
+Schedule:Compact,
+    ChW Loop Availability Schedule,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through 05/31,            !- Field 1
+    For AllDays,              !- Field 2
+    Until 24:00,              !- Field 3
+    0,                        !- Field 4
+    Through 09/15,            !- Field 5
+    For AllDays,              !- Field 6
+    Until 24:00,              !- Field 7
+    1,                        !- Field 8
+    Through 12/31,            !- Field 9
+    For AllDays,              !- Field 10
+    Until 24:00,              !- Field 11
+    0;                        !- Field 12
+
+Schedule:Compact,
+    HW Loop Availability Schedule,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    Through 04/01,            !- Field 1
+    For AllDays,              !- Field 2
+    Until 24:00,              !- Field 3
+    1,                        !- Field 4
+    Through 10/15,            !- Field 5
+    For AllDays,              !- Field 6
+    Until 24:00,              !- Field 7
+    0,                        !- Field 8
+    Through 12/31,            !- Field 9
+    For AllDays,              !- Field 10
+    Until 24:00,              !- Field 11
+    1;                        !- Field 12
+
+Schedule:Compact,
+    StorageTank Temp Schedule,    !- Name
+    Temperature,              !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    10;                       !- Field 4
+
+Schedule:Compact,
+    Chiller Schedule,         !- Name
+    on/off,                   !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:00,              !- Field 3
+    1.0,                      !- Field 4
+    Until: 10:00,             !- Field 5
+    0.0,                      !- Field 6
+    Until: 24:00,             !- Field 7
+    1.0,                      !- Field 8
+    For: Weekends Holidays,    !- Field 9
+    Until: 24:00,             !- Field 10
+    0.0,                      !- Field 11
+    For: WinterDesignDay,     !- Field 12
+    Until: 24:00,             !- Field 13
+    0.0;                      !- Field 14
+
+Schedule:Compact,
+    TES Charge Schedule,      !- Name
+    on/off,                   !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 0:00,              !- Field 3
+    0.0,                      !- Field 4
+    Until: 8:00,              !- Field 5
+    1.0,                      !- Field 6
+    Until: 10:00,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 19:00,             !- Field 9
+    0.0,                      !- Field 10
+    Until: 24:00,             !- Field 11
+    0.0,                      !- Field 12
+    For: Weekends Holidays WinterDesignDay,    !- Field 13
+    Until: 24:00,             !- Field 14
+    0.0;                      !- Field 15
+
+Schedule:Compact,
+    TES ChargeFlow Schedule,    !- Name
+    on/off,                   !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 2:00,              !- Field 3
+    0.1,                      !- Field 4
+    Until: 8:00,              !- Field 5
+    0.5,                      !- Field 6
+    Until: 10:00,             !- Field 7
+    0.0,                      !- Field 8
+    Until: 19:00,             !- Field 9
+    0.0,                      !- Field 10
+    Until: 24:00,             !- Field 11
+    0.0,                      !- Field 12
+    For: Weekends Holidays WinterDesignDay,    !- Field 13
+    Until: 24:00,             !- Field 14
+    0.0;                      !- Field 15
+
+Schedule:Compact,
+    TES Discharge Schedule,    !- Name
+    on/off,                   !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: Weekdays SummerDesignDay,    !- Field 2
+    Until: 8:00,              !- Field 3
+    0.0,                      !- Field 4
+    Until: 10:00,             !- Field 5
+    1.0,                      !- Field 6
+    Until: 24:00,             !- Field 7
+    0.0,                      !- Field 8
+    For: Weekends Holidays WinterDesignDay AllOtherDays,    !- Field 9
+    Until: 24:00,             !- Field 10
+    0.0;                      !- Field 11
+
+Schedule:Compact,
+    PlantHPWHSch,             !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    1.0;                      !- Field 4
+
+Schedule:Compact,
+    PlantHPWHTempSch,         !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    60.0;                     !- Field 4
+
+Schedule:Compact,
+    Plant Hot Water Setpoint Temp Schedule,    !- Name
+    Any Number,               !- Schedule Type Limits Name
+    Through: 12/31,           !- Field 1
+    For: AllDays,             !- Field 2
+    Until: 24:00,             !- Field 3
+    50.0;                     !- Field 4
+
+Schedule:Constant,
+    IDEAL LOAD SCHEDULE,      !- Name
+    Any Number,               !- Schedule Type Limits Name
+    -10000;                   !- Hourly Value
+
+Schedule:Constant,
+    NULL LOAD SCHEDULE,       !- Name
+    Any Number,               !- Schedule Type Limits Name
+    1;                        !- Hourly Value
+
+Schedule:Constant,
+    IDEAL FLOWfrac SCHEDULE,    !- Name
+    Any Number,               !- Schedule Type Limits Name
+    1;                        !- Hourly Value
+
+Schedule:Constant,
+    EP FLOWFRACTION TO STORAGE,    !- Name
+    Any Number,               !- Schedule Type Limits Name
+    1;                        !- Hourly Value
+
+Material,
+    Pavimento flottante laminato,    !- Name
+    MediumSmooth,             !- Roughness
+    0.03,                     !- Thickness
+    0.15,                     !- Conductivity
+    720,                      !- Density
+    1610;                     !- Specific Heat
+
+Material,
+    Membrana freno vapore,    !- Name
+    MediumSmooth,             !- Roughness
+    0.0004,                   !- Thickness
+    0.17,                     !- Conductivity
+    275,                      !- Density
+    1000;                     !- Specific Heat
+
+Material,
+    OSB 18,                   !- Name
+    MediumSmooth,             !- Roughness
+    0.018,                    !- Thickness
+    0.12,                     !- Conductivity
+    640,                      !- Density
+    1700;                     !- Specific Heat
+
+Material,
+    Fibra di legno Plus 40,    !- Name
+    MediumSmooth,             !- Roughness
+    0.04,                     !- Thickness
+    0.04,                     !- Conductivity
+    150,                      !- Density
+    2400;                     !- Specific Heat
+
+Material,
+    CLT 260,                  !- Name
+    MediumSmooth,             !- Roughness
+    0.26,                     !- Thickness
+    0.13,                     !- Conductivity
+    500,                      !- Density
+    1600;                     !- Specific Heat
+
+Material,
+    Sughero 100,              !- Name
+    MediumSmooth,             !- Roughness
+    0.1,                      !- Thickness
+    0.039,                    !- Conductivity
+    120,                      !- Density
+    1900;                     !- Specific Heat
+
+Material,
+    Membrana traspirante,     !- Name
+    MediumSmooth,             !- Roughness
+    0.0007,                   !- Thickness
+    0.18,                     !- Conductivity
+    743,                      !- Density
+    1000;                     !- Specific Heat
+
+Material,
+    Fibra di legno Plus 100,    !- Name
+    MediumSmooth,             !- Roughness
+    0.1,                      !- Thickness
+    0.04,                     !- Conductivity
+    150,                      !- Density
+    2400;                     !- Specific Heat
+
+Material,
+    Fibra di legno 100,       !- Name
+    MediumSmooth,             !- Roughness
+    0.1,                      !- Thickness
+    0.038,                    !- Conductivity
+    120,                      !- Density
+    2400;                     !- Specific Heat
+
+Material,
+    CLT 140,                  !- Name
+    MediumSmooth,             !- Roughness
+    0.14,                     !- Thickness
+    0.13,                     !- Conductivity
+    500,                      !- Density
+    1600;                     !- Specific Heat
+
+Material,
+    Paglia di riso,           !- Name
+    MediumSmooth,             !- Roughness
+    0.2,                      !- Thickness
+    0.043,                    !- Conductivity
+    120,                      !- Density
+    1900;                     !- Specific Heat
+
+Material,
+    CLT 100,                  !- Name
+    MediumSmooth,             !- Roughness
+    0.1,                      !- Thickness
+    0.13,                     !- Conductivity
+    500,                      !- Density
+    1600;                     !- Specific Heat
+
+Material,
+    Fibra di legno Flex 100,    !- Name
+    MediumSmooth,             !- Roughness
+    0.1,                      !- Thickness
+    0.038,                    !- Conductivity
+    50,                       !- Density
+    2100;                     !- Specific Heat
+
+Material,
+    Fibrogesso,               !- Name
+    MediumSmooth,             !- Roughness
+    0.0125,                   !- Thickness
+    0.32,                     !- Conductivity
+    1150,                     !- Density
+    1100;                     !- Specific Heat
+
+Material,
+    Intonaco,                 !- Name
+    MediumSmooth,             !- Roughness
+    0.005,                    !- Thickness
+    0.6,                      !- Conductivity
+    1300,                     !- Density
+    900;                      !- Specific Heat
+
+Material,
+    Fibra di legno Flex 60,    !- Name
+    MediumSmooth,             !- Roughness
+    0.06,                     !- Thickness
+    0.038,                    !- Conductivity
+    50,                       !- Density
+    2100;                     !- Specific Heat
+
+Material,
+    OSB 15,                   !- Name
+    MediumSmooth,             !- Roughness
+    0.015,                    !- Thickness
+    0.12,                     !- Conductivity
+    640,                      !- Density
+    1700;                     !- Specific Heat
+
+Material,
+    Fibra di legno 160,       !- Name
+    MediumSmooth,             !- Roughness
+    0.16,                     !- Thickness
+    0.038,                    !- Conductivity
+    120,                      !- Density
+    2400;                     !- Specific Heat
+
+Material,
+    Fibra di legno DWD Protect,    !- Name
+    MediumSmooth,             !- Roughness
+    0.016,                    !- Thickness
+    0.09,                     !- Conductivity
+    565,                      !- Density
+    2100;                     !- Specific Heat
+
+Material,
+    RH 700,                   !- Name
+    MediumSmooth,             !- Roughness
+    0.022,                    !- Thickness
+    0.129,                    !- Conductivity
+    750,                      !- Density
+    1300;                     !- Specific Heat
+
+Material,
+    RH 400,                   !- Name
+    MediumSmooth,             !- Roughness
+    0.006,                    !- Thickness
+    0.5,                      !- Conductivity
+    1410,                     !- Density
+    1300;                     !- Specific Heat
+
+Material,
+    RH 200,                   !- Name
+    MediumSmooth,             !- Roughness
+    0.002,                    !- Thickness
+    0.17,                     !- Conductivity
+    1100,                     !- Density
+    1300;                     !- Specific Heat
+
+Material,
+    Tavolato abete grezzo 25,    !- Name
+    MediumSmooth,             !- Roughness
+    0.025,                    !- Thickness
+    0.13,                     !- Conductivity
+    540,                      !- Density
+    2000;                     !- Specific Heat
+
+Material,
+    Fibra di legno Flex 40,    !- Name
+    MediumSmooth,             !- Roughness
+    0.04,                     !- Thickness
+    0.038,                    !- Conductivity
+    50,                       !- Density
+    2100;                     !- Specific Heat
+
+Material,
+    Membrana traspirante facciata,    !- Name
+    MediumSmooth,             !- Roughness
+    0.0004,                   !- Thickness
+    0.18,                     !- Conductivity
+    725,                      !- Density
+    1000;                     !- Specific Heat
+
+Material,
+    Doghe in legno,           !- Name
+    MediumSmooth,             !- Roughness
+    0.019,                    !- Thickness
+    0.09,                     !- Conductivity
+    408,                      !- Density
+    1380;                     !- Specific Heat
+
+Material,
+    Sughero MD,               !- Name
+    MediumSmooth,             !- Roughness
+    0.04,                     !- Thickness
+    0.043,                    !- Conductivity
+    120,                      !- Density
+    1900;                     !- Specific Heat
+
+Material,
+    Sughero 50,               !- Name
+    MediumSmooth,             !- Roughness
+    0.05,                     !- Thickness
+    0.039,                    !- Conductivity
+    120,                      !- Density
+    1900;                     !- Specific Heat
+
+Material,
+    Controparete listelli di abete,    !- Name
+    MediumSmooth,             !- Roughness
+    0.06,                     !- Thickness
+    0.13,                     !- Conductivity
+    540,                      !- Density
+    2000;                     !- Specific Heat
+
+Material,
+    Fibra di legno Plus 60,    !- Name
+    MediumSmooth,             !- Roughness
+    0.06,                     !- Thickness
+    0.04,                     !- Conductivity
+    150,                      !- Density
+    2400;                     !- Specific Heat
+
+Material,
+    Tavolato abete grezzo 24,    !- Name
+    MediumSmooth,             !- Roughness
+    0.024,                    !- Thickness
+    0.13,                     !- Conductivity
+    540,                      !- Density
+    2000;                     !- Specific Heat
+
+Material,
+    Lamiera zintek,           !- Name
+    MediumSmooth,             !- Roughness
+    0.0007,                   !- Thickness
+    109,                      !- Conductivity
+    7140,                     !- Density
+    401;                      !- Specific Heat
+
+Material,
+    Doppio fibrogesso,        !- Name
+    MediumSmooth,             !- Roughness
+    0.025,                    !- Thickness
+    0.32,                     !- Conductivity
+    1150,                     !- Density
+    1100;                     !- Specific Heat
+
+Material,
+    Porta - abete,            !- Name
+    MediumSmooth,             !- Roughness
+    0.025,                    !- Thickness
+    0.12,                     !- Conductivity
+    450,                      !- Density
+    1700;                     !- Specific Heat
+
+Material,
+    Porta - acciaio,          !- Name
+    MediumSmooth,             !- Roughness
+    0.003,                    !- Thickness
+    52,                       !- Conductivity
+    7800,                     !- Density
+    450;                      !- Specific Heat
+
+Material,
+    Porta - pannello rigido,    !- Name
+    MediumSmooth,             !- Roughness
+    0.02,                     !- Thickness
+    0.0385,                   !- Conductivity
+    100,                      !- Density
+    1000;                     !- Specific Heat
+
+Material,
+    CONCRETE - DRIED SAND AND GRAVEL 4 IN,    !- Name
+    MediumRough,              !- Roughness
+    0.1,                      !- Thickness
+    1.29,                     !- Conductivity
+    2242.58,                  !- Density
+    830,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.6,                      !- Solar Absorptance
+    0.6;                      !- Visible Absorptance
+
+Material,
+    INS - EXPANDED EXT POLYSTYRENE R12 2 IN,    !- Name
+    Rough,                    !- Roughness
+    0.050000001,              !- Thickness
+    0.02,                     !- Conductivity
+    56.06,                    !- Density
+    1210,                     !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.5,                      !- Solar Absorptance
+    0.5;                      !- Visible Absorptance
+
+Material,
+    GYP1,                     !- Name
+    MediumRough,              !- Roughness
+    0.0127,                   !- Thickness
+    0.7845,                   !- Conductivity
+    1842.1221,                !- Density
+    988,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.5,                      !- Solar Absorptance
+    0.5;                      !- Visible Absorptance
+
+Material,
+    GYP2,                     !- Name
+    MediumRough,              !- Roughness
+    0.01905,                  !- Thickness
+    0.7845,                   !- Conductivity
+    1842.1221,                !- Density
+    988,                      !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.5,                      !- Solar Absorptance
+    0.5;                      !- Visible Absorptance
+
+Material,
+    FINISH FLOORING - TILE 1 / 16 IN,    !- Name
+    Smooth,                   !- Roughness
+    0.0016,                   !- Thickness
+    0.17,                     !- Conductivity
+    1922.21,                  !- Density
+    1250,                     !- Specific Heat
+    0.9,                      !- Thermal Absorptance
+    0.5,                      !- Solar Absorptance
+    0.5;                      !- Visible Absorptance
+
+Material:AirGap,
+    Intercapedine aria 180,    !- Name
+    0.22;                     !- Thermal Resistance
+
+Material:AirGap,
+    Intercapedine aria 19,    !- Name
+    0.17;                     !- Thermal Resistance
+
+Material:AirGap,
+    Intercapedine aria 55,    !- Name
+    0.18;                     !- Thermal Resistance
+
+WindowMaterial:SimpleGlazingSystem,
+    Vetro Cobola,             !- Name
+    0.6,                      !- UFactor
+    0.57,                     !- Solar Heat Gain Coefficient
+    0.74;                     !- Visible Transmittance
+
+WindowMaterial:SimpleGlazingSystem,
+    Vetro Fanzola finestra,    !- Name
+    0.5,                      !- UFactor
+    0.49,                     !- Solar Heat Gain Coefficient
+    0.74;                     !- Visible Transmittance
+
+WindowMaterial:SimpleGlazingSystem,
+    Vetro Fanzola portafinestra,    !- Name
+    0.5,                      !- UFactor
+    0.7,                      !- Solar Heat Gain Coefficient
+    0.74;                     !- Visible Transmittance
+
+Construction,
+    Pavimento,                !- Name
+    Membrana traspirante,     !- Outside Layer
+    Sughero 100,              !- Layer 2
+    CLT 260,                  !- Layer 3
+    Fibra di legno Plus 40,    !- Layer 4
+    OSB 18,                   !- Layer 5
+    Membrana freno vapore,    !- Layer 6
+    Intercapedine aria 180,    !- Layer 7
+    Pavimento flottante laminato;    !- Layer 8
+
+Construction,
+    Copertura legno,          !- Name
+    Membrana traspirante,     !- Outside Layer
+    Fibra di legno Plus 100,    !- Layer 2
+    Fibra di legno 100,       !- Layer 3
+    Membrana freno vapore,    !- Layer 4
+    CLT 140;                  !- Layer 5
+
+Construction,
+    Copertura paglia,         !- Name
+    Membrana traspirante,     !- Outside Layer
+    Paglia di riso,           !- Layer 2
+    Membrana freno vapore,    !- Layer 3
+    CLT 140;                  !- Layer 4
+
+Construction,
+    Parete 4,                 !- Name
+    Doghe in legno,           !- Outside Layer
+    Intercapedine aria 19,    !- Layer 2
+    Membrana traspirante facciata,    !- Layer 3
+    Tavolato abete grezzo 25,    !- Layer 4
+    Paglia di riso,           !- Layer 5
+    Tavolato abete grezzo 25,    !- Layer 6
+    Membrana freno vapore,    !- Layer 7
+    RH 700,                   !- Layer 8
+    RH 400,                   !- Layer 9
+    RH 200;                   !- Layer 10
+
+Construction,
+    Parete 5,                 !- Name
+    Sughero MD,               !- Outside Layer
+    Sughero 50,               !- Layer 2
+    Fibra di legno DWD Protect,    !- Layer 3
+    Fibra di legno 160,       !- Layer 4
+    OSB 15,                   !- Layer 5
+    Membrana traspirante facciata,    !- Layer 6
+    Intercapedine aria 55,    !- Layer 7
+    Doppio fibrogesso,        !- Layer 8
+    Intonaco;                 !- Layer 9
+
+Construction,
+    Parete 6,                 !- Name
+    Sughero MD,               !- Outside Layer
+    Sughero 50,               !- Layer 2
+    Tavolato abete grezzo 25,    !- Layer 3
+    Paglia di riso,           !- Layer 4
+    Tavolato abete grezzo 25,    !- Layer 5
+    Membrana freno vapore,    !- Layer 6
+    RH 700,                   !- Layer 7
+    RH 400,                   !- Layer 8
+    RH 200;                   !- Layer 9
+
+Construction,
+    Parete 7,                 !- Name
+    Lamiera zintek,           !- Outside Layer
+    Tavolato abete grezzo 24,    !- Layer 2
+    Intercapedine aria 55,    !- Layer 3
+    Fibra di legno Plus 60,    !- Layer 4
+    Fibra di legno DWD Protect,    !- Layer 5
+    Fibra di legno 160,       !- Layer 6
+    OSB 15,                   !- Layer 7
+    Controparete listelli di abete,    !- Layer 8
+    Doppio fibrogesso,        !- Layer 9
+    Intonaco;                 !- Layer 10
+
+Construction,
+    Parete 8,                 !- Name
+    Lamiera zintek,           !- Outside Layer
+    Tavolato abete grezzo 24,    !- Layer 2
+    Intercapedine aria 55,    !- Layer 3
+    Fibra di legno Plus 60,    !- Layer 4
+    Tavolato abete grezzo 25,    !- Layer 5
+    Paglia di riso,           !- Layer 6
+    Tavolato abete grezzo 25,    !- Layer 7
+    RH 700,                   !- Layer 8
+    RH 400,                   !- Layer 9
+    RH 200;                   !- Layer 10
+
+Construction,
+    Parete 9,                 !- Name
+    Sughero MD,               !- Outside Layer
+    Sughero 50,               !- Layer 2
+    Fibra di legno DWD Protect,    !- Layer 3
+    Fibra di legno 160,       !- Layer 4
+    OSB 15,                   !- Layer 5
+    Fibrogesso,               !- Layer 6
+    Intonaco;                 !- Layer 7
+
+Construction,
+    Parete 10,                !- Name
+    Sughero MD,               !- Outside Layer
+    Sughero 50,               !- Layer 2
+    Tavolato abete grezzo 25,    !- Layer 3
+    Paglia di riso,           !- Layer 4
+    Tavolato abete grezzo 25,    !- Layer 5
+    Membrana freno vapore,    !- Layer 6
+    RH 700,                   !- Layer 7
+    RH 400,                   !- Layer 8
+    RH 200;                   !- Layer 9
+
+Construction,
+    Parete 11,                !- Name
+    Lamiera zintek,           !- Outside Layer
+    Tavolato abete grezzo 24,    !- Layer 2
+    Intercapedine aria 55,    !- Layer 3
+    Membrana traspirante facciata,    !- Layer 4
+    Fibra di legno Plus 60,    !- Layer 5
+    Fibra di legno DWD Protect,    !- Layer 6
+    Fibra di legno 160,       !- Layer 7
+    OSB 15,                   !- Layer 8
+    Fibrogesso,               !- Layer 9
+    Intonaco;                 !- Layer 10
+
+Construction,
+    Parete 12,                !- Name
+    Lamiera zintek,           !- Outside Layer
+    Tavolato abete grezzo 24,    !- Layer 2
+    Intercapedine aria 55,    !- Layer 3
+    Fibra di legno Plus 60,    !- Layer 4
+    Tavolato abete grezzo 25,    !- Layer 5
+    Paglia di riso,           !- Layer 6
+    Tavolato abete grezzo 25,    !- Layer 7
+    Membrana freno vapore,    !- Layer 8
+    Fibrogesso,               !- Layer 9
+    Intonaco;                 !- Layer 10
+
+Construction,
+    Parete 13,                !- Name
+    Doghe in legno,           !- Outside Layer
+    Intercapedine aria 19,    !- Layer 2
+    Membrana traspirante facciata,    !- Layer 3
+    Fibra di legno DWD Protect,    !- Layer 4
+    Fibra di legno 160,       !- Layer 5
+    OSB 15,                   !- Layer 6
+    Fibrogesso,               !- Layer 7
+    Intonaco;                 !- Layer 8
+
+Construction,
+    Parete SC - AS2,          !- Name
+    RH 200,                   !- Outside Layer
+    RH 400,                   !- Layer 2
+    RH 700,                   !- Layer 3
+    Fibra di legno Flex 60,    !- Layer 4
+    Tavolato abete grezzo 25,    !- Layer 5
+    Paglia di riso,           !- Layer 6
+    Tavolato abete grezzo 25,    !- Layer 7
+    Fibra di legno Flex 40,    !- Layer 8
+    Fibrogesso,               !- Layer 9
+    Intonaco;                 !- Layer 10
+
+Construction,
+    Parete AS2 - SC,          !- Name
+    Intonaco,                 !- Outside Layer
+    Fibrogesso,               !- Layer 2
+    Fibra di legno Flex 40,    !- Layer 3
+    Tavolato abete grezzo 25,    !- Layer 4
+    Paglia di riso,           !- Layer 5
+    Tavolato abete grezzo 25,    !- Layer 6
+    Fibra di legno Flex 60,    !- Layer 7
+    RH 700,                   !- Layer 8
+    RH 400,                   !- Layer 9
+    RH 200;                   !- Layer 10
+
+Construction,
+    Parete AS2 - AS1,         !- Name
+    Intonaco,                 !- Outside Layer
+    Doppio fibrogesso,        !- Layer 2
+    Fibra di legno Flex 60,    !- Layer 3
+    OSB 15,                   !- Layer 4
+    Fibra di legno 160,       !- Layer 5
+    Fibra di legno DWD Protect,    !- Layer 6
+    Fibra di legno Flex 60,    !- Layer 7
+    RH 700,                   !- Layer 8
+    RH 400,                   !- Layer 9
+    RH 200;                   !- Layer 10
+
+Construction,
+    Parete AS1 - AS2,         !- Name
+    RH 200,                   !- Outside Layer
+    RH 400,                   !- Layer 2
+    RH 700,                   !- Layer 3
+    Fibra di legno Flex 60,    !- Layer 4
+    Fibra di legno DWD Protect,    !- Layer 5
+    Fibra di legno 160,       !- Layer 6
+    OSB 15,                   !- Layer 7
+    Fibra di legno Flex 60,    !- Layer 8
+    Doppio fibrogesso,        !- Layer 9
+    Intonaco;                 !- Layer 10
+
+Construction,
+    Parete AS1 - LT,          !- Name
+    CLT 100,                  !- Outside Layer
+    Fibra di legno 100,       !- Layer 2
+    Fibra di legno Flex 100,    !- Layer 3
+    Doppio fibrogesso,        !- Layer 4
+    Intonaco;                 !- Layer 5
+
+Construction,
+    Parete LT - AS1,          !- Name
+    Intonaco,                 !- Outside Layer
+    Doppio fibrogesso,        !- Layer 2
+    Fibra di legno Flex 100,    !- Layer 3
+    Fibra di legno 100,       !- Layer 4
+    CLT 100;                  !- Layer 5
+
+Construction,
+    Finestra SC,              !- Name
+    Vetro Cobola;             !- Outside Layer
+
+Construction,
+    Finestra AS,              !- Name
+    Vetro Fanzola finestra;    !- Outside Layer
+
+Construction,
+    Portafinestra,            !- Name
+    Vetro Fanzola portafinestra;    !- Outside Layer
+
+Construction,
+    Portone in legno,         !- Name
+    Porta - acciaio,          !- Outside Layer
+    Porta - pannello rigido,    !- Layer 2
+    Porta - acciaio,          !- Layer 3
+    Porta - abete;            !- Layer 4
+
+GlobalGeometryRules,
+    UpperLeftCorner,          !- Starting Vertex Position
+    Counterclockwise,         !- Vertex Entry Direction
+    Relative,                 !- Coordinate System
+    Relative,                 !- Daylighting Reference Point Coordinate System
+    Relative;                 !- Rectangular Surface Coordinate System
+
+Zone,
+    Thermal Zone 1,           !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    0,                        !- Y Origin
+    0;                        !- Z Origin
+
+Zone,
+    Thermal Zone 2,           !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    3.29875,                  !- Y Origin
+    0;                        !- Z Origin
+
+Zone,
+    Thermal Zone 3,           !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    13.3635,                  !- Y Origin
+    0;                        !- Z Origin
+
+Zone,
+    Thermal Zone 4,           !- Name
+    0,                        !- Direction of Relative North
+    0,                        !- X Origin
+    13.3635,                  !- Y Origin
+    0;                        !- Z Origin
+
+ZoneList,
+    Lista zone termiche,      !- Name
+    Thermal Zone 1,           !- Zone 1 Name
+    Thermal Zone 2,           !- Zone 2 Name
+    Thermal Zone 3,           !- Zone 3 Name
+    Thermal Zone 4;           !- Zone 4 Name
+
+BuildingSurface:Detailed,
+    Parete int SC - AS2,      !- Name
+    Wall,                     !- Surface Type
+    Parete SC - AS2,          !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Surface,                  !- Outside Boundary Condition
+    Parete int AS2 - SC,      !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    3.29875,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    3.29875,                  !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    3.29875,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    3.29875,                  !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    0,                        !- Vertex 5 Xcoordinate
+    3.29875,                  !- Vertex 5 Ycoordinate
+    2.8417;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete NO SC,             !- Name
+    Wall,                     !- Surface Type
+    Parete 10,                !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    3.29875,                  !- Vertex 1 Ycoordinate
+    2.8417,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    3.29875,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.8417;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete SC,                !- Name
+    Wall,                     !- Surface Type
+    Parete 4,                 !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    6.55,                     !- Vertex 5 Xcoordinate
+    0,                        !- Vertex 5 Ycoordinate
+    2.9382;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete SE SC,             !- Name
+    Wall,                     !- Surface Type
+    Parete 12,                !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    2.9382,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    3.29875,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    3.29875,                  !- Vertex 4 Ycoordinate
+    2.9382;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Pavimento SC,             !- Name
+    Floor,                    !- Surface Type
+    Pavimento,                !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    3.29875,                  !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    3.29875,                  !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto NO SC,              !- Name
+    Roof,                     !- Surface Type
+    Copertura paglia,         !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    3.29875,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    3.29875,                  !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.8417,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto SE SC,              !- Name
+    Roof,                     !- Surface Type
+    Copertura paglia,         !- Construction Name
+    Thermal Zone 1,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    3.29875,                  !- Vertex 3 Ycoordinate
+    2.9382,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    3.29875,                  !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete int AS2 - AS1,     !- Name
+    Wall,                     !- Surface Type
+    Parete AS2 - AS1,         !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Surface,                  !- Outside Boundary Condition
+    Parete int AS1 - AS2,     !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    5.04925,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    5.04925,                  !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    5.04925,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    5.04925,                  !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    0,                        !- Vertex 5 Xcoordinate
+    5.04925,                  !- Vertex 5 Ycoordinate
+    2.8417;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete int AS2 - SC,      !- Name
+    Wall,                     !- Surface Type
+    Parete AS2 - SC,          !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Surface,                  !- Outside Boundary Condition
+    Parete int SC - AS2,      !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    6.55,                     !- Vertex 5 Xcoordinate
+    0,                        !- Vertex 5 Ycoordinate
+    2.9382;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete NO AS2,            !- Name
+    Wall,                     !- Surface Type
+    Parete 6,                 !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    5.04925,                  !- Vertex 1 Ycoordinate
+    2.8417,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    5.04925,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.8417;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete SE AS2,            !- Name
+    Wall,                     !- Surface Type
+    Parete 8,                 !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    2.9382,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    5.04925,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    5.04925,                  !- Vertex 4 Ycoordinate
+    2.9382;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Pavimento AS2,            !- Name
+    Floor,                    !- Surface Type
+    Pavimento,                !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    5.04925,                  !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    5.04925,                  !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto NO AS2,             !- Name
+    Roof,                     !- Surface Type
+    Copertura paglia,         !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    5.04925,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    5.04925,                  !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.8417,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto SE AS2,             !- Name
+    Roof,                     !- Surface Type
+    Copertura paglia,         !- Construction Name
+    Thermal Zone 2,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    5.04925,                  !- Vertex 3 Ycoordinate
+    2.9382,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    5.04925,                  !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete int AS1 - AS2,     !- Name
+    Wall,                     !- Surface Type
+    Parete AS1 - AS2,         !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Surface,                  !- Outside Boundary Condition
+    Parete int AS2 - AS1,     !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    -5.0155,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    -5.0155,                  !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    -5.0155,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    -5.0155,                  !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    6.55,                     !- Vertex 5 Xcoordinate
+    -5.0155,                  !- Vertex 5 Ycoordinate
+    2.9382;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete int AS1 - LT,      !- Name
+    Wall,                     !- Surface Type
+    Parete AS1 - LT,          !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Surface,                  !- Outside Boundary Condition
+    Parete int LT - AS1,      !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    0,                        !- Vertex 5 Xcoordinate
+    0,                        !- Vertex 5 Ycoordinate
+    2.8417;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete NO AS1,            !- Name
+    Wall,                     !- Surface Type
+    Parete 5,                 !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    2.8417,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    -5.0155,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    -5.0155,                  !- Vertex 4 Ycoordinate
+    2.8417;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete SE AS1,            !- Name
+    Wall,                     !- Surface Type
+    Parete 7,                 !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    -5.0155,                  !- Vertex 1 Ycoordinate
+    2.9382,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    -5.0155,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.9382;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Pavimento AS1,            !- Name
+    Floor,                    !- Surface Type
+    Pavimento,                !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    -5.0155,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    -5.0155,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto NO AS1,             !- Name
+    Roof,                     !- Surface Type
+    Copertura legno,          !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    -5.0155,                  !- Vertex 3 Ycoordinate
+    2.8417,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    -5.0155,                  !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto SE AS1,             !- Name
+    Roof,                     !- Surface Type
+    Copertura legno,          !- Construction Name
+    Thermal Zone 3,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    -5.0155,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    -5.0155,                  !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.9382,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete int LT - AS1,      !- Name
+    Wall,                     !- Surface Type
+    Parete LT - AS1,          !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Surface,                  !- Outside Boundary Condition
+    Parete int AS1 - LT,      !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    6.55,                     !- Vertex 5 Xcoordinate
+    0,                        !- Vertex 5 Ycoordinate
+    2.9382;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete LT,                !- Name
+    Wall,                     !- Surface Type
+    Parete 13,                !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    2.5104,                   !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    2.5104,                   !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    2.5104,                   !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    2.5104,                   !- Vertex 4 Ycoordinate
+    0,                        !- Vertex 4 Zcoordinate
+    0,                        !- Vertex 5 Xcoordinate
+    2.5104,                   !- Vertex 5 Ycoordinate
+    2.8417;                   !- Vertex 5 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete NO LT,             !- Name
+    Wall,                     !- Surface Type
+    Parete 9,                 !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    2.5104,                   !- Vertex 1 Ycoordinate
+    2.8417,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    2.5104,                   !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.8417;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Parete SE LT,             !- Name
+    Wall,                     !- Surface Type
+    Parete 11,                !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    2.9382,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    2.5104,                   !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    2.5104,                   !- Vertex 4 Ycoordinate
+    2.9382;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Pavimento LT,             !- Name
+    Floor,                    !- Surface Type
+    Pavimento,                !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    NoSun,                    !- Sun Exposure
+    NoWind,                   !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    2.5104,                   !- Vertex 1 Ycoordinate
+    0,                        !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    2.5104,                   !- Vertex 4 Ycoordinate
+    0;                        !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto NO LT,              !- Name
+    Roof,                     !- Surface Type
+    Copertura legno,          !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    2.5104,                   !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    2.5104,                   !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.8417,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+BuildingSurface:Detailed,
+    Tetto SE LT,              !- Name
+    Roof,                     !- Surface Type
+    Copertura legno,          !- Construction Name
+    Thermal Zone 4,           !- Zone Name
+    Outdoors,                 !- Outside Boundary Condition
+    ,                         !- Outside Boundary Condition Object
+    SunExposed,               !- Sun Exposure
+    WindExposed,              !- Wind Exposure
+    ,                         !- View Factor to Ground
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    2.5104,                   !- Vertex 3 Ycoordinate
+    2.9382,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    2.5104,                   !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Portafinestra SC,         !- Name
+    GlassDoor,                !- Surface Type
+    Portafinestra,            !- Construction Name
+    Parete NO SC,             !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Telaio finestra - portafinestra,    !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    1.933,                    !- Vertex 1 Ycoordinate
+    2.308,                    !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    1.933,                    !- Vertex 2 Ycoordinate
+    0.092,                    !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    1.167,                    !- Vertex 3 Ycoordinate
+    0.092,                    !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    1.167,                    !- Vertex 4 Ycoordinate
+    2.308;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Finestra SC,              !- Name
+    Window,                   !- Surface Type
+    Finestra SC,              !- Construction Name
+    Parete SC,                !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Telaio finestra SC,       !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    3.35,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    2.61,                     !- Vertex 1 Zcoordinate
+    3.35,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0.31,                     !- Vertex 2 Zcoordinate
+    5.65,                     !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    0.31,                     !- Vertex 3 Zcoordinate
+    5.65,                     !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    2.61;                     !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Portafinestra AS2,        !- Name
+    GlassDoor,                !- Surface Type
+    Portafinestra,            !- Construction Name
+    Parete NO AS2,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Telaio finestra - portafinestra,    !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    3.57175,                  !- Vertex 1 Ycoordinate
+    2.308,                    !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    3.57175,                  !- Vertex 2 Ycoordinate
+    0.092,                    !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    2.80575,                  !- Vertex 3 Ycoordinate
+    0.092,                    !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    2.80575,                  !- Vertex 4 Ycoordinate
+    2.308;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Finestra AS2,             !- Name
+    Window,                   !- Surface Type
+    Finestra AS,              !- Construction Name
+    Parete SE AS2,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Telaio finestra - portafinestra,    !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    0.93675,                  !- Vertex 1 Ycoordinate
+    2.308,                    !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0.93675,                  !- Vertex 2 Ycoordinate
+    0.092,                    !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    3.55275,                  !- Vertex 3 Ycoordinate
+    0.092,                    !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    3.55275,                  !- Vertex 4 Ycoordinate
+    2.308;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Portafinestra AS1,        !- Name
+    GlassDoor,                !- Surface Type
+    Portafinestra,            !- Construction Name
+    Parete NO AS1,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Telaio finestra - portafinestra,    !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    -2.772,                   !- Vertex 1 Ycoordinate
+    2.308,                    !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    -2.772,                   !- Vertex 2 Ycoordinate
+    0.092,                    !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    -3.538,                   !- Vertex 3 Ycoordinate
+    0.092,                    !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    -3.538,                   !- Vertex 4 Ycoordinate
+    2.308;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Finestra AS1,             !- Name
+    Window,                   !- Surface Type
+    Finestra AS,              !- Construction Name
+    Parete SE AS1,            !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    Telaio finestra - portafinestra,    !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    -3.528,                   !- Vertex 1 Ycoordinate
+    2.308,                    !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    -3.528,                   !- Vertex 2 Ycoordinate
+    0.092,                    !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    -0.911999999999999,       !- Vertex 3 Ycoordinate
+    0.092,                    !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    -0.911999999999999,       !- Vertex 4 Ycoordinate
+    2.308;                    !- Vertex 4 Zcoordinate
+
+FenestrationSurface:Detailed,
+    Porta LT,                 !- Name
+    Door,                     !- Surface Type
+    Portone in legno,         !- Construction Name
+    Parete LT,                !- Building Surface Name
+    ,                         !- Outside Boundary Condition Object
+    ,                         !- View Factor to Ground
+    ,                         !- Frame and Divider Name
+    ,                         !- Multiplier
+    ,                         !- Number of Vertices
+    6.549,                    !- Vertex 1 Xcoordinate
+    2.5104,                   !- Vertex 1 Ycoordinate
+    2.8,                      !- Vertex 1 Zcoordinate
+    6.549,                    !- Vertex 2 Xcoordinate
+    2.5104,                   !- Vertex 2 Ycoordinate
+    0.001,                    !- Vertex 2 Zcoordinate
+    3.25,                     !- Vertex 3 Xcoordinate
+    2.5104,                   !- Vertex 3 Ycoordinate
+    0.001,                    !- Vertex 3 Zcoordinate
+    3.25,                     !- Vertex 4 Xcoordinate
+    2.5104,                   !- Vertex 4 Ycoordinate
+    2.8;                      !- Vertex 4 Zcoordinate
+
+WindowProperty:FrameAndDivider,
+    Telaio finestra SC,       !- Name
+    0.1,                      !- Frame Width
+    0,                        !- Frame Outside Projection
+    0,                        !- Frame Inside Projection
+    0.94,                     !- Frame Conductance
+    1,                        !- Ratio of FrameEdge Glass Conductance to CenterOfGlass Conductance
+    0.7,                      !- Frame Solar Absorptance
+    0.7,                      !- Frame Visible Absorptance
+    0.9,                      !- Frame Thermal Hemispherical Emissivity
+    ,                         !- Divider Type
+    ,                         !- Divider Width
+    ,                         !- Number of Horizontal Dividers
+    ,                         !- Number of Vertical Dividers
+    ,                         !- Divider Outside Projection
+    ,                         !- Divider Inside Projection
+    ,                         !- Divider Conductance
+    ,                         !- Ratio of DividerEdge Glass Conductance to CenterOfGlass Conductance
+    ,                         !- Divider Solar Absorptance
+    ,                         !- Divider Visible Absorptance
+    ;                         !- Divider Thermal Hemispherical Emissivity
+
+WindowProperty:FrameAndDivider,
+    Telaio finestra - portafinestra,    !- Name
+    0.092,                    !- Frame Width
+    0,                        !- Frame Outside Projection
+    0,                        !- Frame Inside Projection
+    0.62,                     !- Frame Conductance
+    1,                        !- Ratio of FrameEdge Glass Conductance to CenterOfGlass Conductance
+    0.7,                      !- Frame Solar Absorptance
+    0.7,                      !- Frame Visible Absorptance
+    0.9,                      !- Frame Thermal Hemispherical Emissivity
+    ,                         !- Divider Type
+    ,                         !- Divider Width
+    ,                         !- Number of Horizontal Dividers
+    ,                         !- Number of Vertical Dividers
+    ,                         !- Divider Outside Projection
+    ,                         !- Divider Inside Projection
+    ,                         !- Divider Conductance
+    ,                         !- Ratio of DividerEdge Glass Conductance to CenterOfGlass Conductance
+    ,                         !- Divider Solar Absorptance
+    ,                         !- Divider Visible Absorptance
+    ;                         !- Divider Thermal Hemispherical Emissivity
+
+Shading:Building:Detailed,
+    Sporgenza vert SC,        !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    2.9382,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    -0.8265,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    -0.8265,                  !- Vertex 4 Ycoordinate
+    2.9382;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Tettoia NO SC,            !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    -0.8265,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    -0.8265,                  !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    0,                        !- Vertex 3 Ycoordinate
+    2.8417,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    0,                        !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Tettoia SE SC,            !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    0,                        !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    0,                        !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    -0.8265,                  !- Vertex 3 Ycoordinate
+    2.9382,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    -0.8265,                  !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Sporgenza vert LT,        !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    6.55,                     !- Vertex 1 Xcoordinate
+    16.6285,                  !- Vertex 1 Ycoordinate
+    2.9382,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    16.6285,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    15.8739,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    6.55,                     !- Vertex 4 Xcoordinate
+    15.8739,                  !- Vertex 4 Ycoordinate
+    2.9382;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Tettoia NO LT,            !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    15.8739,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    0,                        !- Vertex 2 Xcoordinate
+    15.8739,                  !- Vertex 2 Ycoordinate
+    2.8417,                   !- Vertex 2 Zcoordinate
+    0,                        !- Vertex 3 Xcoordinate
+    16.6285,                  !- Vertex 3 Ycoordinate
+    2.8417,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    16.6285,                  !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Tettoia SE LT,            !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.275,                    !- Vertex 1 Xcoordinate
+    16.6285,                  !- Vertex 1 Ycoordinate
+    3.7192,                   !- Vertex 1 Zcoordinate
+    6.55,                     !- Vertex 2 Xcoordinate
+    16.6285,                  !- Vertex 2 Ycoordinate
+    2.9382,                   !- Vertex 2 Zcoordinate
+    6.55,                     !- Vertex 3 Xcoordinate
+    15.8739,                  !- Vertex 3 Ycoordinate
+    2.9382,                   !- Vertex 3 Zcoordinate
+    3.275,                    !- Vertex 4 Xcoordinate
+    15.8739,                  !- Vertex 4 Ycoordinate
+    3.7192;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Parete est LT,            !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    -1.239,                   !- Vertex 1 Xcoordinate
+    13.8285,                  !- Vertex 1 Ycoordinate
+    2.5097,                   !- Vertex 1 Zcoordinate
+    -1.239,                   !- Vertex 2 Xcoordinate
+    13.8285,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    -1.239,                   !- Vertex 3 Xcoordinate
+    16.6285,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    -1.239,                   !- Vertex 4 Xcoordinate
+    16.6285,                  !- Vertex 4 Ycoordinate
+    2.5097;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Parete est SC,            !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    -1.239,                   !- Vertex 1 Xcoordinate
+    -0.8265,                  !- Vertex 1 Ycoordinate
+    2.5097,                   !- Vertex 1 Zcoordinate
+    -1.239,                   !- Vertex 2 Xcoordinate
+    -0.8265,                  !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    -1.239,                   !- Vertex 3 Xcoordinate
+    1.9735,                   !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    -1.239,                   !- Vertex 4 Xcoordinate
+    1.9735,                   !- Vertex 4 Ycoordinate
+    2.5097;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    Tettoia,                  !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    0,                        !- Vertex 1 Xcoordinate
+    -0.8265,                  !- Vertex 1 Ycoordinate
+    2.8417,                   !- Vertex 1 Zcoordinate
+    -1.239,                   !- Vertex 2 Xcoordinate
+    -0.8265,                  !- Vertex 2 Ycoordinate
+    2.5097,                   !- Vertex 2 Zcoordinate
+    -1.239,                   !- Vertex 3 Xcoordinate
+    16.6285,                  !- Vertex 3 Ycoordinate
+    2.5097,                   !- Vertex 3 Zcoordinate
+    0,                        !- Vertex 4 Xcoordinate
+    16.6285,                  !- Vertex 4 Ycoordinate
+    2.8417;                   !- Vertex 4 Zcoordinate
+
+Shading:Building:Detailed,
+    I3P,                      !- Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    -6.275,                   !- Vertex 1 Xcoordinate
+    -66.8265,                 !- Vertex 1 Ycoordinate
+    10.48,                    !- Vertex 1 Zcoordinate
+    -6.275,                   !- Vertex 2 Xcoordinate
+    -66.8265,                 !- Vertex 2 Ycoordinate
+    0,                        !- Vertex 2 Zcoordinate
+    -6.275,                   !- Vertex 3 Xcoordinate
+    25.9235,                  !- Vertex 3 Ycoordinate
+    0,                        !- Vertex 3 Zcoordinate
+    -6.275,                   !- Vertex 4 Xcoordinate
+    25.9235,                  !- Vertex 4 Ycoordinate
+    10.48;                    !- Vertex 4 Zcoordinate
+
+Shading:Zone:Detailed,
+    Pannelli vert SC,         !- Name
+    Parete SE SC,             !- Base Surface Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    6.596,                    !- Vertex 1 Xcoordinate
+    0.0953701701302301,       !- Vertex 1 Ycoordinate
+    2.50777999657246,         !- Vertex 1 Zcoordinate
+    6.596,                    !- Vertex 2 Xcoordinate
+    0.0953701701302301,       !- Vertex 2 Ycoordinate
+    0.41577999657246,         !- Vertex 2 Zcoordinate
+    6.596,                    !- Vertex 3 Xcoordinate
+    1.65437017013023,         !- Vertex 3 Ycoordinate
+    0.41577999657246,         !- Vertex 3 Zcoordinate
+    6.596,                    !- Vertex 4 Xcoordinate
+    1.65437017013023,         !- Vertex 4 Ycoordinate
+    1.46177999657246,         !- Vertex 4 Zcoordinate
+    6.596,                    !- Vertex 5 Xcoordinate
+    3.21337017013023,         !- Vertex 5 Ycoordinate
+    1.46177999657246,         !- Vertex 5 Zcoordinate
+    6.596,                    !- Vertex 6 Xcoordinate
+    3.21337017013023,         !- Vertex 6 Ycoordinate
+    2.50777999657246;         !- Vertex 6 Zcoordinate
+
+Shading:Zone:Detailed,
+    Pannelli tetto SC,        !- Name
+    Tetto SE SC,              !- Base Surface Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.43503770411494,         !- Vertex 1 Xcoordinate
+    0.96273824934206,         !- Vertex 1 Ycoordinate
+    3.72703528338511,         !- Vertex 1 Zcoordinate
+    6.48744340146548,         !- Vertex 2 Xcoordinate
+    0.96273824934206,         !- Vertex 2 Ycoordinate
+    2.99911807739099,         !- Vertex 2 Zcoordinate
+    6.48744340146548,         !- Vertex 3 Xcoordinate
+    2.52173824934205,         !- Vertex 3 Ycoordinate
+    2.99911807739099,         !- Vertex 3 Zcoordinate
+    3.43503770411494,         !- Vertex 4 Xcoordinate
+    2.52173824934205,         !- Vertex 4 Ycoordinate
+    3.72703528338511;         !- Vertex 4 Zcoordinate
+
+Shading:Zone:Detailed,
+    Pannelli AS2,             !- Name
+    Tetto NO AS2,             !- Base Surface Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.12980539135743,         !- Vertex 1 Xcoordinate
+    4.11836581204949,         !- Vertex 1 Ycoordinate
+    3.72629671173012,         !- Vertex 1 Zcoordinate
+    0.09872237301443,         !- Vertex 2 Xcoordinate
+    4.11836581204949,         !- Vertex 2 Ycoordinate
+    2.91415156712066,         !- Vertex 2 Zcoordinate
+    0.09872237301443,         !- Vertex 3 Xcoordinate
+    1.0003658120495,          !- Vertex 3 Ycoordinate
+    2.91415156712066,         !- Vertex 3 Zcoordinate
+    3.12980539135743,         !- Vertex 4 Xcoordinate
+    1.0003658120495,          !- Vertex 4 Ycoordinate
+    3.72629671173012;         !- Vertex 4 Zcoordinate
+
+Shading:Zone:Detailed,
+    Pannelli AS1,             !- Name
+    Tetto SE AS1,             !- Base Surface Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.36730508178399,         !- Vertex 1 Xcoordinate
+    -3.8808268437318,         !- Vertex 1 Ycoordinate
+    3.74318770416083,         !- Vertex 1 Zcoordinate
+    6.41971077913448,         !- Vertex 2 Xcoordinate
+    -3.8808268437318,         !- Vertex 2 Ycoordinate
+    3.01527049816671,         !- Vertex 2 Zcoordinate
+    6.41971077913448,         !- Vertex 3 Xcoordinate
+    -0.7628268437318,         !- Vertex 3 Ycoordinate
+    3.01527049816671,         !- Vertex 3 Zcoordinate
+    3.36730508178399,         !- Vertex 4 Xcoordinate
+    -0.7628268437318,         !- Vertex 4 Ycoordinate
+    3.74318770416083;         !- Vertex 4 Zcoordinate
+
+Shading:Zone:Detailed,
+    Pannelli vert LT,         !- Name
+    Parete SE LT,             !- Base Surface Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    6.596,                    !- Vertex 1 Xcoordinate
+    0.15,                     !- Vertex 1 Ycoordinate
+    2.7182,                   !- Vertex 1 Zcoordinate
+    6.596,                    !- Vertex 2 Xcoordinate
+    0.15,                     !- Vertex 2 Ycoordinate
+    0.1132,                   !- Vertex 2 Zcoordinate
+    6.596,                    !- Vertex 3 Xcoordinate
+    2.242,                    !- Vertex 3 Ycoordinate
+    0.1132,                   !- Vertex 3 Zcoordinate
+    6.596,                    !- Vertex 4 Xcoordinate
+    2.242,                    !- Vertex 4 Ycoordinate
+    1.6722,                   !- Vertex 4 Zcoordinate
+    6.596,                    !- Vertex 5 Xcoordinate
+    1.709,                    !- Vertex 5 Ycoordinate
+    1.6722,                   !- Vertex 5 Zcoordinate
+    6.596,                    !- Vertex 6 Xcoordinate
+    1.709,                    !- Vertex 6 Ycoordinate
+    2.7182;                   !- Vertex 6 Zcoordinate
+
+Shading:Zone:Detailed,
+    Pannelli tetto LT,        !- Name
+    Tetto SE LT,              !- Base Surface Name
+    ,                         !- Transmittance Schedule Name
+    ,                         !- Number of Vertices
+    3.37955511992204,         !- Vertex 1 Xcoordinate
+    2.07706362389931,         !- Vertex 1 Ycoordinate
+    3.74026639735599,         !- Vertex 1 Zcoordinate
+    3.37955511992204,         !- Vertex 2 Xcoordinate
+    0.518063623899317,        !- Vertex 2 Ycoordinate
+    3.74026639735599,         !- Vertex 2 Zcoordinate
+    6.43196081727252,         !- Vertex 3 Xcoordinate
+    0.518063623899317,        !- Vertex 3 Ycoordinate
+    3.01234919136188,         !- Vertex 3 Zcoordinate
+    6.43196081727252,         !- Vertex 4 Xcoordinate
+    2.07706362389931,         !- Vertex 4 Ycoordinate
+    3.01234919136188;         !- Vertex 4 Zcoordinate
+
+People,
+    Occupancy_AS2,            !- Name
+    Thermal Zone 2,           !- Zone or ZoneList Name
+    AS OCCUPANCY SCHEDULE,    !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    10,                       !- Number of People
+    ,                         !- People per Zone Floor Area
+    ,                         !- Zone Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    autocalculate,            !- Sensible Heat Fraction
+    ActivityLevel,            !- Activity Level Schedule Name
+    3.82e-08,                 !- Carbon Dioxide Generation Rate
+    No,                       !- Enable ASHRAE 55 Comfort Warnings
+    ZoneAveraged,             !- Mean Radiant Temperature Calculation Type
+    ,                         !- Surface NameAngle Factor List Name
+    ,                         !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule;    !- Clothing Insulation Calculation Method
+
+People,
+    Occupancy_AS1,            !- Name
+    Thermal Zone 3,           !- Zone or ZoneList Name
+    AS OCCUPANCY SCHEDULE,    !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    10,                       !- Number of People
+    ,                         !- People per Zone Floor Area
+    ,                         !- Zone Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    autocalculate,            !- Sensible Heat Fraction
+    ActivityLevel,            !- Activity Level Schedule Name
+    3.82e-08,                 !- Carbon Dioxide Generation Rate
+    No,                       !- Enable ASHRAE 55 Comfort Warnings
+    ZoneAveraged,             !- Mean Radiant Temperature Calculation Type
+    ,                         !- Surface NameAngle Factor List Name
+    ,                         !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule;    !- Clothing Insulation Calculation Method
+
+People,
+    Occupancy_SC,             !- Name
+    Thermal Zone 1,           !- Zone or ZoneList Name
+    SC OCCUPANCY SCHEDULE,    !- Number of People Schedule Name
+    People,                   !- Number of People Calculation Method
+    3,                        !- Number of People
+    ,                         !- People per Zone Floor Area
+    ,                         !- Zone Floor Area per Person
+    0.3,                      !- Fraction Radiant
+    autocalculate,            !- Sensible Heat Fraction
+    ActivityLevel,            !- Activity Level Schedule Name
+    3.82e-08,                 !- Carbon Dioxide Generation Rate
+    No,                       !- Enable ASHRAE 55 Comfort Warnings
+    ZoneAveraged,             !- Mean Radiant Temperature Calculation Type
+    ,                         !- Surface NameAngle Factor List Name
+    ,                         !- Work Efficiency Schedule Name
+    ClothingInsulationSchedule;    !- Clothing Insulation Calculation Method
+
+Lights,
+    LED AS2,                  !- Name
+    Thermal Zone 2,           !- Zone or ZoneList Name
+    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    LightingLevel,            !- Design Level Calculation Method
+    90,                       !- Lighting Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0.78,                     !- Return Air Fraction
+    0.09,                     !- Fraction Radiant
+    0.13,                     !- Fraction Visible
+    ,                         !- Fraction Replaceable
+    LED AS2;                  !- EndUse Subcategory
+
+Lights,
+    LED AS1,                  !- Name
+    Thermal Zone 3,           !- Zone or ZoneList Name
+    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    LightingLevel,            !- Design Level Calculation Method
+    90,                       !- Lighting Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0.78,                     !- Return Air Fraction
+    0.09,                     !- Fraction Radiant
+    0.13,                     !- Fraction Visible
+    ,                         !- Fraction Replaceable
+    LED AS1;                  !- EndUse Subcategory
+
+Lights,
+    LED SC,                   !- Name
+    Thermal Zone 1,           !- Zone or ZoneList Name
+    SC ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    LightingLevel,            !- Design Level Calculation Method
+    27,                       !- Lighting Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0.78,                     !- Return Air Fraction
+    0.09,                     !- Fraction Radiant
+    0.13,                     !- Fraction Visible
+    ,                         !- Fraction Replaceable
+    LED SC;                   !- EndUse Subcategory
+
+Lights,
+    Plafoniere SC,            !- Name
+    Thermal Zone 1,           !- Zone or ZoneList Name
+    SC ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    LightingLevel,            !- Design Level Calculation Method
+    26,                       !- Lighting Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.32,                     !- Fraction Radiant
+    0.25,                     !- Fraction Visible
+    ,                         !- Fraction Replaceable
+    Plafoniere SC;            !- EndUse Subcategory
+
+Lights,
+    Plafoniere AS2,           !- Name
+    Thermal Zone 2,           !- Zone or ZoneList Name
+    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    LightingLevel,            !- Design Level Calculation Method
+    52,                       !- Lighting Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.32,                     !- Fraction Radiant
+    0.25,                     !- Fraction Visible
+    ,                         !- Fraction Replaceable
+    Plafoniere AS2;           !- EndUse Subcategory
+
+Lights,
+    Plafoniere AS1,           !- Name
+    Thermal Zone 3,           !- Zone or ZoneList Name
+    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    LightingLevel,            !- Design Level Calculation Method
+    52,                       !- Lighting Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Return Air Fraction
+    0.32,                     !- Fraction Radiant
+    0.25,                     !- Fraction Visible
+    ,                         !- Fraction Replaceable
+    Plafoniere AS1;           !- EndUse Subcategory
+
+ElectricEquipment,
+    PC SC,                    !- Name
+    Thermal Zone 1,           !- Zone or ZoneList Name
+    SC ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    EquipmentLevel,           !- Design Level Calculation Method
+    150,                      !- Design Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Fraction Latent
+    ,                         !- Fraction Radiant
+    0.3,                      !- Fraction Lost
+    PC SC;                    !- EndUse Subcategory
+
+ElectricEquipment,
+    PC AS2,                   !- Name
+    Thermal Zone 2,           !- Zone or ZoneList Name
+    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    EquipmentLevel,           !- Design Level Calculation Method
+    200,                      !- Design Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Fraction Latent
+    ,                         !- Fraction Radiant
+    0.3,                      !- Fraction Lost
+    PC AS2;                   !- EndUse Subcategory
+
+ElectricEquipment,
+    PC AS1,                   !- Name
+    Thermal Zone 3,           !- Zone or ZoneList Name
+    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    EquipmentLevel,           !- Design Level Calculation Method
+    200,                      !- Design Level
+    ,                         !- Watts per Zone Floor Area
+    ,                         !- Watts per Person
+    0,                        !- Fraction Latent
+    ,                         !- Fraction Radiant
+    0.3,                      !- Fraction Lost
+    PC AS1;                   !- EndUse Subcategory
+
+ZoneInfiltration:DesignFlowRate,
+    SC INFILTRATION,          !- Name
+    Thermal Zone 1,           !- Zone or ZoneList Name
+    AS INFILTRATION SCHEDULE,    !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow per Zone Floor Area
+    ,                         !- Flow per Exterior Surface Area
+    0.15,                     !- Air Changes per Hour
+    ,                         !- Constant Term Coefficient
+    ,                         !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ;                         !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    AS2 INFILTRATION,         !- Name
+    Thermal Zone 2,           !- Zone or ZoneList Name
+    AS INFILTRATION SCHEDULE,    !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow per Zone Floor Area
+    ,                         !- Flow per Exterior Surface Area
+    0.15,                     !- Air Changes per Hour
+    ,                         !- Constant Term Coefficient
+    ,                         !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ;                         !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    AS1 INFILTRATION,         !- Name
+    Thermal Zone 3,           !- Zone or ZoneList Name
+    AS INFILTRATION SCHEDULE,    !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow per Zone Floor Area
+    ,                         !- Flow per Exterior Surface Area
+    0.15,                     !- Air Changes per Hour
+    ,                         !- Constant Term Coefficient
+    ,                         !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ;                         !- Velocity Squared Term Coefficient
+
+ZoneInfiltration:DesignFlowRate,
+    LT INFILTRATION,          !- Name
+    Thermal Zone 4,           !- Zone or ZoneList Name
+    ON,                       !- Schedule Name
+    AirChanges/Hour,          !- Design Flow Rate Calculation Method
+    ,                         !- Design Flow Rate
+    ,                         !- Flow per Zone Floor Area
+    ,                         !- Flow per Exterior Surface Area
+    0.15,                     !- Air Changes per Hour
+    ,                         !- Constant Term Coefficient
+    ,                         !- Temperature Term Coefficient
+    ,                         !- Velocity Term Coefficient
+    ;                         !- Velocity Squared Term Coefficient
+
+HVACTemplate:Thermostat,
+    ZONE1 THERMOSTAT,         !- Name
+    HEATING SETPOINTS,        !- Heating Setpoint Schedule Name
+    ,                         !- Constant Heating Setpoint
+    COOLING SETPOINTS,        !- Cooling Setpoint Schedule Name
+    ;                         !- Constant Cooling Setpoint
+
+HVACTemplate:Thermostat,
+    ZONE2 THERMOSTAT,         !- Name
+    HEATING SETPOINTS,        !- Heating Setpoint Schedule Name
+    ,                         !- Constant Heating Setpoint
+    COOLING SETPOINTS,        !- Cooling Setpoint Schedule Name
+    ;                         !- Constant Cooling Setpoint
+
+HVACTemplate:Thermostat,
+    ZONE3 THERMOSTAT,         !- Name
+    HEATING SETPOINTS,        !- Heating Setpoint Schedule Name
+    ,                         !- Constant Heating Setpoint
+    COOLING SETPOINTS,        !- Cooling Setpoint Schedule Name
+    ;                         !- Constant Cooling Setpoint
+
+HVACTemplate:Zone:IdealLoadsAirSystem,
+    Thermal Zone 1,           !- Zone Name
+    ZONE1 THERMOSTAT,         !- Template Thermostat Name
+    HVAC OPERATION SCHEDULE,    !- System Availability Schedule Name
+    50,                       !- Maximum Heating Supply Air Temperature
+    13,                       !- Minimum Cooling Supply Air Temperature
+    0.02,                     !- Maximum Heating Supply Air Humidity Ratio
+    0.0077,                   !- Minimum Cooling Supply Air Humidity Ratio
+    NoLimit,                  !- Heating Limit
+    0,                        !- Maximum Heating Air Flow Rate
+    0,                        !- Maximum Sensible Heating Capacity
+    LimitFlowRateAndCapacity,    !- Cooling Limit
+    autosize,                 !- Maximum Cooling Air Flow Rate
+    autosize,                 !- Maximum Total Cooling Capacity
+    ON,                       !- Heating Availability Schedule Name
+    ON,                       !- Cooling Availability Schedule Name
+    Humidistat,               !- Dehumidification Control Type
+    0.7,                      !- Cooling Sensible Heat Ratio
+    55,                       !- Dehumidification Setpoint
+    None,                     !- Humidification Control Type
+    30,                       !- Humidification Setpoint
+    DetailedSpecification,    !- Outdoor Air Method
+    0.00944,                  !- Outdoor Air Flow Rate per Person
+    ,                         !- Outdoor Air Flow Rate per Zone Floor Area
+    ,                         !- Outdoor Air Flow Rate per Zone
+    SZ DSOA Zone 1,           !- Design Specification Outdoor Air Object Name
+    None,                     !- Demand Controlled Ventilation Type
+    NoEconomizer,             !- Outdoor Air Economizer Type
+    None,                     !- Heat Recovery Type
+    0.7,                      !- Sensible Heat Recovery Effectiveness
+    0.65;                     !- Latent Heat Recovery Effectiveness
+
+HVACTemplate:Zone:IdealLoadsAirSystem,
+    Thermal Zone 2,           !- Zone Name
+    ZONE2 THERMOSTAT,         !- Template Thermostat Name
+    HVAC OPERATION SCHEDULE,    !- System Availability Schedule Name
+    50,                       !- Maximum Heating Supply Air Temperature
+    13,                       !- Minimum Cooling Supply Air Temperature
+    0.02,                     !- Maximum Heating Supply Air Humidity Ratio
+    0.0077,                   !- Minimum Cooling Supply Air Humidity Ratio
+    NoLimit,                  !- Heating Limit
+    0,                        !- Maximum Heating Air Flow Rate
+    0,                        !- Maximum Sensible Heating Capacity
+    LimitFlowRateAndCapacity,    !- Cooling Limit
+    autosize,                 !- Maximum Cooling Air Flow Rate
+    autosize,                 !- Maximum Total Cooling Capacity
+    ON,                       !- Heating Availability Schedule Name
+    ON,                       !- Cooling Availability Schedule Name
+    Humidistat,               !- Dehumidification Control Type
+    0.7,                      !- Cooling Sensible Heat Ratio
+    55,                       !- Dehumidification Setpoint
+    None,                     !- Humidification Control Type
+    30,                       !- Humidification Setpoint
+    DetailedSpecification,    !- Outdoor Air Method
+    0.00944,                  !- Outdoor Air Flow Rate per Person
+    ,                         !- Outdoor Air Flow Rate per Zone Floor Area
+    ,                         !- Outdoor Air Flow Rate per Zone
+    SZ DSOA Zone 2,           !- Design Specification Outdoor Air Object Name
+    None,                     !- Demand Controlled Ventilation Type
+    NoEconomizer,             !- Outdoor Air Economizer Type
+    None,                     !- Heat Recovery Type
+    0.7,                      !- Sensible Heat Recovery Effectiveness
+    0.65;                     !- Latent Heat Recovery Effectiveness
+
+HVACTemplate:Zone:IdealLoadsAirSystem,
+    Thermal Zone 3,           !- Zone Name
+    ZONE3 THERMOSTAT,         !- Template Thermostat Name
+    HVAC OPERATION SCHEDULE,    !- System Availability Schedule Name
+    50,                       !- Maximum Heating Supply Air Temperature
+    13,                       !- Minimum Cooling Supply Air Temperature
+    0.02,                     !- Maximum Heating Supply Air Humidity Ratio
+    0.0077,                   !- Minimum Cooling Supply Air Humidity Ratio
+    NoLimit,                  !- Heating Limit
+    0,                        !- Maximum Heating Air Flow Rate
+    0,                        !- Maximum Sensible Heating Capacity
+    LimitFlowRateAndCapacity,    !- Cooling Limit
+    autosize,                 !- Maximum Cooling Air Flow Rate
+    autosize,                 !- Maximum Total Cooling Capacity
+    ON,                       !- Heating Availability Schedule Name
+    ON,                       !- Cooling Availability Schedule Name
+    Humidistat,               !- Dehumidification Control Type
+    0.7,                      !- Cooling Sensible Heat Ratio
+    55,                       !- Dehumidification Setpoint
+    None,                     !- Humidification Control Type
+    30,                       !- Humidification Setpoint
+    DetailedSpecification,    !- Outdoor Air Method
+    0.00944,                  !- Outdoor Air Flow Rate per Person
+    ,                         !- Outdoor Air Flow Rate per Zone Floor Area
+    ,                         !- Outdoor Air Flow Rate per Zone
+    SZ DSOA Zone 3,           !- Design Specification Outdoor Air Object Name
+    None,                     !- Demand Controlled Ventilation Type
+    NoEconomizer,             !- Outdoor Air Economizer Type
+    None,                     !- Heat Recovery Type
+    0.7,                      !- Sensible Heat Recovery Effectiveness
+    0.65;                     !- Latent Heat Recovery Effectiveness
+
+DesignSpecification:OutdoorAir,
+    SZ DSOA Zone 1,           !- Name
+    flow/person,              !- Outdoor Air Method
+    0.015,                    !- Outdoor Air Flow per Person
+    0,                        !- Outdoor Air Flow per Zone Floor Area
+    0;                        !- Outdoor Air Flow per Zone
+
+DesignSpecification:OutdoorAir,
+    SZ DSOA Zone 2,           !- Name
+    flow/person,              !- Outdoor Air Method
+    0.015,                    !- Outdoor Air Flow per Person
+    0,                        !- Outdoor Air Flow per Zone Floor Area
+    0;                        !- Outdoor Air Flow per Zone
+
+DesignSpecification:OutdoorAir,
+    SZ DSOA Zone 3,           !- Name
+    flow/person,              !- Outdoor Air Method
+    0.015,                    !- Outdoor Air Flow per Person
+    0,                        !- Outdoor Air Flow per Zone Floor Area
+    0;                        !- Outdoor Air Flow per Zone
+
+Sizing:Parameters,
+    1,                        !- Heating Sizing Factor
+    1;                        !- Cooling Sizing Factor
+
+Sizing:Zone,
+    Thermal Zone 1,           !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    50,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    SZ DSOA Zone 1,           !- Design Specification Outdoor Air Object Name
+    0,                        !- Zone Heating Sizing Factor
+    0,                        !- Zone Cooling Sizing Factor
+    DesignDay,                !- Cooling Design Air Flow Method
+    0,                        !- Cooling Design Air Flow Rate
+    ,                         !- Cooling Minimum Air Flow per Zone Floor Area
+    ,                         !- Cooling Minimum Air Flow
+    ,                         !- Cooling Minimum Air Flow Fraction
+    DesignDay,                !- Heating Design Air Flow Method
+    0;                        !- Heating Design Air Flow Rate
+
+Sizing:Zone,
+    Thermal Zone 2,           !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    50,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    SZ DSOA Zone 2,           !- Design Specification Outdoor Air Object Name
+    0,                        !- Zone Heating Sizing Factor
+    0,                        !- Zone Cooling Sizing Factor
+    DesignDay,                !- Cooling Design Air Flow Method
+    0,                        !- Cooling Design Air Flow Rate
+    ,                         !- Cooling Minimum Air Flow per Zone Floor Area
+    ,                         !- Cooling Minimum Air Flow
+    ,                         !- Cooling Minimum Air Flow Fraction
+    DesignDay,                !- Heating Design Air Flow Method
+    0;                        !- Heating Design Air Flow Rate
+
+Sizing:Zone,
+    Thermal Zone 3,           !- Zone or ZoneList Name
+    SupplyAirTemperature,     !- Zone Cooling Design Supply Air Temperature Input Method
+    14,                       !- Zone Cooling Design Supply Air Temperature
+    ,                         !- Zone Cooling Design Supply Air Temperature Difference
+    SupplyAirTemperature,     !- Zone Heating Design Supply Air Temperature Input Method
+    50,                       !- Zone Heating Design Supply Air Temperature
+    ,                         !- Zone Heating Design Supply Air Temperature Difference
+    0.009,                    !- Zone Cooling Design Supply Air Humidity Ratio
+    0.004,                    !- Zone Heating Design Supply Air Humidity Ratio
+    SZ DSOA Zone 3,           !- Design Specification Outdoor Air Object Name
+    0,                        !- Zone Heating Sizing Factor
+    0,                        !- Zone Cooling Sizing Factor
+    DesignDay,                !- Cooling Design Air Flow Method
+    0,                        !- Cooling Design Air Flow Rate
+    ,                         !- Cooling Minimum Air Flow per Zone Floor Area
+    ,                         !- Cooling Minimum Air Flow
+    ,                         !- Cooling Minimum Air Flow Fraction
+    DesignDay,                !- Heating Design Air Flow Method
+    0;                        !- Heating Design Air Flow Rate
+
+Sizing:Plant,
+    ChW Loop,                 !- Plant or Condenser Loop Name
+    cooling,                  !- Loop Type
+    7.22,                     !- Design Loop Exit Temperature
+    6.67;                     !- Loop Design Temperature Difference
+
+Branch,
+    ChW Supply Side InletBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pump:VariableSpeed,       !- Component 1 Object Type
+    ChW Supply Side CircPump,    !- Component 1 Name
+    ChW Supply Side InletBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Supply Side InletBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Supply Side ChillerBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Chiller:Electric:EIR,     !- Component 1 Object Type
+    Chiller,                  !- Component 1 Name
+    ChW Supply Side ChillerBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Supply Side ChillerBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Supply Side StorageBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    ThermalStorage:ChilledWater:Mixed,    !- Component 1 Object Type
+    StorageTank,              !- Component 1 Name
+    ChW Supply Side StorageBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Supply Side StorageBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Supply Side BypassBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    ChW Supply Side Side BypassPipe,    !- Component 1 Name
+    ChW Supply Side BypassBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Supply Side BypassBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Supply Side OutletBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    ChW Supply Side OutletPipe,    !- Component 1 Name
+    ChW Supply Side OutletBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Supply Side OutletBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Demand Side InletBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    ChW Demand Side InletPipe,    !- Component 1 Name
+    ChW Demand Side InletBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Demand Side InletBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Demand Side OutletBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    ChW Demand Side OutletPipe,    !- Component 1 Name
+    ChW Demand Side OutletBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Demand Side OutletBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Demand Side LoadBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    LoadProfile:Plant,        !- Component 1 Object Type
+    IdealLoadProfile,         !- Component 1 Name
+    ChW Demand Side LoadBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Demand Side LoadBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+Branch,
+    ChW Demand Side StorageBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    LoadProfile:Plant,        !- Component 1 Object Type
+    StorageChargeFlowProfile,    !- Component 1 Name
+    ChW Demand Side StorageBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Demand Side Storage Outlet Node,    !- Component 1 Outlet Node Name
+    ThermalStorage:ChilledWater:Mixed,    !- Component 2 Object Type
+    StorageTank,              !- Component 2 Name
+    ChW Demand Side Storage Outlet Node,    !- Component 2 Inlet Node Name
+    ChW Demand Side StorageBranch Outlet Node;    !- Component 2 Outlet Node Name
+
+Branch,
+    ChW Demand Side BypassBranch,    !- Name
+    ,                         !- Pressure Drop Curve Name
+    Pipe:Adiabatic,           !- Component 1 Object Type
+    ChW Demand Side BypassPipe,    !- Component 1 Name
+    ChW Demand Side BypassBranch Inlet Node,    !- Component 1 Inlet Node Name
+    ChW Demand Side BypassBranch Outlet Node;    !- Component 1 Outlet Node Name
+
+BranchList,
+    ChW Supply Side Branches,    !- Name
+    ChW Supply Side InletBranch,    !- Branch 1 Name
+    ChW Supply Side ChillerBranch,    !- Branch 2 Name
+    ChW Supply Side StorageBranch,    !- Branch 3 Name
+    ChW Supply Side BypassBranch,    !- Branch 4 Name
+    ChW Supply Side OutletBranch;    !- Branch 5 Name
+
+BranchList,
+    ChW Demand Side Branches,    !- Name
+    ChW Demand Side InletBranch,    !- Branch 1 Name
+    ChW Demand Side LoadBranch,    !- Branch 2 Name
+    ChW Demand Side BypassBranch,    !- Branch 3 Name
+    ChW Demand Side StorageBranch,    !- Branch 4 Name
+    ChW Demand Side OutletBranch;    !- Branch 5 Name
+
+Connector:Splitter,
+    ChW Supply Side Splitter,    !- Name
+    ChW Supply Side InletBranch,    !- Inlet Branch Name
+    ChW Supply Side ChillerBranch,    !- Outlet Branch 1 Name
+    ChW Supply Side StorageBranch,    !- Outlet Branch 2 Name
+    ChW Supply Side BypassBranch;    !- Outlet Branch 3 Name
+
+Connector:Splitter,
+    ChW Demand Side Splitter,    !- Name
+    ChW Demand Side InletBranch,    !- Inlet Branch Name
+    ChW Demand Side LoadBranch,    !- Outlet Branch 1 Name
+    ChW Demand Side StorageBranch,    !- Outlet Branch 2 Name
+    ChW Demand Side BypassBranch;    !- Outlet Branch 3 Name
+
+Connector:Mixer,
+    ChW Supply Side Mixer,    !- Name
+    ChW Supply Side OutletBranch,    !- Outlet Branch Name
+    ChW Supply Side ChillerBranch,    !- Inlet Branch 1 Name
+    ChW Supply Side StorageBranch,    !- Inlet Branch 2 Name
+    ChW Supply Side BypassBranch;    !- Inlet Branch 3 Name
+
+Connector:Mixer,
+    ChW Demand Side Mixer,    !- Name
+    ChW Demand Side OutletBranch,    !- Outlet Branch Name
+    ChW Demand Side LoadBranch,    !- Inlet Branch 1 Name
+    ChW Demand Side StorageBranch,    !- Inlet Branch 2 Name
+    ChW Demand Side BypassBranch;    !- Inlet Branch 3 Name
+
+ConnectorList,
+    ChW Supply Side Connectors,    !- Name
+    Connector:Splitter,       !- Connector 1 Object Type
+    ChW Supply Side Splitter,    !- Connector 1 Name
+    Connector:Mixer,          !- Connector 2 Object Type
+    ChW Supply Side Mixer;    !- Connector 2 Name
+
+ConnectorList,
+    ChW Demand Side Connectors,    !- Name
+    Connector:Splitter,       !- Connector 1 Object Type
+    ChW Demand Side Splitter,    !- Connector 1 Name
+    Connector:Mixer,          !- Connector 2 Object Type
+    ChW Demand Side Mixer;    !- Connector 2 Name
+
+Pipe:Adiabatic,
+    ChW Supply Side Side BypassPipe,    !- Name
+    ChW Supply Side BypassBranch Inlet Node,    !- Inlet Node Name
+    ChW Supply Side BypassBranch Outlet Node;    !- Outlet Node Name
+
+Pipe:Adiabatic,
+    ChW Supply Side OutletPipe,    !- Name
+    ChW Supply Side OutletBranch Inlet Node,    !- Inlet Node Name
+    ChW Supply Side OutletBranch Outlet Node;    !- Outlet Node Name
+
+Pipe:Adiabatic,
+    ChW Demand Side InletPipe,    !- Name
+    ChW Demand Side InletBranch Inlet Node,    !- Inlet Node Name
+    ChW Demand Side InletBranch Outlet Node;    !- Outlet Node Name
+
+Pipe:Adiabatic,
+    ChW Demand Side OutletPipe,    !- Name
+    ChW Demand Side OutletBranch Inlet Node,    !- Inlet Node Name
+    ChW Demand Side OutletBranch Outlet Node;    !- Outlet Node Name
+
+Pipe:Adiabatic,
+    ChW Demand Side BypassPipe,    !- Name
+    ChW Demand Side BypassBranch Inlet Node,    !- Inlet Node Name
+    ChW Demand Side BypassBranch Outlet Node;    !- Outlet Node Name
+
+Pump:VariableSpeed,
+    ChW Supply Side CircPump,    !- Name
+    ChW Supply Side InletBranch Inlet Node,    !- Inlet Node Name
+    ChW Supply Side InletBranch Outlet Node,    !- Outlet Node Name
+    0.00055,                  !- Design Maximum Flow Rate
+    179352,                   !- Design Pump Head
+    autosize,                 !- Design Power Consumption
+    0.9,                      !- Motor Efficiency
+    0,                        !- Fraction of Motor Inefficiencies to Fluid Stream
+    0,                        !- Coefficient 1 of the Part Load Performance Curve
+    1,                        !- Coefficient 2 of the Part Load Performance Curve
+    0,                        !- Coefficient 3 of the Part Load Performance Curve
+    0,                        !- Coefficient 4 of the Part Load Performance Curve
+    0,                        !- Design Minimum Flow Rate
+    Intermittent;             !- Pump Control Type
+
+LoadProfile:Plant,
+    IdealLoadProfile,         !- Name
+    ChW Demand Side LoadBranch Inlet Node,    !- Inlet Node Name
+    ChW Demand Side LoadBranch Outlet Node,    !- Outlet Node Name
+    IDEAL LOAD SCHEDULE,      !- Load Schedule Name
+    0.00035,                  !- Peak Flow Rate
+    IDEAL FLOWfrac SCHEDULE;    !- Flow Rate Fraction Schedule Name
+
+LoadProfile:Plant,
+    StorageChargeFlowProfile,    !- Name
+    ChW Demand Side StorageBranch Inlet Node,    !- Inlet Node Name
+    ChW Demand Side Storage Outlet Node,    !- Outlet Node Name
+    NULL LOAD SCHEDULE,       !- Load Schedule Name
+    0.0002,                   !- Peak Flow Rate
+    EP FLOWFRACTION TO STORAGE;    !- Flow Rate Fraction Schedule Name
+
+Chiller:Electric:EIR,
+    Chiller,                  !- Name
+    12000,                    !- Reference Capacity
+    2.67,                     !- Reference COP
+    6.67,                     !- Reference Leaving Chilled Water Temperature
+    35,                       !- Reference Entering Condenser Fluid Temperature
+    0.00055,                  !- Reference Chilled Water Flow Rate
+    Autosize,                 !- Reference Condenser Fluid Flow Rate
+    ElectricEIRChiller McQuay AGZ010BS 34.5kW/2.67COP CAPFT,    !- Cooling Capacity Function of Temperature Curve Name
+    ElectricEIRChiller McQuay AGZ010BS 34.5kW/2.67COP EIRFT,    !- Electric Input to Cooling Output Ratio Function of Temperature Curve Name
+    ElectricEIRChiller McQuay AGZ010BS 34.5kW/2.67COP EIRFPLR,    !- Electric Input to Cooling Output Ratio Function of Part Load Ratio Curve Name
+    0.1,                      !- Minimum Part Load Ratio
+    1.15,                     !- Maximum Part Load Ratio
+    1,                        !- Optimum Part Load Ratio
+    0.1,                      !- Minimum Unloading Ratio
+    ChW Supply Side ChillerBranch Inlet Node,    !- Chilled Water Inlet Node Name
+    ChW Supply Side ChillerBranch Outlet Node,    !- Chilled Water Outlet Node Name
+    PlantChillerOAInNode,     !- Condenser Inlet Node Name
+    ,                         !- Condenser Outlet Node Name
+    AirCooled,                !- Condenser Type
+    ,                         !- Condenser Fan Power Ratio
+    1,                        !- Fraction of Compressor Electric Consumption Rejected by Condenser
+    2,                        !- Leaving Chilled Water Lower Temperature Limit
+    NotModulated,             !- Chiller Flow Mode
+    0;                        !- Design Heat Recovery Water Flow Rate
+
+ThermalStorage:ChilledWater:Mixed,
+    StorageTank,              !- Name
+    10,                       !- Tank Volume
+    StorageTank Temp Schedule,    !- Setpoint Temperature Schedule Name
+    0.1,                      !- Deadband Temperature Difference
+    1,                        !- Minimum Temperature Limit
+    8000,                     !- Nominal Cooling Capacity
+    Zone,                     !- Ambient Temperature Indicator
+    ,                         !- Ambient Temperature Schedule Name
+    Thermal Zone 4,           !- Ambient Temperature Zone Name
+    ,                         !- Ambient Temperature Outdoor Air Node Name
+    12,                       !- Heat Gain Coefficient from Ambient Temperature
+    ChW Supply Side StorageBranch Inlet Node,    !- Use Side Inlet Node Name
+    ChW Supply Side StorageBranch Outlet Node,    !- Use Side Outlet Node Name
+    1,                        !- Use Side Heat Transfer Effectiveness
+    BCVTB_STORAGE_DISCHARGING,    !- Use Side Availability Schedule Name
+    0.00035,                  !- Use Side Design Flow Rate
+    ChW Demand Side Storage Outlet Node,    !- Source Side Inlet Node Name
+    ChW Demand Side StorageBranch Outlet Node,    !- Source Side Outlet Node Name
+    1,                        !- Source Side Heat Transfer Effectiveness
+    BCVTB_STORAGE_CHARGING,    !- Source Side Availability Schedule Name
+    0.0002,                   !- Source Side Design Flow Rate
+    4;                        !- Tank Recovery Time
+
+PlantLoop,
+    ChW Loop,                 !- Name
+    Water,                    !- Fluid Type
+    ,                         !- User Defined Fluid Type
+    Chiller Operation,        !- Plant Equipment Operation Scheme Name
+    ChW Supply Side OutletBranch Outlet Node,    !- Loop Temperature Setpoint Node Name
+    100,                      !- Maximum Loop Temperature
+    5,                        !- Minimum Loop Temperature
+    autosize,                 !- Maximum Loop Flow Rate
+    0,                        !- Minimum Loop Flow Rate
+    autocalculate,            !- Plant Loop Volume
+    ChW Supply Side InletBranch Inlet Node,    !- Plant Side Inlet Node Name
+    ChW Supply Side OutletBranch Outlet Node,    !- Plant Side Outlet Node Name
+    ChW Supply Side Branches,    !- Plant Side Branch List Name
+    ChW Supply Side Connectors,    !- Plant Side Connector List Name
+    ChW Demand Side InletBranch Inlet Node,    !- Demand Side Inlet Node Name
+    ChW Demand Side OutletBranch Outlet Node,    !- Demand Side Outlet Node Name
+    ChW Demand Side Branches,    !- Demand Side Branch List Name
+    ChW Demand Side Connectors,    !- Demand Side Connector List Name
+    SequentialLoad,           !- Load Distribution Scheme
+    ChW Loop Availability List;    !- Availability Manager List Name
+
+PlantEquipmentList,
+    ChW Loop Equipment List1,    !- Name
+    Chiller:Electric:EIR,     !- Equipment 1 Object Type
+    Chiller;                  !- Equipment 1 Name
+
+PlantEquipmentList,
+    ChW Loop Equipment List2,    !- Name
+    ThermalStorage:ChilledWater:Mixed,    !- Equipment 1 Object Type
+    StorageTank;              !- Equipment 1 Name
+
+PlantEquipmentOperation:CoolingLoad,
+    Chiller Operation Control Scheme,    !- Name
+    0,                        !- Load Range 1 Lower Limit
+    1000000,                  !- Load Range 1 Upper Limit
+    ChW Loop Equipment List1;    !- Range 1 Equipment List Name
+
+PlantEquipmentOperation:CoolingLoad,
+    Storage Operation Control Scheme,    !- Name
+    0,                        !- Load Range 1 Lower Limit
+    1000000,                  !- Load Range 1 Upper Limit
+    ChW Loop Equipment List2;    !- Range 1 Equipment List Name
+
+PlantEquipmentOperationSchemes,
+    Chiller Operation,        !- Name
+    PlantEquipmentOperation:CoolingLoad,    !- Control Scheme 1 Object Type
+    Storage Operation Control Scheme,    !- Control Scheme 1 Name
+    BCVTB_STORAGE_DISCHARGING,    !- Control Scheme 1 Schedule Name
+    PlantEquipmentOperation:CoolingLoad,    !- Control Scheme 2 Object Type
+    Chiller Operation Control Scheme,    !- Control Scheme 2 Name
+    BCVTB_CHILLER_OPS;        !- Control Scheme 2 Schedule Name
+
+EnergyManagementSystem:Sensor,
+    EMS_LightE_1,             !- Name
+    LED AS2,                  !- OutputVariable or OutputMeter Index Key Name
+    Lights Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_LightE_2,             !- Name
+    LED AS1,                  !- OutputVariable or OutputMeter Index Key Name
+    Lights Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_LightE_3,             !- Name
+    LED SC,                   !- OutputVariable or OutputMeter Index Key Name
+    Lights Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_LightE_4,             !- Name
+    Plafoniere SC,            !- OutputVariable or OutputMeter Index Key Name
+    Lights Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_LightE_5,             !- Name
+    Plafoniere AS2,           !- OutputVariable or OutputMeter Index Key Name
+    Lights Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_LightE_6,             !- Name
+    Plafoniere AS1,           !- OutputVariable or OutputMeter Index Key Name
+    Lights Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_EEquip_1,             !- Name
+    PC AS1,                   !- OutputVariable or OutputMeter Index Key Name
+    Electric Equipment Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_EEquip_2,             !- Name
+    PC SC,                    !- OutputVariable or OutputMeter Index Key Name
+    Electric Equipment Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_EEquip_3,             !- Name
+    PC AS2,                   !- OutputVariable or OutputMeter Index Key Name
+    Electric Equipment Electric Power;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    IdealLoadZ1,              !- Name
+    THERMAL ZONE 1 IDEAL LOADS AIR SYSTEM,    !- OutputVariable or OutputMeter Index Key Name
+    Zone Ideal Loads Zone Total Cooling Rate;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    IdealLoadZ2,              !- Name
+    THERMAL ZONE 2 IDEAL LOADS AIR SYSTEM,    !- OutputVariable or OutputMeter Index Key Name
+    Zone Ideal Loads Zone Total Cooling Rate;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    IdealLoadZ3,              !- Name
+    THERMAL ZONE 3 IDEAL LOADS AIR SYSTEM,    !- OutputVariable or OutputMeter Index Key Name
+    Zone Ideal Loads Zone Total Cooling Rate;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_FlowFractionToZones,    !- Name
+    BCVTB_FLOWFRACTION_TO_ZONES,    !- OutputVariable or OutputMeter Index Key Name
+    Schedule Value;           !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    TTANK,                    !- Name
+    StorageTank,              !- OutputVariable or OutputMeter Index Key Name
+    Chilled Water Thermal Storage Tank Temperature;    !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Sensor,
+    EMS_FlowFractionToStorage,    !- Name
+    BCVTB_FLOWFRACTION_TO_STORAGE,    !- OutputVariable or OutputMeter Index Key Name
+    Schedule Value;           !- OutputVariable or OutputMeter Name
+
+EnergyManagementSystem:Actuator,
+    EMS_ZoneFlowRate,         !- Name
+    ChW Demand Side LoadBranch Inlet Node,    !- Actuated Component Unique Name
+    System Node Setpoint,     !- Actuated Component Type
+    Mass Flow Rate Setpoint;    !- Actuated Component Control Type
+
+EnergyManagementSystem:Actuator,
+    EMS_StorageFlowRate,      !- Name
+    ChW Demand Side StorageBranch Inlet Node,    !- Actuated Component Unique Name
+    System Node Setpoint,     !- Actuated Component Type
+    Mass Flow Rate Setpoint;    !- Actuated Component Control Type
+
+EnergyManagementSystem:Actuator,
+    EMS_PumpFlowRate,         !- Name
+    ChW Supply Side CircPump,    !- Actuated Component Unique Name
+    Pump,                     !- Actuated Component Type
+    Pump Mass Flow Rate;      !- Actuated Component Control Type
+
+EnergyManagementSystem:Actuator,
+    EMS_IdealLoadSchedule,    !- Name
+    IDEAL LOAD SCHEDULE,      !- Actuated Component Unique Name
+    Schedule:Constant,        !- Actuated Component Type
+    Schedule Value;           !- Actuated Component Control Type
+
+EnergyManagementSystem:Actuator,
+    EMS_IdealFlowFracSchedule,    !- Name
+    IDEAL FLOWfrac SCHEDULE,    !- Actuated Component Unique Name
+    Schedule:Constant,        !- Actuated Component Type
+    Schedule Value;           !- Actuated Component Control Type
+
+EnergyManagementSystem:Actuator,
+    EMS_StorageFlowFracSchedule,    !- Name
+    EP FLOWFRACTION TO STORAGE,    !- Actuated Component Unique Name
+    Schedule:Constant,        !- Actuated Component Type
+    Schedule Value;           !- Actuated Component Control Type
+
+EnergyManagementSystem:ProgramCallingManager,
+    Calculate Trend,          !- Name
+    BeginTimestepBeforePredictor,    !- EnergyPlus Model Calling Point
+    trend_variables;          !- Program Name 1
+
+EnergyManagementSystem:ProgramCallingManager,
+    My Setpoint Schedule Calculator Example,    !- Name
+    InsideHVACSystemIterationLoop,    !- EnergyPlus Model Calling Point
+    IdealLoadProfileProg;     !- Program Name 1
+
+EnergyManagementSystem:ProgramCallingManager,
+    GetTimelag_Manager,       !- Name
+    AfterPredictorAfterHVACManagers,    !- EnergyPlus Model Calling Point
+    GetTimelag;               !- Program Name 1
+
+EnergyManagementSystem:ProgramCallingManager,
+    Calculate ELoad,          !- Name
+    BeginTimestepBeforePredictor,    !- EnergyPlus Model Calling Point
+    ELoadCalc;                !- Program Name 1
+
+EnergyManagementSystem:Program,
+    ELoadCalc,                !- Name
+    SET EMS_ELoad = (EMS_LightE_1 + EMS_LightE_2 + EMS_LightE_3 + EMS_LightE_4 + EMS_LightE_5 + EMS_LightE_6 + EMS_EEquip_1 + EMS_EEquip_2 + EMS_EEquip_3);    !- Program Line 1
+
+EnergyManagementSystem:Program,
+    IdealLoadProfileProg,     !- Name
+    Set EMS_IdealLoadSchedule = -(IdealLoadZ1 + IdealLoadZ2 + IdealLoadZ3),    !- Program Line 1
+    SET EMS_StorageFlowFracSchedule = EMS_FlowFractionToStorage,    !- Program Line 2
+    IF (EMS_IdealLoadSchedule == 0),    !- Program Line 3
+    Set EMS_IdealFlowFracSchedule = 0,    !- Program Line 4
+    ELSEIF (EMS_IdealLoadSchedule < 0),    !- Program Line 5
+    Set EMS_IdealFlowFracSchedule = EMS_FlowFractionToZones,    !- Program Line 6
+    ENDIF,                    !- Program Line 7
+    SET EMS_ZoneFlowRate = EMS_IdealFlowFracSchedule * 0.35,    !- Program Line 8
+    SET EMS_StorageFlowRate = EMS_StorageFlowFracSchedule * 0.2,    !- Program Line 9
+    SET EMS_PumpFlowRate = EMS_IdealFlowFracSchedule * 0.35 + EMS_StorageFlowFracSchedule * 0.2;    !- Program Line 10
+
+EnergyManagementSystem:Program,
+    GetTimelag,               !- Name
+    SET currentYear = Year,    !- Program Line 1
+    SET currentMonth = Month,    !- Program Line 2
+    SET currentDayOfMonth = DayOfMonth,    !- Program Line 3
+    SET currentDayOfWeek = DayOfWeek,    !- Program Line 4
+    SET currentTimeOfDay = CurrentTime,    !- Program Line 5
+    SET currentHoliday = Holiday;    !- Program Line 6
+
+EnergyManagementSystem:Program,
+    trend_variables,          !- Name
+    SET ttank_m_1=@TrendValue ttank_trend 12,    !- Program Line 1
+    SET ttank_m_2=@TrendValue ttank_trend 24,    !- Program Line 2
+    SET ttank_m_3=@TrendValue ttank_trend 36,    !- Program Line 3
+    SET ttank_m_4=@TrendValue ttank_trend 48;    !- Program Line 4
+
+EnergyManagementSystem:GlobalVariable,
+    ttank_m_1,                !- Erl Variable 1 Name
+    ttank_m_2,                !- Erl Variable 2 Name
+    ttank_m_3,                !- Erl Variable 3 Name
+    ttank_m_4,                !- Erl Variable 4 Name
+    EMS_ELoad;                !- Erl Variable 5 Name
+
+EnergyManagementSystem:GlobalVariable,
+    currentYear;              !- Erl Variable 1 Name
+
+EnergyManagementSystem:GlobalVariable,
+    currentMonth;             !- Erl Variable 1 Name
+
+EnergyManagementSystem:GlobalVariable,
+    currentDayOfMonth;        !- Erl Variable 1 Name
+
+EnergyManagementSystem:GlobalVariable,
+    currentDayOfWeek;         !- Erl Variable 1 Name
+
+EnergyManagementSystem:GlobalVariable,
+    currentTimeOfDay;         !- Erl Variable 1 Name
+
+EnergyManagementSystem:GlobalVariable,
+    currentHoliday;           !- Erl Variable 1 Name
+
+EnergyManagementSystem:OutputVariable,
+    EMS_ELoad,                !- Name
+    EMS_ELoad,                !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    ttank_m_1,                !- Name
+    ttank_m_1,                !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    ttank_m_2,                !- Name
+    ttank_m_2,                !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    ttank_m_3,                !- Name
+    ttank_m_3,                !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    ttank_m_4,                !- Name
+    ttank_m_4,                !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    currentMonth,             !- Name
+    currentMonth,             !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    currentDayOfMonth,        !- Name
+    currentDayOfMonth,        !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    currentDayOfWeek,         !- Name
+    currentDayOfWeek,         !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    currentTimeOfDay,         !- Name
+    currentTimeOfDay,         !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:OutputVariable,
+    currentHoliday,           !- Name
+    currentHoliday,           !- EMS Variable Name
+    Averaged,                 !- Type of Data in Variable
+    ZoneTimeStep;             !- Update Frequency
+
+EnergyManagementSystem:TrendVariable,
+    ttank_trend,              !- Name
+    TTANK,                    !- EMS Variable Name
+    48;                       !- Number of Timesteps to be Logged
+
+ExternalInterface,
+    PtolemyServer;            !- Name of External Interface
+
+ExternalInterface:Schedule,
+    BCVTB_FLOWFRACTION_TO_STORAGE,    !- Name
+    Fraction,                 !- Schedule Type Limits Name
+    0;                        !- Initial Value
+
+ExternalInterface:Schedule,
+    BCVTB_FLOWFRACTION_TO_ZONES,    !- Name
+    Any Number,               !- Schedule Type Limits Name
+    1;                        !- Initial Value
+
+ExternalInterface:Schedule,
+    BCVTB_CHILLER_OPS,        !- Name
+    Any Number,               !- Schedule Type Limits Name
+    1;                        !- Initial Value
+
+ExternalInterface:Schedule,
+    BCVTB_STORAGE_CHARGING,    !- Name
+    Any Number,               !- Schedule Type Limits Name
+    0;                        !- Initial Value
+
+ExternalInterface:Schedule,
+    BCVTB_STORAGE_DISCHARGING,    !- Name
+    Any Number,               !- Schedule Type Limits Name
+    0;                        !- Initial Value
+
+AvailabilityManager:Scheduled,
+    ChW Loop Availability,    !- Name
+    ChW Loop Availability Schedule;    !- Schedule Name
+
+AvailabilityManagerAssignmentList,
+    ChW Loop Availability List,    !- Name
+    AvailabilityManager:Scheduled,    !- Availability Manager 1 Object Type
+    ChW Loop Availability;    !- Availability Manager 1 Name
+
+SetpointManager:Scheduled,
+    ChW Loop SetpointManager,    !- Name
+    Temperature,              !- Control Variable
+    ChW LOOP TEMP SCHEDULE,    !- Schedule Name
+    ChW Supply Side OutletBranch Outlet Node;    !- Setpoint Node or NodeList Name
+
+Curve:Quadratic,
+    ElectricEIRChiller McQuay AGZ010BS 34.5kW/2.67COP EIRFPLR,    !- Name
+    0,                        !- Coefficient1 Constant
+    1,                        !- Coefficient2 x
+    0,                        !- Coefficient3 x2
+    0.15,                     !- Minimum Value of x
+    1;                        !- Maximum Value of x
+
+Curve:Biquadratic,
+    ElectricEIRChiller McQuay AGZ010BS 34.5kW/2.67COP CAPFT,    !- Name
+    0.9297434402,             !- Coefficient1 Constant
+    0.0503265306,             !- Coefficient2 x
+    -0.0001180758,            !- Coefficient3 x2
+    -0.004555102,             !- Coefficient4 y
+    -1.88921e-05,             !- Coefficient5 y2
+    -0.0003306122,            !- Coefficient6 xy
+    5.56,                     !- Minimum Value of x
+    10,                       !- Maximum Value of x
+    23.89,                    !- Minimum Value of y
+    46.11,                    !- Maximum Value of y
+    0.8673,                   !- Minimum Curve Output
+    1.2245,                   !- Maximum Curve Output
+    Temperature,              !- Input Unit Type for X
+    Temperature,              !- Input Unit Type for Y
+    Dimensionless;            !- Output Unit Type
+
+Curve:Biquadratic,
+    ElectricEIRChiller McQuay AGZ010BS 34.5kW/2.67COP EIRFT,    !- Name
+    0.7690169642,             !- Coefficient1 Constant
+    -0.023780081,             !- Coefficient2 x
+    0.0009828809,             !- Coefficient3 x2
+    0.0015396954,             !- Coefficient4 y
+    0.000353063,              !- Coefficient5 y2
+    -0.0005959493,            !- Coefficient6 xy
+    5.56,                     !- Minimum Value of x
+    10,                       !- Maximum Value of x
+    23.89,                    !- Minimum Value of y
+    46.11,                    !- Maximum Value of y
+    0.72,                     !- Minimum Curve Output
+    1.3426,                   !- Maximum Curve Output
+    Temperature,              !- Input Unit Type for X
+    Temperature,              !- Input Unit Type for Y
+    Dimensionless;            !- Output Unit Type
+
+Output:VariableDictionary,
+    IDF,                      !- Key Field
+    Unsorted;                 !- Sort Option
+
+Output:Surfaces:List,
+    Details;                  !- Report Type
+
+Output:Constructions,
+    Constructions,            !- Details Type 1
+    Materials;                !- Details Type 2
+
+Output:Table:SummaryReports,
+    AllSummary;               !- Report 1 Name
+
+OutputControl:Table:Style,
+    HTML,                     !- Column Separator
+    None;                     !- Unit Conversion
+
+Output:Variable,
+    *,                        !- Key Value
+    Site Outdoor Air Drybulb Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Site Outdoor Air Relative Humidity,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Site Diffuse Solar Radiation Rate per Area,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Site Direct Solar Radiation Rate per Area,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Zone People Occupant Count,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Zone Ideal Loads Zone Total Cooling Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Plant Load Profile Cooling Energy,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Plant Load Profile Heat Transfer Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Thermal Zone 1,           !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Thermal Zone 2,           !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Thermal Zone 3,           !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    Thermal Zone 4,           !- Key Value
+    Zone Mean Air Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Pump Mass Flow Rate,      !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Pump Electric Energy,     !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chiller Evaporator Cooling Energy,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chiller Evaporator Inlet Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chiller Evaporator Outlet Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Tank Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Use Side Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Source Side Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Use Side Heat Transfer Energy,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Source Side Heat Transfer Energy,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chiller Part Load Ratio,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chiller COP,              !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Use Side Inlet Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Use Side Outlet Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Source Side Inlet Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chilled Water Thermal Storage Source Side Outlet Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    ChW Supply Side OutletBranch Outlet Node,    !- Key Value
+    System Node Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    EMS,                      !- Key Value
+    currentTimeOfDay,         !- Variable Name
+    TimeStep;                 !- Reporting Frequency
+
+Output:Variable,
+    EMS,                      !- Key Value
+    currentDayOfWeek,         !- Variable Name
+    TimeStep;                 !- Reporting Frequency
+
+Output:Variable,
+    EMS,                      !- Key Value
+    EMS_ELoad,                !- Variable Name
+    TimeStep;                 !- Reporting Frequency
+
+Output:Variable,
+    *,                        !- Key Value
+    Chiller Electric Energy,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    ChW Supply Side OutletBranch Outlet Node,    !- Key Value
+    System Node Temperature,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:Variable,
+    ChW Supply Side OutletBranch Outlet Node,    !- Key Value
+    System Node Mass Flow Rate,    !- Variable Name
+    Timestep;                 !- Reporting Frequency
+
+Output:SQLite,
+    SimpleAndTabular;         !- Option Type
