@@ -1,0 +1,4 @@
+id;price_schedule;pv_surface;battery_size;tank_volume;tank_heat_gain_coefficient;baseline;score
+_001;ita1;10;2400;10;12;;
+_002;uk1;10;2400;10;12;;
+_003;uk2;10;2400;10;12;;

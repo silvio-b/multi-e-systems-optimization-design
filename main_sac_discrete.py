@@ -22,7 +22,7 @@ if __name__ == '__main__':
     n_neurons = 64
     batch_size = 256
     replay_buffer_capacity = 24 * 30 * 100
-    prediction_observations = ['electricity_price']
+    prediction_observations = ['electricity_price', 'pv_power_generation', 'cooling_load']
     prediction_horizon = 4
     min_temperature_limit = 10  # Below this value no charging
     min_charging_temperature = 12  # Charging begins above this threshold
