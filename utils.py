@@ -191,7 +191,8 @@ def order_state_variables(env, observation, cooling_load_predictions, electricit
     observation_df = pd.DataFrame(index=range(0, len(observation)), columns=['variable', 'value'])
     observation_df['variable'] = ['outdoor_air_temperature_0', 'cooling_load_0', 'electricity_price_0',
                                   'storage_soc_0', 'storage_soc_l1', 'storage_soc_l2', 'storage_soc_l3',
-                                  'storage_soc_l4', 'pv_power_generation_0', 'auxiliary_load_0', 'battery_soc_0']
+                                  'storage_soc_l4', 'pv_power_generation_0', 'auxiliary_load_0', 'battery_soc_0',
+                                  'time_of_day_0', 'day_of_week_0']
     observation_df['value'] = observation
 
     cooling_load_predictions_df = pd.DataFrame(index=range(0, horizon), columns=['variable', 'value'])

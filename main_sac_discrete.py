@@ -4,6 +4,7 @@ import pandas as pd
 from agents.SAC_discrete import SACAgent
 from utils import order_state_variables, min_max_scaling, calculate_tank_soc
 import numpy as np
+import json
 
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
@@ -12,22 +13,21 @@ if __name__ == '__main__':
     result_directory = 'test_06'
     safe_exploration = -1
     discount_factor = 0.99
-    alpha = 1
+    alpha = 0.05
     tau = 0.005
     automatic_entropy_tuning = False
     learning_rate_actor = 0.0001
     learning_rate_critic = 0.001
     n_hidden_layers = 2
-    n_neurons = 256
-    batch_size = 64
+    n_neurons = 64
+    batch_size = 256
     replay_buffer_capacity = 24 * 30 * 100
-    prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
-    prediction_horizon = 24
+    prediction_observations = ['electricity_price']
+    prediction_horizon = 4
     min_temperature_limit = 10  # Below this value no charging
     min_charging_temperature = 12  # Charging begins above this threshold
     max_temperature_limit = 18  # Above this threshold no discharging
     num_episodes = 10
-    
 
     result_directory_final = result_directory_path + result_directory
     if not os.path.exists(result_directory_final):
@@ -42,15 +42,24 @@ if __name__ == '__main__':
         'simulation_days': 90,
         'tank_min_temperature': min_temperature_limit,
         'tank_max_temperature': max_temperature_limit,
-        'price_schedule_name': 'electricity_price_schedule.csv'}
+        'price_schedule_name': 'electricity_price_schedule_uk1.csv'}
 
     env = RelicEnv(config)
+
+    with open('supportFiles//state_space_variables.json', 'r') as json_file:
+        building_states = json.load(json_file)
+
+    building_states['predicted_observations']['horizon'] = int(prediction_horizon)
+    building_states['predicted_observations']['variables'] = prediction_observations
+
+    with open('supportFiles//state_space_variables.json', 'w') as json_file:
+        json.dump(building_states, json_file)
 
     # Import predictions
     cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect.csv')
     electricity_price_predictions = pd.read_csv('supportFiles\\prediction-electricity_price_perfect.csv')
     pv_power_generation_predictions = pd.read_csv('supportFiles\\prediction-pv_power_generation_perfect.csv')
-    electricity_price_schedule = pd.read_csv('supportFiles\\electricity_price_schedule.csv', header=None)
+    electricity_price_schedule = pd.read_csv('supportFiles\\electricity_price_schedule_uk1.csv', header=None)
 
     # Set the number of actions
     n_actions = 2
@@ -85,7 +94,7 @@ if __name__ == '__main__':
     # Training Loop
     for episode in range(1, num_episodes + 1):
         episode_step = 0
-        observation = env.reset()
+        observation = env.reset(name_save='episode')
         # append prediction
         electricity_price = electricity_price_schedule[0][env.kStep + 1]
         storage_soc = observation[3]

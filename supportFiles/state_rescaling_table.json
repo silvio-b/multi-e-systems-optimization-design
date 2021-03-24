@@ -16,8 +16,8 @@
     "max": 10000.0
   },
   "electricity_price":{
-    "min": 0.0,
-    "max": 0.3
+    "min": 0.0818,
+    "max": 0.2709
   },
   "auxiliary_load":{
     "min": 0.0,
@@ -30,5 +30,13 @@
     "battery_soc":{
     "min": 0.0,
     "max": 1.0
+  },
+  "time_of_day":{
+    "min": 0.0,
+    "max": 24.0
+  },
+  "day_of_week":{
+    "min": 1.0,
+    "max": 7.0
   }
 }

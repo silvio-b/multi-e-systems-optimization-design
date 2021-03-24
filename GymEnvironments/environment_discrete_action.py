@@ -55,7 +55,7 @@ class RelicEnv(gym.Env):
         if "reward_multiplier" in config:
             self.reward_multiplier = config["reward_multiplier"]
         else:
-            self.reward_multiplier = 100
+            self.reward_multiplier = 1
 
         # Tank properties
         if "tank_volume" in config:
@@ -191,6 +191,7 @@ class RelicEnv(gym.Env):
         self.electricity_price_schedule = pd.read_csv(self.directory + '\\supportFiles\\' + self.price_schedule_name,
                                                       header=None)
         self.max_price = self.electricity_price_schedule.values.max()
+        self.min_price = self.electricity_price_schedule.values.min()
 
         # PV & Battery Initialization
         self.pv = PV(surface=self.pv_surface, tilt_angle=40, azimuth=180 - 64)
@@ -200,6 +201,8 @@ class RelicEnv(gym.Env):
         self.eta_ac_dc = 0.9
 
         self.SOC = 1
+
+        self.name_save = 'episode'
 
         # Lists for adding variables to eplus output (.csv)
         self.action_list = []
@@ -225,6 +228,8 @@ class RelicEnv(gym.Env):
         self.grid_list = []
         self.energy_cost_from_grid_list = []
         self.energy_cost_to_grid_list = []
+
+        self.episode_electricity_cost = 0
 
         self.action_space_physical = [-1, 1]
 
@@ -277,7 +282,7 @@ class RelicEnv(gym.Env):
 
         time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
         storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption = self.outputs
+        pump_energy_consumption, time_of_day, day_of_week = self.outputs
 
         self.SOC = storage_soc
 
@@ -355,10 +360,10 @@ class RelicEnv(gym.Env):
         self.battery.soc = np.clip(self.battery.soc, self.battery.soc_min, self.battery.soc_max)
 
         # START REWARD CALCULATIONS
-        energy_cost_from_grid = - (grid_energy_ac / (3.6 * 1000000) * electricity_price)
-        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * 0.02)
+        energy_cost_from_grid = (grid_energy_ac / (3.6 * 1000000) * electricity_price)
+        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/2)
 
-        reward_price = energy_cost_from_grid + energy_cost_to_grid
+        reward_price = - energy_cost_from_grid + energy_cost_to_grid
 
         # price component
         reward = reward_price * self.reward_multiplier
@@ -391,7 +396,7 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc)
+                      self.battery.soc, time_of_day, day_of_week)
         self.kStep += 1
 
         done = False
@@ -438,12 +443,16 @@ class RelicEnv(gym.Env):
 
             episode_electricity_consumption = dataep['CHILLER:Chiller Electric Energy [J](TimeStep)'].sum() / (
                         3.6 * 1000000)
-            episode_electricity_cost = - dataep['Energy costs from grid [€]'].sum() - dataep['Energy costs to grid [€]'].sum()
+            episode_electricity_cost = dataep['Energy costs from grid [€]'].sum() - dataep['Energy costs to grid [€]'].sum()
+            self.episode_electricity_cost = episode_electricity_cost
             print('Elec consumption: ' + str(episode_electricity_consumption) +
                   ' Elec Price: ' + str(episode_electricity_cost))
-
-            dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
-                          sep=';', decimal=',', index=False)
+            if self.name_save == 'episode':
+                dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
+                              sep=';', decimal=',', index=False)
+            elif self.name_save == 'baseline':
+                dataep.to_csv(path_or_buf=self.res_directory + '/' + 'baseline.csv',
+                              sep=';', decimal=',', index=False)
             self.episode_number = self.episode_number + 1
             self.ep = None
             self.action_list = []
@@ -476,7 +485,7 @@ class RelicEnv(gym.Env):
             print(done)
         return next_state, reward, done, info
 
-    def reset(self):
+    def reset(self, name_save):
         # stop existing energyplus simulation
         if self.ep:
             print("Closing the old simulation and socket.")
@@ -496,6 +505,8 @@ class RelicEnv(gym.Env):
 
         self.outputs = np.round(self.ep.decode_packet_simple(self.ep.read()), 1).tolist()
 
+        self.name_save = name_save
+
         for i in range(5, 10):
             self.outputs[i] = calculate_tank_soc(self.outputs[i],
                                                  min_temperature=self.tank_min_temperature,
@@ -503,7 +514,7 @@ class RelicEnv(gym.Env):
 
         time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
         storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption = self.outputs
+        pump_energy_consumption, time_of_day, day_of_week = self.outputs
 
         pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
                                                               day=self.day_shift, time=time,
@@ -518,7 +529,7 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc)
+                      self.battery.soc, time_of_day, day_of_week)
 
         return next_state
 
