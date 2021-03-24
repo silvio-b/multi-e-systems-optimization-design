@@ -12,7 +12,7 @@ if __name__ == '__main__':
     result_directory = 'test_02'
     safe_exploration = -1
     discount_factor = 0.99
-    alpha = 0.25
+    alpha = 0.5
     tau = 0.005
     automatic_entropy_tuning = False
     learning_rate_actor = 0.005

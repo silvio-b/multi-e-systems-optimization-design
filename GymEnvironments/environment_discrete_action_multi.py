@@ -55,7 +55,7 @@ class RelicEnv(gym.Env):
         if "reward_multiplier" in config:
             self.reward_multiplier = config["reward_multiplier"]
         else:
-            self.reward_multiplier = 10
+            self.reward_multiplier = 1
 
         # Tank properties
         if "tank_volume" in config:
@@ -231,7 +231,7 @@ class RelicEnv(gym.Env):
 
         self.episode_electricity_cost = 0
 
-        self.action_space_physical = [-1, 1]
+        self.action_space_physical = [[-1, 0], [1, 0], [-1, -1], [1, -1]]
 
     def step(self, action: np.ndarray):
 
@@ -244,8 +244,8 @@ class RelicEnv(gym.Env):
             print("Day: ", int(self.kStep / self.DAYSTEPS))
 
         # prendo le azioni dal controllore
-        action = self.action_space_physical[int(action)]
-
+        action = self.action_space_physical[int(action)][0]
+        action_battery = self.action_space_physical[int(action)][1]
         penalty = 0
         if self.SOC == 0 and action < 0: # AVOID discharge when SOC is 0
             action = 0
@@ -334,7 +334,7 @@ class RelicEnv(gym.Env):
             pv_energy_to_grid_ac = 0
             grid_energy_to_battery_ac = 0
 
-            if electricity_price >= self.max_price:
+            if action_battery == -1:
                 building_energy_residual_ac = building_energy_consumption_ac - pv_energy_to_building_ac
 
                 if building_energy_residual_ac / self.eta_ac_dc <= max_discharge_dc:

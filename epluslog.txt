@@ -1,5 +1,4 @@
 ===== C:\EnergyPlusV9-2-0//RunEplus (Run EnergyPlus) C:\Users\silvi\PycharmProjects\multi-e-systems-optimization-design\eplusModels/StorageTank_Model\eplusModel ITA_TORINO-CASELLE_IGDG ===== Start =====
-        1 file copiati.
 Impossibile trovare il file specificato.
         1 file copiati.
 ExpandObjects Started.
@@ -16,7 +15,7 @@ IDD file    : C:\EnergyPlusV9-2-0\Energy+.idd
 Weather File: C:\EnergyPlusV9-2-0\WeatherData\ITA_TORINO-CASELLE_IGDG.epw
 Begin EnergyPlus processing . . . 
 EnergyPlus Starting
-EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.03.24 17:24
+EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.03.24 21:39
 Initializing Response Factors
 Calculating CTFs for "PAVIMENTO", Construction # 1
 Calculating CTFs for "PAVIMENTO", Construction # 1
@@ -173,8 +172,3 @@ Warming up {5}
 Warming up {6}
 Starting Simulation at 06/01/2010 for TYPOYEAR
 ExternalInterface starts first data exchange.
-Continuing Simulation at 06/14/2010 for TYPOYEAR
-Continuing Simulation at 06/28/2010 for TYPOYEAR
-Continuing Simulation at 07/12/2010 for TYPOYEAR
-Continuing Simulation at 07/26/2010 for TYPOYEAR
-Continuing Simulation at 08/09/2010 for TYPOYEAR

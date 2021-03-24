@@ -1,5 +1,5 @@
 import os
-from GymEnvironments.environment_discrete_action import RelicEnv
+from GymEnvironments.environment_discrete_action_multi import RelicEnv
 import pandas as pd
 from agents.SAC_discrete import SACAgent
 from utils import order_state_variables, min_max_scaling, calculate_tank_soc
@@ -10,24 +10,24 @@ directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
     result_directory_path = 'D:\\OneDrive - Politecnico di Torino\\PhD_Silvio\\14_Projects\\002_PVZenControl\\Thermal_Electrical_Storage_Control\\'
-    result_directory = 'test_06'
+    result_directory = 'test_07'
     safe_exploration = -1
     discount_factor = 0.99
-    alpha = 0.05
+    alpha = 0.1
     tau = 0.005
     automatic_entropy_tuning = False
     learning_rate_actor = 0.0001
-    learning_rate_critic = 0.001
+    learning_rate_critic = 0.0001
     n_hidden_layers = 2
-    n_neurons = 64
+    n_neurons = 256
     batch_size = 256
     replay_buffer_capacity = 24 * 30 * 100
     prediction_observations = ['electricity_price', 'pv_power_generation', 'cooling_load']
-    prediction_horizon = 4
+    prediction_horizon = 24
     min_temperature_limit = 10  # Below this value no charging
     min_charging_temperature = 12  # Charging begins above this threshold
     max_temperature_limit = 18  # Above this threshold no discharging
-    num_episodes = 10
+    num_episodes = 30
 
     result_directory_final = result_directory_path + result_directory
     if not os.path.exists(result_directory_final):
@@ -42,7 +42,7 @@ if __name__ == '__main__':
         'simulation_days': 90,
         'tank_min_temperature': min_temperature_limit,
         'tank_max_temperature': max_temperature_limit,
-        'price_schedule_name': 'electricity_price_schedule_uk1.csv'}
+        'price_schedule_name': 'electricity_price_schedule.csv'}
 
     env = RelicEnv(config)
 
@@ -59,10 +59,10 @@ if __name__ == '__main__':
     cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect.csv')
     electricity_price_predictions = pd.read_csv('supportFiles\\prediction-electricity_price_perfect.csv')
     pv_power_generation_predictions = pd.read_csv('supportFiles\\prediction-pv_power_generation_perfect.csv')
-    electricity_price_schedule = pd.read_csv('supportFiles\\electricity_price_schedule_uk1.csv', header=None)
+    electricity_price_schedule = pd.read_csv('supportFiles\\electricity_price_schedule.csv', header=None)
 
     # Set the number of actions
-    n_actions = 2
+    n_actions = 4
     input_dims = env.observation_space.shape[0]
 
     # define period for RBC control and
@@ -85,7 +85,7 @@ if __name__ == '__main__':
                      action_dim=n_actions, hidden_dim=hidden_size, discount=discount_factor, tau=tau,
                      lr_critic=learning_rate_critic, lr_actor=learning_rate_actor,
                      batch_size=batch_size, replay_buffer_capacity=replay_buffer_capacity, learning_start=30*24,
-                     reward_scaling=10., seed=0, rbc_controller=rbc_controller, safe_exploration=safe_exploration,
+                     reward_scaling=10., seed=100, rbc_controller=rbc_controller, safe_exploration=safe_exploration,
                      automatic_entropy_tuning=automatic_entropy_tuning, alpha=alpha)
 
     # Define the number of episodes
