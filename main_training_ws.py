@@ -19,13 +19,13 @@ if __name__ == '__main__':
         result_directory = '\\' + test_id + '\\configuration' + test_schedule['id'][test]
         safe_exploration = -1
         discount_factor = 0.99
-        alpha = 0.05
+        alpha = 0.01
         tau = 0.005
         automatic_entropy_tuning = False
-        learning_rate_actor = 0.0001
-        learning_rate_critic = 0.001
+        learning_rate_actor = 0.0003
+        learning_rate_critic = 0.0003
         n_hidden_layers = 2
-        n_neurons = 64
+        n_neurons = 256
         batch_size = 64
         replay_buffer_capacity = 24 * 30 * 100
         prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
@@ -44,9 +44,9 @@ if __name__ == '__main__':
 
         # price schedule
         price_schedule = test_schedule['price_schedule'][test]
-        price_schedule_name = 'electricity_price_schedule_{}.csv'.format(price_schedule)
+        price_schedule_name = 'electricity_price_schedule.csv'
 
-        num_episodes = 10
+        num_episodes = 20
 
         result_directory_final = result_directory_path + result_directory
         if not os.path.exists(result_directory_final):
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
         # Import predictions
         cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect.csv')
-        electricity_price_predictions = pd.read_csv('supportFiles\\prediction-electricity_price_{}_perfect.csv'.format(price_schedule))
+        electricity_price_predictions = pd.read_csv('supportFiles\\prediction-electricity_price_perfect.csv')
         pv_power_generation_predictions = pd.read_csv('supportFiles\\prediction-pv_power_generation_perfect.csv')
         electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
 
@@ -156,7 +156,7 @@ if __name__ == '__main__':
             # append prediction
             electricity_price = electricity_price_schedule[0][env.kStep + 1]
             storage_soc = observation[3]
-            observation = order_state_variables(env=env,
+            observation = order_state_variables(env_names=env.state_names,
                                                 observation=observation,
                                                 cooling_load_predictions=cooling_load_predictions,
                                                 electricity_price_predictions=electricity_price_predictions,
@@ -211,7 +211,7 @@ if __name__ == '__main__':
                 new_observation[9] = auxiliary_load
                 new_observation = tuple(new_observation)
 
-                new_observation = order_state_variables(env=env,
+                new_observation = order_state_variables(env_names=env.state_names,
                                                         observation=new_observation,
                                                         cooling_load_predictions=cooling_load_predictions,
                                                         electricity_price_predictions=electricity_price_predictions,
