@@ -196,7 +196,7 @@ class RelicEnv(gym.Env):
         # PV & Battery Initialization
         self.pv = PV(surface=self.pv_surface, tilt_angle=40, azimuth=180 - 64)
 
-        self.battery = Battery(max_power=1500, max_capacity=self.battery_size, rte=0.96)
+        self.battery = Battery(max_power=4500, max_capacity=self.battery_size, rte=0.96)
 
         self.eta_ac_dc = 0.9
 
@@ -251,6 +251,9 @@ class RelicEnv(gym.Env):
             action = 0
             penalty += -1
             eplus_commands = get_eplus_action_encoding(action=action)
+        elif self.SOC > 0.97 and action > 0:
+            action = 0
+            eplus_commands = get_eplus_action_encoding(action=action)
         else:
             eplus_commands = get_eplus_action_encoding(action=action)
 
@@ -282,7 +285,7 @@ class RelicEnv(gym.Env):
 
         time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
         storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption, time_of_day, day_of_week = self.outputs
+        pump_energy_consumption = self.outputs
 
         self.SOC = storage_soc
 
@@ -396,7 +399,7 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc, time_of_day, day_of_week)
+                      self.battery.soc, time, day)
         self.kStep += 1
 
         done = False
@@ -514,7 +517,7 @@ class RelicEnv(gym.Env):
 
         time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
         storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption, time_of_day, day_of_week = self.outputs
+        pump_energy_consumption = self.outputs
 
         pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
                                                               day=self.day_shift, time=time,
@@ -529,7 +532,7 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc, time_of_day, day_of_week)
+                      self.battery.soc, time, day)
 
         return next_state
 

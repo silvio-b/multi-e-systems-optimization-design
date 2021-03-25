@@ -193,7 +193,7 @@ class RelicEnv(gym.Env):
         # PV & Battery Initialization
         self.pv = PV(surface=self.pv_surface, tilt_angle=40, azimuth=180 - 64)
 
-        self.battery = Battery(max_power=1500, max_capacity=self.battery_size, rte=0.96)
+        self.battery = Battery(max_power=4500, max_capacity=self.battery_size, rte=0.96)
 
         self.eta_ac_dc = 0.9
 
@@ -239,6 +239,9 @@ class RelicEnv(gym.Env):
         action = action[0]
 
         if self.SOC == 0 and action < 0: # AVOID discharge when SOC is 0
+            action = 0
+            eplus_commands = get_eplus_action_encoding(action=action)
+        elif self.SOC > 0.97 and action > 0:
             action = 0
             eplus_commands = get_eplus_action_encoding(action=action)
         else:
@@ -386,7 +389,7 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc)
+                      self.battery.soc, time, day)
         self.kStep += 1
 
         done = False
@@ -513,7 +516,7 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc)
+                      self.battery.soc, time, day)
 
         return next_state
 

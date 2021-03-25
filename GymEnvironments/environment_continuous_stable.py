@@ -7,7 +7,7 @@ import pandas as pd
 from pyEp import pyEp
 from gym import spaces
 import json
-from utils import get_state_variables, get_eplus_action_encoding, calculate_tank_soc
+from utils import get_state_variables, get_eplus_action_encoding, calculate_tank_soc, order_state_variables
 from eppy.modeleditor import IDF
 from EnergyModels.PVmodel import PV
 from EnergyModels.battery_model import Battery
@@ -55,7 +55,7 @@ class RelicEnv(gym.Env):
         if "reward_multiplier" in config:
             self.reward_multiplier = config["reward_multiplier"]
         else:
-            self.reward_multiplier = 1
+            self.reward_multiplier = 10
 
         # Tank properties
         if "tank_volume" in config:
@@ -108,12 +108,17 @@ class RelicEnv(gym.Env):
         if "pv_surface" in config:
             self.pv_surface = config["pv_surface"]
         else:
-            self.pv_surface = 20
+            self.pv_surface = 10
 
         if "battery_size" in config:
             self.battery_size = config["battery_size"]
         else:
             self.battery_size = 2400
+
+        if "horizon" in config:
+            self.horizon = config["horizon"]
+        else:
+            self.horizon = 24
 
         self.price_schedule_name = config["price_schedule_name"]
 
@@ -155,6 +160,7 @@ class RelicEnv(gym.Env):
 
         # Current step of the simulation
         self.kStep = 0
+        self.hStep = 0
 
         # Instance of EnergyPlus simulation
         self.ep = None
@@ -190,19 +196,20 @@ class RelicEnv(gym.Env):
         # Price of the electricity schedule
         self.electricity_price_schedule = pd.read_csv(self.directory + '\\supportFiles\\' + self.price_schedule_name,
                                                       header=None)
+        self.cooling_load_predictions = pd.read_csv(self.directory + '\\supportFiles\\prediction-cooling_load_perfect.csv')
+        self.electricity_price_predictions = pd.read_csv(self.directory + '\\supportFiles\\prediction-electricity_price_perfect.csv')
+        self.pv_power_generation_predictions = pd.read_csv(self.directory + '\\supportFiles\\prediction-pv_power_generation_perfect.csv')
         self.max_price = self.electricity_price_schedule.values.max()
         self.min_price = self.electricity_price_schedule.values.min()
 
         # PV & Battery Initialization
         self.pv = PV(surface=self.pv_surface, tilt_angle=40, azimuth=180 - 64)
 
-        self.battery = Battery(max_power=4500, max_capacity=self.battery_size, rte=0.96)
+        self.battery = Battery(max_power=1500, max_capacity=self.battery_size, rte=0.96)
 
         self.eta_ac_dc = 0.9
 
         self.SOC = 1
-
-        self.name_save = 'episode'
 
         # Lists for adding variables to eplus output (.csv)
         self.action_list = []
@@ -231,8 +238,6 @@ class RelicEnv(gym.Env):
 
         self.episode_electricity_cost = 0
 
-        self.action_space_physical = [-1, 1]
-
     def step(self, action: np.ndarray):
 
         # current time from start of simulation
@@ -244,162 +249,183 @@ class RelicEnv(gym.Env):
             print("Day: ", int(self.kStep / self.DAYSTEPS))
 
         # prendo le azioni dal controllore
-        action = self.action_space_physical[int(action)]
+        action = action[0]
 
-        penalty = 0
-        if self.SOC == 0 and action < 0: # AVOID discharge when SOC is 0
-            action = 0
-            eplus_commands = get_eplus_action_encoding(action=action)
-        elif self.SOC > 0.97 and action > 0:
-            action = 0
-            eplus_commands = get_eplus_action_encoding(action=action)
-        else:
-            eplus_commands = get_eplus_action_encoding(action=action)
+        cooling_load_total = 0
+        pv_power_total = 0
+        reward_total = 0
 
-        # EPlus simulation, input packet construction and feeding to Eplus
-        self.inputs = eplus_commands
-        input_packet = self.ep.encode_packet_simple(self.inputs, time)
-        self.ep.write(input_packet)
+        for i in range(0, self.ep_time_step):
 
-        # after EnergyPlus runs the simulation step, it returns the outputs
-        output_packet = self.ep.read()
-        self.outputs = self.ep.decode_packet_simple(output_packet)
-
-        # Append agent action, may differ from actual actions
-        self.action_list.append(action)
-        # print("Outputs:", self.outputs)
-        if not self.outputs:
-            print("Outputs:", self.outputs)
-            print("Actions:", action)
-            next_state = self.reset()
-            return next_state, 0, False, {}
-
-        # Unpack Eplus output
-
-        # CALCULATE soc
-        for i in range(5, 10):
-            self.outputs[i] = calculate_tank_soc(self.outputs[i],
-                                                 min_temperature=self.tank_min_temperature,
-                                                 max_temperature=self.tank_max_temperature)
-
-        time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
-        storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption = self.outputs
-
-        self.SOC = storage_soc
-
-        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption + \
-                                         auxiliary_energy_consumption
-
-        # PV model from PV class, PV power in W, PV energy in Joule
-        incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time)
-        pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
-                                                              day=day_of_the_year, time=time,
-                                                              t_out=outdoor_air_temperature)
-
-        pv_energy_production_dc = pv_power * 60 * 60 / self.ep_time_step
-
-        pv_energy_excess_dc = pv_energy_production_dc - building_energy_consumption_ac / self.eta_ac_dc
-        # PV has always priority
-        # agent_battery_energy = abs(action_batt * self.battery.max_power * 60 * 60 / self.epTimeStep)
-
-        max_charge_dc = min(self.battery.max_power * 60 * 60 / self.ep_time_step,
-                            (self.battery.soc_max - self.battery.soc) * self.battery.max_capacity * 3600 /
-                            self.battery.eta_dc_dc)
-        max_discharge_dc = min(self.battery.max_power * 60 * 60 / self.ep_time_step,
-                               (self.battery.soc - self.battery.soc_min) * self.battery.max_capacity * 3600 *
-                               self.battery.eta_dc_dc)
-
-        electricity_price = self.electricity_price_schedule[0][self.kStep]
-
-        if pv_energy_excess_dc > 0:
-
-            battery_energy_to_building_ac = 0
-            pv_energy_to_building_ac = building_energy_consumption_ac
-            grid_energy_to_building_ac = 0
-            grid_energy_to_battery_ac = 0
-
-            if pv_energy_excess_dc > max_charge_dc:
-                net_battery_energy_dc = max_charge_dc
-                pv_energy_to_grid_ac = (pv_energy_excess_dc - max_charge_dc) * self.eta_ac_dc
+            if self.SOC == 0 and action < 0:  # AVOID discharge when SOC is 0
+                action = 0
+                eplus_commands = get_eplus_action_encoding(action=action)
+            elif self.SOC > 0.97 and action > 0:
+                action = 0
+                eplus_commands = get_eplus_action_encoding(action=action)
             else:
-                net_battery_energy_dc = pv_energy_excess_dc
-                pv_energy_to_grid_ac = 0
+                eplus_commands = get_eplus_action_encoding(action=action)
 
-            self.battery.charge(net_battery_energy_dc)
-            pv_energy_to_battery_dc = net_battery_energy_dc
+                # EPlus simulation, input packet construction and feeding to Eplus
+            self.inputs = eplus_commands
+            input_packet = self.ep.encode_packet_simple(self.inputs, time)
+            self.ep.write(input_packet)
 
-        else:
+            # after EnergyPlus runs the simulation step, it returns the outputs
+            output_packet = self.ep.read()
+            self.outputs = self.ep.decode_packet_simple(output_packet)
 
-            pv_energy_to_building_ac = pv_energy_production_dc * self.eta_ac_dc
-            pv_energy_to_battery_dc = 0
-            pv_energy_to_grid_ac = 0
-            grid_energy_to_battery_ac = 0
+            # Append agent action, may differ from actual actions
+            self.action_list.append(action)
+            # print("Outputs:", self.outputs)
+            if not self.outputs:
+                print("Outputs:", self.outputs)
+                print("Actions:", action)
+                next_state = self.reset()
+                return next_state, 0, False, {}
 
-            if electricity_price >= self.max_price:
-                building_energy_residual_ac = building_energy_consumption_ac - pv_energy_to_building_ac
+            # Unpack Eplus output
 
-                if building_energy_residual_ac / self.eta_ac_dc <= max_discharge_dc:
-                    net_battery_energy_dc = building_energy_consumption_ac / self.eta_ac_dc - pv_energy_production_dc
+            # CALCULATE soc
+            for i in range(5, 10):
+                self.outputs[i] = calculate_tank_soc(self.outputs[i],
+                                                     min_temperature=self.tank_min_temperature,
+                                                     max_temperature=self.tank_max_temperature)
 
-                    battery_energy_to_building_ac = net_battery_energy_dc * self.eta_ac_dc
-                    grid_energy_to_building_ac = 0
-                else:
-                    net_battery_energy_dc = max_discharge_dc
-                    battery_energy_to_building_ac = net_battery_energy_dc * self.eta_ac_dc
-                    grid_energy_to_building_ac = building_energy_consumption_ac - pv_energy_to_building_ac - \
-                                                 battery_energy_to_building_ac
-            else:
-                net_battery_energy_dc = 0
+            time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
+            storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
+            pump_energy_consumption, time_of_day, day_of_week = self.outputs
+
+            self.SOC = storage_soc
+
+            building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption
+
+            # PV model from PV class, PV power in W, PV energy in Joule
+            incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time)
+            pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
+                                                                  day=day_of_the_year, time=time,
+                                                                  t_out=outdoor_air_temperature)
+
+            pv_energy_production_dc = pv_power * 60 * 60 / self.ep_time_step
+
+            pv_energy_excess_dc = pv_energy_production_dc - building_energy_consumption_ac / self.eta_ac_dc
+            # PV has always priority
+            # agent_battery_energy = abs(action_batt * self.battery.max_power * 60 * 60 / self.epTimeStep)
+
+            max_charge_dc = min(self.battery.max_power * 60 * 60 / self.ep_time_step,
+                                (self.battery.soc_max - self.battery.soc) * self.battery.max_capacity * 3600 /
+                                self.battery.eta_dc_dc)
+            max_discharge_dc = min(self.battery.max_power * 60 * 60 / self.ep_time_step,
+                                   (self.battery.soc - self.battery.soc_min) * self.battery.max_capacity * 3600 *
+                                   self.battery.eta_dc_dc)
+
+            electricity_price = self.electricity_price_schedule[0][self.kStep]
+
+            if pv_energy_excess_dc > 0:
+
                 battery_energy_to_building_ac = 0
+                pv_energy_to_building_ac = building_energy_consumption_ac
+                grid_energy_to_building_ac = 0
+                grid_energy_to_battery_ac = 0
+
+                if pv_energy_excess_dc > max_charge_dc:
+                    net_battery_energy_dc = max_charge_dc
+                    pv_energy_to_grid_ac = (pv_energy_excess_dc - max_charge_dc) * self.eta_ac_dc
+                else:
+                    net_battery_energy_dc = pv_energy_excess_dc
+                    pv_energy_to_grid_ac = 0
+
+                self.battery.charge(net_battery_energy_dc)
+                pv_energy_to_battery_dc = net_battery_energy_dc
+
+            else:
+
+                pv_energy_to_building_ac = pv_energy_production_dc * self.eta_ac_dc
+                pv_energy_to_battery_dc = 0
                 pv_energy_to_grid_ac = 0
-                grid_energy_to_building_ac = building_energy_consumption_ac - pv_energy_to_building_ac
+                grid_energy_to_battery_ac = 0
 
-            self.battery.discharge(net_battery_energy_dc)
+                if electricity_price >= self.max_price:
+                    building_energy_residual_ac = building_energy_consumption_ac - pv_energy_to_building_ac
 
-        grid_energy_ac = grid_energy_to_building_ac + grid_energy_to_battery_ac
+                    if building_energy_residual_ac / self.eta_ac_dc <= max_discharge_dc:
+                        net_battery_energy_dc = building_energy_consumption_ac / self.eta_ac_dc - pv_energy_production_dc
 
-        self.battery.soc = np.clip(self.battery.soc, self.battery.soc_min, self.battery.soc_max)
+                        battery_energy_to_building_ac = net_battery_energy_dc * self.eta_ac_dc
+                        grid_energy_to_building_ac = 0
+                    else:
+                        net_battery_energy_dc = max_discharge_dc
+                        battery_energy_to_building_ac = net_battery_energy_dc * self.eta_ac_dc
+                        grid_energy_to_building_ac = building_energy_consumption_ac - pv_energy_to_building_ac - \
+                                                     battery_energy_to_building_ac
+                else:
+                    net_battery_energy_dc = 0
+                    battery_energy_to_building_ac = 0
+                    pv_energy_to_grid_ac = 0
+                    grid_energy_to_building_ac = building_energy_consumption_ac - pv_energy_to_building_ac
 
-        # START REWARD CALCULATIONS
-        energy_cost_from_grid = (grid_energy_ac / (3.6 * 1000000) * electricity_price)
-        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/2)
+                self.battery.discharge(net_battery_energy_dc)
 
-        reward_price = - energy_cost_from_grid + energy_cost_to_grid
+            grid_energy_ac = grid_energy_to_building_ac + grid_energy_to_battery_ac
+
+            self.battery.soc = np.clip(self.battery.soc, self.battery.soc_min, self.battery.soc_max)
+
+            # START REWARD CALCULATIONS
+            energy_cost_from_grid = (grid_energy_ac / (3.6 * 1000000) * electricity_price)
+            energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price / 2)
+
+            reward_price = - energy_cost_from_grid + energy_cost_to_grid
 
         # price component
-        reward = reward_price * self.reward_multiplier
-        reward = reward
+            reward = reward_price * self.reward_multiplier
         # END REWARD CALCULATIONS
 
-        self.reward_list.append(reward)
-        self.price_list.append(electricity_price)
-        self.tank_soc_list.append(storage_soc)
-        self.battery_soc_list.append(self.battery.soc)
-        self.incidence_list.append(incidence)
-        self.zenith_list.append(zenith)
-        self.efficiency_list.append(efficiency)
-        self.pv_power_generation_list.append(pv_power)
-        self.pv_energy_production_list.append(pv_energy_production_dc)
-        self.pv_energy_to_building_list.append(pv_energy_to_building_ac)
-        self.pv_energy_to_battery_list.append(pv_energy_to_battery_dc)
-        self.pv_energy_to_grid_list.append(pv_energy_to_grid_ac)
-        self.grid_energy_list.append(grid_energy_ac)
-        self.grid_energy_to_building_list.append(grid_energy_to_building_ac)
-        self.grid_energy_to_battery_list.append(grid_energy_to_battery_ac)
-        self.battery_energy_to_building_list.append(battery_energy_to_building_ac)
-        self.building_energy_consumption_list.append(building_energy_consumption_ac)
-        self.p_cool_list.append(cooling_load)
-        self.energy_cost_from_grid_list.append(energy_cost_from_grid)
-        self.energy_cost_to_grid_list.append(energy_cost_to_grid)
+            self.reward_list.append(reward)
+            self.price_list.append(electricity_price)
+            self.tank_soc_list.append(storage_soc)
+            self.battery_soc_list.append(self.battery.soc)
+            self.incidence_list.append(incidence)
+            self.zenith_list.append(zenith)
+            self.efficiency_list.append(efficiency)
+            self.pv_power_generation_list.append(pv_power)
+            self.pv_energy_production_list.append(pv_energy_production_dc)
+            self.pv_energy_to_building_list.append(pv_energy_to_building_ac)
+            self.pv_energy_to_battery_list.append(pv_energy_to_battery_dc)
+            self.pv_energy_to_grid_list.append(pv_energy_to_grid_ac)
+            self.grid_energy_list.append(grid_energy_ac)
+            self.grid_energy_to_building_list.append(grid_energy_to_building_ac)
+            self.grid_energy_to_battery_list.append(grid_energy_to_battery_ac)
+            self.battery_energy_to_building_list.append(battery_energy_to_building_ac)
+            self.building_energy_consumption_list.append(building_energy_consumption_ac)
+            self.p_cool_list.append(cooling_load)
+            self.energy_cost_from_grid_list.append(energy_cost_from_grid)
+            self.energy_cost_to_grid_list.append(energy_cost_to_grid)
 
-        # the cooling load is returned as negative value from energy plus
-        cooling_load = np.abs(cooling_load)
+            # the cooling load is returned as negative value from energy plus
+            cooling_load = np.abs(cooling_load)
 
-        next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
-                      storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc, time, day)
-        self.kStep += 1
+            cooling_load_total += cooling_load
+            pv_power_total += pv_power
+            reward_total += reward
+            self.kStep += 1
+            if self.kStep >= self.MAXSTEPS:
+                break
+
+        cooling_load_total = cooling_load_total/self.ep_time_step
+        pv_power_total = pv_power_total/self.ep_time_step
+
+        next_state = (outdoor_air_temperature, cooling_load_total, electricity_price, storage_soc, storage_soc_l1,
+                      storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power_total, auxiliary_energy_consumption,
+                      self.battery.soc, time_of_day, day_of_week)
+
+        next_state = order_state_variables(env_names=self.state_names,
+                                           observation=next_state,
+                                           cooling_load_predictions=self.cooling_load_predictions,
+                                           electricity_price_predictions=self.electricity_price_predictions,
+                                           pv_power_generation_predictions=self.pv_power_generation_predictions,
+                                           horizon=self.horizon,
+                                           step=self.hStep)
+        self.hStep += 1
 
         done = False
         if self.kStep >= self.MAXSTEPS:
@@ -449,12 +475,9 @@ class RelicEnv(gym.Env):
             self.episode_electricity_cost = episode_electricity_cost
             print('Elec consumption: ' + str(episode_electricity_consumption) +
                   ' Elec Price: ' + str(episode_electricity_cost))
-            if self.name_save == 'episode':
-                dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
-                              sep=';', decimal=',', index=False)
-            elif self.name_save == 'baseline':
-                dataep.to_csv(path_or_buf=self.res_directory + '/' + 'baseline.csv',
-                              sep=';', decimal=',', index=False)
+
+            dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
+                          sep=';', decimal=',', index=False)
             self.episode_number = self.episode_number + 1
             self.ep = None
             self.action_list = []
@@ -487,7 +510,7 @@ class RelicEnv(gym.Env):
             print(done)
         return next_state, reward, done, info
 
-    def reset(self, name_save):
+    def reset(self):
         # stop existing energyplus simulation
         if self.ep:
             print("Closing the old simulation and socket.")
@@ -499,6 +522,7 @@ class RelicEnv(gym.Env):
         # start new simulation
         print("Starting a new simulation..")
         self.kStep = 0
+        self.hStep = 0
         pyEp.set_eplus_dir("C:\\EnergyPlusV9-2-0")
         path_to_buildings = os.path.join(self.directory, 'eplusModels')
         builder = pyEp.socket_builder(path_to_buildings)
@@ -507,8 +531,6 @@ class RelicEnv(gym.Env):
 
         self.outputs = np.round(self.ep.decode_packet_simple(self.ep.read()), 1).tolist()
 
-        self.name_save = name_save
-
         for i in range(5, 10):
             self.outputs[i] = calculate_tank_soc(self.outputs[i],
                                                  min_temperature=self.tank_min_temperature,
@@ -516,7 +538,7 @@ class RelicEnv(gym.Env):
 
         time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
         storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption = self.outputs
+        pump_energy_consumption, time_of_day, day_of_week = self.outputs
 
         pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
                                                               day=self.day_shift, time=time,
@@ -531,8 +553,16 @@ class RelicEnv(gym.Env):
 
         next_state = (outdoor_air_temperature, cooling_load, electricity_price, storage_soc, storage_soc_l1,
                       storage_soc_l2, storage_soc_l3, storage_soc_l4, pv_power, auxiliary_energy_consumption,
-                      self.battery.soc, time, day)
+                      self.battery.soc, time_of_day, day_of_week)
 
+        next_state = order_state_variables(env_names=self.state_names,
+                                           observation=next_state,
+                                           cooling_load_predictions=self.cooling_load_predictions,
+                                           electricity_price_predictions=self.electricity_price_predictions,
+                                           pv_power_generation_predictions=self.pv_power_generation_predictions,
+                                           horizon=self.horizon,
+                                           step=self.kStep)
+        print(len(next_state))
         return next_state
 
     def render(self, mode='human', close=False):

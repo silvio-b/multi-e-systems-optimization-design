@@ -121,7 +121,8 @@ def get_eplus_action_encoding(action):
     """
 
     if action > 0:
-        eplus_commands = [1, 1, 1, 1, 0]
+        action = np.ceil(action*10)/10
+        eplus_commands = [action, 1, 1, 1, 0]
     elif action < 0:
         eplus_commands = [0, 1, 0, 0, 1]
     else:
@@ -173,7 +174,7 @@ def calculate_tank_soc(temperature, min_temperature, max_temperature):
     return soc
 
 
-def order_state_variables(env, observation, cooling_load_predictions, electricity_price_predictions,
+def order_state_variables(env_names, observation, cooling_load_predictions, electricity_price_predictions,
                           pv_power_generation_predictions, horizon, step):
     """
 
@@ -186,8 +187,8 @@ def order_state_variables(env, observation, cooling_load_predictions, electricit
     :return:
     """
 
-    state_variables_mask = pd.DataFrame(index=range(0, len(env.state_names)), columns=['variable'])
-    state_variables_mask['variable'] = env.state_names
+    state_variables_mask = pd.DataFrame(index=range(0, len(env_names)), columns=['variable'])
+    state_variables_mask['variable'] = env_names
     observation_df = pd.DataFrame(index=range(0, len(observation)), columns=['variable', 'value'])
     observation_df['variable'] = ['outdoor_air_temperature_0', 'cooling_load_0', 'electricity_price_0',
                                   'storage_soc_0', 'storage_soc_l1', 'storage_soc_l2', 'storage_soc_l3',

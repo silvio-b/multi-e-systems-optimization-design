@@ -4,6 +4,7 @@ import pandas as pd
 from agents.SAC import SACAgent
 from utils import order_state_variables, min_max_scaling, calculate_tank_soc
 import numpy as np
+import json
 
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
@@ -12,7 +13,7 @@ if __name__ == '__main__':
     result_directory = 'test_02'
     safe_exploration = -1
     discount_factor = 0.99
-    alpha = 0.5
+    alpha = 1
     tau = 0.005
     automatic_entropy_tuning = False
     learning_rate_actor = 0.005
@@ -26,11 +27,20 @@ if __name__ == '__main__':
     min_temperature_limit = 10  # Below this value no charging
     min_charging_temperature = 12  # Charging begins above this threshold
     max_temperature_limit = 18  # Above this threshold no discharging
-    num_episodes = 10
+    num_episodes = 20
 
     result_directory_final = result_directory_path + result_directory
     if not os.path.exists(result_directory_final):
         os.makedirs(result_directory_final)
+
+    with open('supportFiles//state_space_variables.json', 'r') as json_file:
+        building_states = json.load(json_file)
+
+    building_states['predicted_observations']['horizon'] = int(prediction_horizon)
+    building_states['predicted_observations']['variables'] = prediction_observations
+
+    with open('supportFiles//state_space_variables.json', 'w') as json_file:
+        json.dump(building_states, json_file)
 
     hidden_size = n_hidden_layers * [n_neurons]
 
@@ -41,7 +51,8 @@ if __name__ == '__main__':
         'simulation_days': 90,
         'tank_min_temperature': min_temperature_limit,
         'tank_max_temperature': max_temperature_limit,
-        'price_schedule_name': 'electricity_price_schedule.csv'}
+        'price_schedule_name': 'electricity_price_schedule.csv',
+        'battery_size': 10000}
 
     env = RelicEnv(config)
 
@@ -87,7 +98,7 @@ if __name__ == '__main__':
         # append prediction
         electricity_price = electricity_price_schedule[0][env.kStep + 1]
         storage_soc = observation[3]
-        observation = order_state_variables(env=env,
+        observation = order_state_variables(env_names=env.state_names,
                                             observation=observation,
                                             cooling_load_predictions=cooling_load_predictions,
                                             electricity_price_predictions=electricity_price_predictions,
@@ -142,7 +153,7 @@ if __name__ == '__main__':
             new_observation[9] = auxiliary_load
             new_observation = tuple(new_observation)
 
-            new_observation = order_state_variables(env=env,
+            new_observation = order_state_variables(env_names=env.state_names,
                                                     observation=new_observation,
                                                     cooling_load_predictions=cooling_load_predictions,
                                                     electricity_price_predictions=electricity_price_predictions,
