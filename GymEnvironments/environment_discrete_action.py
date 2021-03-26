@@ -55,7 +55,7 @@ class RelicEnv(gym.Env):
         if "reward_multiplier" in config:
             self.reward_multiplier = config["reward_multiplier"]
         else:
-            self.reward_multiplier = 1
+            self.reward_multiplier = 100
 
         # Tank properties
         if "tank_volume" in config:
@@ -108,7 +108,7 @@ class RelicEnv(gym.Env):
         if "pv_surface" in config:
             self.pv_surface = config["pv_surface"]
         else:
-            self.pv_surface = 20
+            self.pv_surface = 10
 
         if "battery_size" in config:
             self.battery_size = config["battery_size"]
@@ -288,8 +288,7 @@ class RelicEnv(gym.Env):
 
         self.SOC = storage_soc
 
-        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption + \
-                                         auxiliary_energy_consumption
+        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption
 
         # PV model from PV class, PV power in W, PV energy in Joule
         incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time)
@@ -365,7 +364,7 @@ class RelicEnv(gym.Env):
         energy_cost_from_grid = (grid_energy_ac / (3.6 * 1000000) * electricity_price)
         energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/2)
 
-        reward_price = - energy_cost_from_grid + energy_cost_to_grid
+        reward_price = - energy_cost_from_grid + energy_cost_to_grid * 0
 
         # price component
         reward = reward_price * self.reward_multiplier
@@ -445,17 +444,19 @@ class RelicEnv(gym.Env):
 
             episode_electricity_consumption = dataep['CHILLER:Chiller Electric Energy [J](TimeStep)'].sum() / (
                         3.6 * 1000000)
-            episode_electricity_cost = dataep['Energy costs from grid [€]'].sum() - dataep['Energy costs to grid [€]'].sum()
+            episode_electricity_cost = dataep['Energy costs from grid [€]'].sum()
+                                       # - dataep['Energy costs to grid [€]'].sum()
             self.episode_electricity_cost = episode_electricity_cost
             print('Elec consumption: ' + str(episode_electricity_consumption) +
                   ' Elec Price: ' + str(episode_electricity_cost))
             if self.name_save == 'episode':
                 dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
                               sep=';', decimal=',', index=False)
+                self.episode_number = self.episode_number + 1
             elif self.name_save == 'baseline':
                 dataep.to_csv(path_or_buf=self.res_directory + '/' + 'baseline.csv',
                               sep=';', decimal=',', index=False)
-            self.episode_number = self.episode_number + 1
+
             self.ep = None
             self.action_list = []
             self.reward_list = []

@@ -1,5 +1,5 @@
 import os
-from GymEnvironments.environment_discrete_action import RelicEnv
+from GymEnvironments.environment_discrete_action_multi import RelicEnv
 import pandas as pd
 from agents.SAC_discrete import SACAgent
 from utils import order_state_variables, min_max_scaling, calculate_tank_soc
@@ -10,24 +10,24 @@ directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
     result_directory_path = 'D:\\OneDrive - Politecnico di Torino\\PhD_Silvio\\14_Projects\\002_PVZenControl\\Thermal_Electrical_Storage_Control\\'
-    result_directory = 'test_08'
+    result_directory = 'test_10'
     safe_exploration = -1
     discount_factor = 0.99
-    alpha = 0.01
+    alpha = 0.1
     tau = 0.005
     automatic_entropy_tuning = False
-    learning_rate_actor = 0.0003
-    learning_rate_critic = 0.0003
-    n_hidden_layers = 2
-    n_neurons = 256
+    learning_rate_actor = 0.0005
+    learning_rate_critic = 0.0005
+    n_hidden_layers = 3
+    n_neurons = 512
     batch_size = 64
-    replay_buffer_capacity = 24 * 30 * 100
+    replay_buffer_capacity = 24 * 30 * 15
     prediction_observations = ['electricity_price', 'pv_power_generation', 'cooling_load']
     prediction_horizon = 24
     min_temperature_limit = 10  # Below this value no charging
     min_charging_temperature = 12  # Charging begins above this threshold
     max_temperature_limit = 18  # Above this threshold no discharging
-    num_episodes = 30
+    num_episodes = 50
 
     result_directory_final = result_directory_path + result_directory
     if not os.path.exists(result_directory_final):
@@ -43,7 +43,7 @@ if __name__ == '__main__':
         'tank_min_temperature': min_temperature_limit,
         'tank_max_temperature': max_temperature_limit,
         'price_schedule_name': 'electricity_price_schedule.csv',
-        'battery_size': 10000}
+        'battery_size': 5000}
 
     with open('supportFiles//state_space_variables.json', 'r') as json_file:
         building_states = json.load(json_file)
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     electricity_price_schedule = pd.read_csv('supportFiles\\electricity_price_schedule.csv', header=None)
 
     # Set the number of actions
-    n_actions = 2
+    n_actions = 4
     input_dims = env.observation_space.shape[0]
 
     # define period for RBC control and
@@ -168,12 +168,20 @@ if __name__ == '__main__':
 
             # print(new_observation)
             agent.remember(observation, action, reward, new_observation, done)
+            act_prob = agent.get_actions_probabilities(observation=new_observation)
+            actions_probabilities.append(act_prob.tolist())
 
             score += reward
             if episode != num_episodes:
                 agent.learn()
 
             observation = new_observation
+
+        actions_probabilities = np.stack(actions_probabilities)
+        actions_probabilities = pd.DataFrame(actions_probabilities)
+        actions_probabilities.to_csv(
+            result_directory_final + '\\episode_{}_action_probabilities.csv'.format(str(episode)),
+            index=False, decimal=',', sep=';')
 
         score_history.append(score)
 

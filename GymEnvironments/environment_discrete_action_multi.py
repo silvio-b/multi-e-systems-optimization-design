@@ -206,6 +206,7 @@ class RelicEnv(gym.Env):
 
         # Lists for adding variables to eplus output (.csv)
         self.action_list = []
+        self.action_battery_list = []
         self.reward_list = []
         self.price_list = []
         self.tank_soc_list = []
@@ -244,18 +245,18 @@ class RelicEnv(gym.Env):
             print("Day: ", int(self.kStep / self.DAYSTEPS))
 
         # prendo le azioni dal controllore
-        action = self.action_space_physical[int(action)][0]
+        action_tank = self.action_space_physical[int(action)][0]
         action_battery = self.action_space_physical[int(action)][1]
         penalty = 0
-        if self.SOC == 0 and action < 0: # AVOID discharge when SOC is 0
-            action = 0
+        if self.SOC == 0 and action_tank < 0: # AVOID discharge when SOC is 0
+            action_tank = 0
             penalty += -1
-            eplus_commands = get_eplus_action_encoding(action=action)
-        elif self.SOC > 0.97 and action > 0:
-            action = 0
-            eplus_commands = get_eplus_action_encoding(action=action)
+            eplus_commands = get_eplus_action_encoding(action=action_tank)
+        elif self.SOC > 0.97 and action_tank > 0:
+            action_tank = 0
+            eplus_commands = get_eplus_action_encoding(action=action_tank)
         else:
-            eplus_commands = get_eplus_action_encoding(action=action)
+            eplus_commands = get_eplus_action_encoding(action=action_tank)
 
         # EPlus simulation, input packet construction and feeding to Eplus
         self.inputs = eplus_commands
@@ -267,11 +268,11 @@ class RelicEnv(gym.Env):
         self.outputs = self.ep.decode_packet_simple(output_packet)
 
         # Append agent action, may differ from actual actions
-        self.action_list.append(action)
+        self.action_list.append(action_tank)
         # print("Outputs:", self.outputs)
         if not self.outputs:
             print("Outputs:", self.outputs)
-            print("Actions:", action)
+            print("Actions:", action_tank)
             next_state = self.reset()
             return next_state, 0, False, {}
 
@@ -364,7 +365,7 @@ class RelicEnv(gym.Env):
 
         # START REWARD CALCULATIONS
         energy_cost_from_grid = (grid_energy_ac / (3.6 * 1000000) * electricity_price)
-        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/2)
+        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/3)
 
         reward_price = - energy_cost_from_grid + energy_cost_to_grid
 
@@ -373,6 +374,7 @@ class RelicEnv(gym.Env):
         reward = reward
         # END REWARD CALCULATIONS
 
+        self.action_battery_list.append(action_battery)
         self.reward_list.append(reward)
         self.price_list.append(electricity_price)
         self.tank_soc_list.append(storage_soc)
@@ -413,7 +415,7 @@ class RelicEnv(gym.Env):
             output_packet = self.ep.read()
             last_output = self.ep.decode_packet_simple(output_packet)
             print("Finished simulation")
-            print("Last action: ", action)
+            print("Last action: ", action_tank)
             print("Last reward: ", reward)
             done = True
             print(done)
@@ -423,6 +425,7 @@ class RelicEnv(gym.Env):
 
             dataep = pd.read_csv(self.directory + '\\eplusModels\\storageTank_Model\\' + self.idf_name + '.csv')
             dataep['Action'] = self.action_list
+            dataep['Action Battery'] = self.action_battery_list
             dataep['Reward'] = self.reward_list
             dataep['Price'] = self.price_list
             dataep['Tank SOC'] = self.tank_soc_list
@@ -447,9 +450,12 @@ class RelicEnv(gym.Env):
             episode_electricity_consumption = dataep['CHILLER:Chiller Electric Energy [J](TimeStep)'].sum() / (
                         3.6 * 1000000)
             episode_electricity_cost = dataep['Energy costs from grid [€]'].sum() - dataep['Energy costs to grid [€]'].sum()
+            episode_electricity_sold = dataep['Energy costs to grid [€]'].sum()
+            episode_reward = dataep['Reward'].sum()
             self.episode_electricity_cost = episode_electricity_cost
-            print('Elec consumption: ' + str(episode_electricity_consumption) +
-                  ' Elec Price: ' + str(episode_electricity_cost))
+            print('Elec price: ' + str(episode_electricity_cost) +
+                  ' Elec penalty: ' + str(episode_electricity_sold))
+            print('Reward: ' + str(episode_reward))
             if self.name_save == 'episode':
                 dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
                               sep=';', decimal=',', index=False)
@@ -459,6 +465,7 @@ class RelicEnv(gym.Env):
             self.episode_number = self.episode_number + 1
             self.ep = None
             self.action_list = []
+            self.action_battery_list = []
             self.reward_list = []
             self.price_list = []
             self.tank_soc_list = []

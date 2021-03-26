@@ -1,5 +1,5 @@
 import os
-from GymEnvironments.environment_discrete_action import RelicEnv
+from GymEnvironments.environment_discrete_action_multi import RelicEnv
 import pandas as pd
 from agents.SAC_discrete import SACAgent
 from agents.RBC_discrete import RBCAgent
@@ -15,15 +15,15 @@ if __name__ == '__main__':
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
     for test in range(0, test_schedule.shape[0]):
-
+        best_score = 1000
         result_directory = '\\' + test_id + '\\configuration' + test_schedule['id'][test]
         safe_exploration = -1
         discount_factor = 0.99
-        alpha = 0.01
+        alpha = test_schedule['alpha'][test]
         tau = 0.005
         automatic_entropy_tuning = False
-        learning_rate_actor = 0.0003
-        learning_rate_critic = 0.0003
+        learning_rate_actor = test_schedule['lr'][test]
+        learning_rate_critic = test_schedule['lr'][test]
         n_hidden_layers = 2
         n_neurons = 256
         batch_size = 64
@@ -234,11 +234,15 @@ if __name__ == '__main__':
 
             score_history.append(score)
 
+            if env.episode_electricity_cost < best_score:
+                best_score = env.episode_electricity_cost
+
             print(f'Episode: {episode}, Score: {score}')
 
         last_episode_cost = env.episode_electricity_cost
 
         test_schedule['score'][test] = last_episode_cost
+        test_schedule['best_score'][test] = last_episode_cost
         test_schedule['baseline'][test] = baseline_cost
 
         agent.save_models(path=result_directory_final)
