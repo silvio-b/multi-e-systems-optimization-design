@@ -1,5 +1,6 @@
 import os
 from GymEnvironments.environment_discrete_action_multi import RelicEnv
+from GymEnvironments.environment_discrete_action import RelicEnv as RelicEnvBaseline
 import pandas as pd
 from agents.SAC_discrete import SACAgent
 from agents.RBC_discrete import RBCAgent
@@ -43,7 +44,6 @@ if __name__ == '__main__':
         tank_heat_gain_coefficient = test_schedule['tank_heat_gain_coefficient'][test]
 
         # price schedule
-        price_schedule = test_schedule['price_schedule'][test]
         price_schedule_name = 'electricity_price_schedule.csv'
 
         num_episodes = 20
@@ -73,9 +73,11 @@ if __name__ == '__main__':
             'tank_volume': tank_volume,
             'tank_heat_gain_coefficient': tank_heat_gain_coefficient,
             'pv_surface': pv_surface,
-            'battery_size': battery_size}
+            'battery_size': battery_size,
+            'price_schedule_name': price_schedule_name}
 
         env = RelicEnv(config)
+        env_baseline = RelicEnvBaseline(config)
 
         # Import predictions
         cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect.csv')
@@ -98,13 +100,12 @@ if __name__ == '__main__':
         min_storage_soc = calculate_tank_soc(max_temperature_limit, min_temperature_limit,
                                              max_temperature_limit)  # The storage is empty
 
-        rbc_controller = None
         # Initialize agent
         agent = SACAgent(state_dim=input_dims,
                          action_dim=n_actions, hidden_dim=hidden_size, discount=discount_factor, tau=tau,
                          lr_critic=learning_rate_critic, lr_actor=learning_rate_actor,
                          batch_size=batch_size, replay_buffer_capacity=replay_buffer_capacity, learning_start=30 * 24,
-                         reward_scaling=10., seed=0, rbc_controller=rbc_controller, safe_exploration=safe_exploration,
+                         reward_scaling=10., seed=0, rbc_controller=None, safe_exploration=safe_exploration,
                          automatic_entropy_tuning=automatic_entropy_tuning, alpha=alpha)
 
         rbc_controller = RBCAgent(min_storage_soc=min_storage_soc,
@@ -114,12 +115,12 @@ if __name__ == '__main__':
 
         # Define the number of episodes
         score_history = []
-
+        done = False
         # baseline simulation
 
-        observation = env.reset(name_save='baseline')
+        observation = env_baseline.reset(name_save='baseline')
         # append prediction
-        electricity_price = electricity_price_schedule[0][env.kStep + 1]
+        electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
         storage_soc = observation[3]
 
         while not done:
@@ -129,8 +130,8 @@ if __name__ == '__main__':
 
             step = 1
             reward = 0
-            while step <= env.ep_time_step:
-                new_observation, reward_step, done, info = env.step(action)
+            while step <= env_baseline.ep_time_step:
+                new_observation, reward_step, done, info = env_baseline.step(action)
                 reward += reward_step
                 step += 1
                 # if done:
@@ -140,7 +141,7 @@ if __name__ == '__main__':
                 break
 
             # append predictions
-            electricity_price = electricity_price_schedule[0][env.kStep + 1]
+            electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
             storage_soc = new_observation[3]
 
             # print(new_observation)

@@ -362,9 +362,9 @@ class RelicEnv(gym.Env):
 
         # START REWARD CALCULATIONS
         energy_cost_from_grid = (grid_energy_ac / (3.6 * 1000000) * electricity_price)
-        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/2)
+        energy_cost_to_grid = (pv_energy_to_grid_ac / (3.6 * 1000000) * self.min_price/3)
 
-        reward_price = - energy_cost_from_grid + energy_cost_to_grid * 0
+        reward_price = - energy_cost_from_grid + energy_cost_to_grid
 
         # price component
         reward = reward_price * self.reward_multiplier
@@ -444,8 +444,7 @@ class RelicEnv(gym.Env):
 
             episode_electricity_consumption = dataep['CHILLER:Chiller Electric Energy [J](TimeStep)'].sum() / (
                         3.6 * 1000000)
-            episode_electricity_cost = dataep['Energy costs from grid [€]'].sum()
-                                       # - dataep['Energy costs to grid [€]'].sum()
+            episode_electricity_cost = dataep['Energy costs from grid [€]'].sum() - dataep['Energy costs to grid [€]'].sum()
             self.episode_electricity_cost = episode_electricity_cost
             print('Elec consumption: ' + str(episode_electricity_consumption) +
                   ' Elec Price: ' + str(episode_electricity_cost))
