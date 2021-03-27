@@ -86,7 +86,7 @@ if __name__ == '__main__':
         electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
 
         # Set the number of actions
-        n_actions = 2
+        n_actions = 4
         input_dims = env.observation_space.shape[0]
 
         # define period for RBC control and
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
             observation = new_observation
 
-        baseline_cost = env.episode_electricity_cost
+        baseline_cost = env_baseline.episode_electricity_cost
 
         # Training Loop
         for episode in range(1, num_episodes + 1):
@@ -243,7 +243,7 @@ if __name__ == '__main__':
         last_episode_cost = env.episode_electricity_cost
 
         test_schedule['score'][test] = last_episode_cost
-        test_schedule['best_score'][test] = last_episode_cost
+        test_schedule['best_score'][test] = best_score
         test_schedule['baseline'][test] = baseline_cost
 
         agent.save_models(path=result_directory_final)

@@ -232,7 +232,7 @@ class RelicEnv(gym.Env):
 
         self.episode_electricity_cost = 0
 
-        self.action_space_physical = [[-1, 0], [1, 0], [-1, -1], [1, -1]]
+        self.action_space_physical = [[-1, 0], [1, 0], [-1, -1], [1, -1], [0, 0], [0, -1]]
 
     def step(self, action: np.ndarray):
 
