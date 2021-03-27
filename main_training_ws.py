@@ -117,7 +117,7 @@ if __name__ == '__main__':
         score_history = []
         done = False
         # baseline simulation
-
+        #
         observation = env_baseline.reset(name_save='baseline')
         # append prediction
         electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
@@ -223,9 +223,9 @@ if __name__ == '__main__':
                 # Scale observations
                 new_observation = min_max_scaling(new_observation, env.state_mins, env.state_maxs, np.array([0]),
                                                   np.array([1]))
-
+                true_action = info['true_action'][0]
                 # print(new_observation)
-                agent.remember(observation, action, reward, new_observation, done)
+                agent.remember(observation, true_action, reward, new_observation, done)
 
                 score += reward
                 if episode != num_episodes:

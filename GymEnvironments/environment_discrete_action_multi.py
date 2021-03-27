@@ -233,6 +233,8 @@ class RelicEnv(gym.Env):
         self.episode_electricity_cost = 0
 
         self.action_space_physical = [[-1, 0], [1, 0], [-1, -1], [1, -1], [0, 0], [0, -1]]
+        self.action_table = [[0, -1, 0], [1, 0, 0], [2, 1, 0], [3, -1, 1], [4, 0, 1], [5, 1, 1]]
+        self.action_table = pd.DataFrame(self.action_table, columns=['action', 'action_tank', 'action_battery'])
 
     def step(self, action: np.ndarray):
 
@@ -245,8 +247,15 @@ class RelicEnv(gym.Env):
             print("Day: ", int(self.kStep / self.DAYSTEPS))
 
         # prendo le azioni dal controllore
-        action_tank = self.action_space_physical[int(action)][0]
-        action_battery = self.action_space_physical[int(action)][1]
+        # action_tank = self.action_space_physical[int(action)][0]
+        # action_battery = self.action_space_physical[int(action)][1]
+
+        action_tank = self.action_table.action_tank[self.action_table['action'] == int(action)].values
+        action_battery = self.action_table.action_battery[self.action_table['action'] == int(action)].values
+
+        action_tank = action_tank[0]
+        action_battery = action_battery[0]
+
         penalty = 0
         if self.SOC == 0 and action_tank < 0: # AVOID discharge when SOC is 0
             action_tank = 0
@@ -315,6 +324,7 @@ class RelicEnv(gym.Env):
         electricity_price = self.electricity_price_schedule[0][self.kStep]
 
         if pv_energy_excess_dc > 0:
+            action_battery = 0
 
             battery_energy_to_building_ac = 0
             pv_energy_to_building_ac = building_energy_consumption_ac
@@ -351,6 +361,9 @@ class RelicEnv(gym.Env):
                     battery_energy_to_building_ac = net_battery_energy_dc * self.eta_ac_dc
                     grid_energy_to_building_ac = building_energy_consumption_ac - pv_energy_to_building_ac - \
                                                  battery_energy_to_building_ac
+
+                if battery_energy_to_building_ac == 0:
+                    action_battery = 0
             else:
                 net_battery_energy_dc = 0
                 battery_energy_to_building_ac = 0
@@ -373,6 +386,9 @@ class RelicEnv(gym.Env):
         reward = reward_price * self.reward_multiplier
         reward = reward
         # END REWARD CALCULATIONS
+
+        true_action = self.action_table.action[(self.action_table['action_tank'] == 1) &
+                                               (self.action_table['action_battery'] == 0)].values
 
         self.action_battery_list.append(action_battery)
         self.reward_list.append(reward)
@@ -490,7 +506,7 @@ class RelicEnv(gym.Env):
             self.SOC = 1
             self.battery.soc = 0.46
 
-        info = {}
+        info = {'true_action': true_action}
         if self.kStep == self.MAXSTEPS:
             print(done)
         return next_state, reward, done, info
