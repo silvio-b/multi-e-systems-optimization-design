@@ -233,7 +233,7 @@ class RelicEnv(gym.Env):
         self.episode_electricity_cost = 0
 
         self.action_space_physical = [[-1, 0], [1, 0], [-1, -1], [1, -1], [0, 0], [0, -1]]
-        self.action_table = [[0, -1, 0], [1, 0, 0], [2, 1, 0], [3, -1, 1], [4, 0, 1], [5, 1, 1]]
+        self.action_table = [[0, -1, 0], [1, 0, 0], [2, 1, 0], [3, -1, -1], [4, 0, -1], [5, 1, -1]]
         self.action_table = pd.DataFrame(self.action_table, columns=['action', 'action_tank', 'action_battery'])
 
     def step(self, action: np.ndarray):
@@ -387,8 +387,8 @@ class RelicEnv(gym.Env):
         reward = reward
         # END REWARD CALCULATIONS
 
-        true_action = self.action_table.action[(self.action_table['action_tank'] == 1) &
-                                               (self.action_table['action_battery'] == 0)].values
+        true_action = self.action_table.action[(self.action_table['action_tank'] == action_tank) &
+                                               (self.action_table['action_battery'] == action_battery)].values
 
         self.action_battery_list.append(action_battery)
         self.reward_list.append(reward)

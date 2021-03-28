@@ -11,7 +11,7 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_01'
+    test_id = 'test_02'
     test_schedule = pd.read_csv('testSchedules'+'\\'+ test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
@@ -25,9 +25,9 @@ if __name__ == '__main__':
         automatic_entropy_tuning = False
         learning_rate_actor = test_schedule['lr'][test]
         learning_rate_critic = test_schedule['lr'][test]
-        n_hidden_layers = 2
-        n_neurons = 256
-        batch_size = 64
+        n_hidden_layers = test_schedule['dim'][test]
+        n_neurons = test_schedule['neurons'][test]
+        batch_size = test_schedule['batch_size'][test]
         replay_buffer_capacity = 24 * 30 * 100
         prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
         prediction_horizon = 24
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         # price schedule
         price_schedule_name = 'electricity_price_schedule.csv'
 
-        num_episodes = 20
+        num_episodes = test_schedule['num_episodes'][test]
 
         result_directory_final = result_directory_path + result_directory
         if not os.path.exists(result_directory_final):
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
 
         # Set the number of actions
-        n_actions = 4
+        n_actions = 6
         input_dims = env.observation_space.shape[0]
 
         # define period for RBC control and
@@ -225,7 +225,7 @@ if __name__ == '__main__':
                                                   np.array([1]))
                 true_action = info['true_action'][0]
                 # print(new_observation)
-                agent.remember(observation, true_action, reward, new_observation, done)
+                agent.remember(observation, action, reward, new_observation, done)
 
                 score += reward
                 if episode != num_episodes:
