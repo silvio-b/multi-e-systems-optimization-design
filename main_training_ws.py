@@ -118,37 +118,37 @@ if __name__ == '__main__':
         done = False
         # baseline simulation
         #
-        # observation = env_baseline.reset(name_save='baseline')
-        # # append prediction
-        # electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
-        # storage_soc = observation[3]
-        #
-        # while not done:
-        #
-        #     action = rbc_controller.choose_action(electricity_price=electricity_price,
-        #                                           storage_soc=storage_soc)
-        #
-        #     step = 1
-        #     reward = 0
-        #     while step <= env_baseline.ep_time_step:
-        #         new_observation, reward_step, done, info = env_baseline.step(action)
-        #         reward += reward_step
-        #         step += 1
-        #         # if done:
-        #         #     break
-        #
-        #     if done:
-        #         break
-        #
-        #     # append predictions
-        #     electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
-        #     storage_soc = new_observation[3]
-        #
-        #     # print(new_observation)
-        #
-        #     observation = new_observation
-        #
-        # baseline_cost = env_baseline.episode_electricity_cost
+        observation = env_baseline.reset(name_save='baseline')
+        # append prediction
+        electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
+        storage_soc = observation[3]
+
+        while not done:
+
+            action = rbc_controller.choose_action(electricity_price=electricity_price,
+                                                  storage_soc=storage_soc)
+
+            step = 1
+            reward = 0
+            while step <= env_baseline.ep_time_step:
+                new_observation, reward_step, done, info = env_baseline.step(action)
+                reward += reward_step
+                step += 1
+                # if done:
+                #     break
+
+            if done:
+                break
+
+            # append predictions
+            electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
+            storage_soc = new_observation[3]
+
+            # print(new_observation)
+
+            observation = new_observation
+
+        baseline_cost = env_baseline.episode_electricity_cost
 
         # Training Loop
         for episode in range(1, num_episodes + 1):
