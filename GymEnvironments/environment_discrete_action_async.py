@@ -161,29 +161,29 @@ class RelicEnv(gym.Env):
 
         # state can be all the inputs required to make a control decision
         # getting all the outputs coming from EnergyPlus for the time being
-        with open(self.directory + '\\supportFiles\\state_space_variables.json') as json_file:
-            buildings_states = json.load(json_file)
-
-        with open(self.directory + '\\supportFiles\\state_rescaling_table.json') as json_file:
-            rescaling_table = json.load(json_file)
-
-        self.state_types, self.state_names, self.state_mins, self.state_maxs = \
-            get_state_variables(data=buildings_states,
-                                rescaling_table=rescaling_table)
-
-        self.state_mins = np.array(self.state_mins)
-        self.state_maxs = np.array(self.state_maxs)
-
-        self.observation_space = spaces.Box(np.repeat(0, len(self.state_mins)),
-                                            np.repeat(0, len(self.state_maxs)),
-                                            dtype=np.float32)
-
-        self.action_space = spaces.Box(
-            low=-1,
-            high=1,
-            shape=(1,),
-            dtype=np.float32
-        )
+        # with open(self.directory + '\\supportFiles\\state_space_variables.json') as json_file:
+        #     buildings_states = json.load(json_file)
+        #
+        # with open(self.directory + '\\supportFiles\\state_rescaling_table.json') as json_file:
+        #     rescaling_table = json.load(json_file)
+        #
+        # self.state_types, self.state_names, self.state_mins, self.state_maxs = \
+        #     get_state_variables(data=buildings_states,
+        #                         rescaling_table=rescaling_table)
+        #
+        # self.state_mins = np.array(self.state_mins)
+        # self.state_maxs = np.array(self.state_maxs)
+        #
+        # self.observation_space = spaces.Box(np.repeat(0, len(self.state_mins)),
+        #                                     np.repeat(0, len(self.state_maxs)),
+        #                                     dtype=np.float32)
+        #
+        # self.action_space = spaces.Box(
+        #     low=-1,
+        #     high=1,
+        #     shape=(1,),
+        #     dtype=np.float32
+        # )
 
         self.episode_number = 1
 
@@ -299,7 +299,8 @@ class RelicEnv(gym.Env):
 
         self.SOC = storage_soc
 
-        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption
+        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption + \
+                                         auxiliary_energy_consumption
 
         # PV model from PV class, PV power in W, PV energy in Joule
         incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time)
