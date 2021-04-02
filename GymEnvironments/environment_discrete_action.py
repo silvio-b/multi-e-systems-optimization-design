@@ -196,7 +196,7 @@ class RelicEnv(gym.Env):
         # PV & Battery Initialization
         self.pv = PV(surface=self.pv_surface, tilt_angle=40, azimuth=180 - 64)
 
-        self.battery = Battery(max_power=4500, max_capacity=self.battery_size, rte=0.96)
+        self.battery = Battery(max_power=1000, max_capacity=self.battery_size, rte=0.96)
 
         self.eta_ac_dc = 0.9
 
@@ -335,7 +335,7 @@ class RelicEnv(gym.Env):
             pv_energy_to_grid_ac = 0
             grid_energy_to_battery_ac = 0
 
-            if electricity_price >= self.max_price:
+            if electricity_price <= self.max_price:
                 building_energy_residual_ac = building_energy_consumption_ac - pv_energy_to_building_ac
 
                 if building_energy_residual_ac / self.eta_ac_dc <= max_discharge_dc:

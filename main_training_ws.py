@@ -1,5 +1,5 @@
 import os
-from GymEnvironments.environment_discrete_action_multi import RelicEnv
+from GymEnvironments.environment_discrete_action import RelicEnv
 from GymEnvironments.environment_discrete_action import RelicEnv as RelicEnvBaseline
 import pandas as pd
 from agents.SAC_discrete import SACAgent
@@ -11,7 +11,7 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_02'
+    test_id = 'test_05'
     test_schedule = pd.read_csv('testSchedules'+'\\'+ test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
         electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
 
         # Set the number of actions
-        n_actions = 6
+        n_actions = 2
         input_dims = env.observation_space.shape[0]
 
         # define period for RBC control and
@@ -223,7 +223,7 @@ if __name__ == '__main__':
                 # Scale observations
                 new_observation = min_max_scaling(new_observation, env.state_mins, env.state_maxs, np.array([0]),
                                                   np.array([1]))
-                true_action = info['true_action'][0]
+                # true_action = info['true_action'][0]
                 # print(new_observation)
                 agent.remember(observation, action, reward, new_observation, done)
 

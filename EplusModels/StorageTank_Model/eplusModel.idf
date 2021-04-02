@@ -3005,7 +3005,7 @@ Chiller:Electric:EIR,
 
 ThermalStorage:ChilledWater:Mixed,
     StorageTank,              !- Name
-    10,                       !- Tank Volume
+    6,                        !- Tank Volume
     StorageTank Temp Schedule,    !- Setpoint Temperature Schedule Name
     0.1,                      !- Deadband Temperature Difference
     1,                        !- Minimum Temperature Limit
@@ -3014,7 +3014,7 @@ ThermalStorage:ChilledWater:Mixed,
     ,                         !- Ambient Temperature Schedule Name
     Thermal Zone 4,           !- Ambient Temperature Zone Name
     ,                         !- Ambient Temperature Outdoor Air Node Name
-    12,                       !- Heat Gain Coefficient from Ambient Temperature
+    8,                        !- Heat Gain Coefficient from Ambient Temperature
     ChW Supply Side StorageBranch Inlet Node,    !- Use Side Inlet Node Name
     ChW Supply Side StorageBranch Outlet Node,    !- Use Side Outlet Node Name
     1,                        !- Use Side Heat Transfer Effectiveness
