@@ -52,7 +52,8 @@ if __name__ == '__main__':
         'tank_min_temperature': min_temperature_limit,
         'tank_max_temperature': max_temperature_limit,
         'price_schedule_name': 'electricity_price_schedule.csv',
-        'battery_size': 10000}
+        'pv_nominal_power': 2000,
+        'battery_size': 2400}
 
     env = RelicEnv(config)
 

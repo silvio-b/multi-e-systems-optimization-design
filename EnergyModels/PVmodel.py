@@ -6,9 +6,9 @@ from EnergyModels.pv_utils import sin, cos
 class PV:
     # STC sta per standard test condition, tilt angle è l inclinazione del pannello rispetto al piano orizzontale
     # l azimuth è la distanza angolare dall'asse Sud, positivo nel verso West,input angles are in degree
-    def __init__(self, surface, tilt_angle, azimuth, latitude=45.2, longitude=7.65, rho=0, eta_conv=0.95):
+    def __init__(self, nominal_power, tilt_angle, azimuth, latitude=45.2, longitude=7.65, rho=0, eta_conv=0.95):
         super(PV, self).__init__()
-        self.surface = surface
+        self.stc_power = nominal_power
         self.eta_conv = eta_conv
 
         self.tilt = tilt_angle
@@ -22,7 +22,7 @@ class PV:
         self.ground_reflectivity = rho  # rho controlla nome
 
         self.stc_efficiency = self.efficiency_compute()
-        self.stc_power = self.stc_efficiency * self.surface * 1000
+        self.surface = self.stc_power / self.stc_efficiency / 1000
 
         directory = os.path.dirname(os.path.realpath(__file__))
 

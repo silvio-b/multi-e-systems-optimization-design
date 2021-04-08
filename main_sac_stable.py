@@ -36,7 +36,10 @@ config = {
     'tank_min_temperature': min_temperature_limit,
     'tank_max_temperature': max_temperature_limit,
     'price_schedule_name': 'electricity_price_schedule.csv',
-    'horizon': prediction_horizon}
+    'horizon': prediction_horizon,
+    'pv_nominal_power': 2000,
+    'battery_size': 2400}
+
 
 with open('supportFiles//state_space_variables.json', 'r') as json_file:
     building_states = json.load(json_file)

@@ -72,8 +72,8 @@ if __name__ == '__main__':
             'tank_max_temperature': max_temperature_limit,
             'tank_volume': tank_volume,
             'tank_heat_gain_coefficient': tank_heat_gain_coefficient,
-            'pv_surface': pv_surface,
-            'battery_size': battery_size,
+            'pv_nominal_power': 2000,
+            'battery_size': 2400,
             'price_schedule_name': price_schedule_name}
 
         env = RelicEnv(config)

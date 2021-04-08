@@ -1,7 +1,9 @@
 class Battery:
-    def __init__(self, max_power, max_capacity, rte, soc_min=0.04, soc_max=0.96, eta_dc_dc=0.95):
-        self.max_power = max_power
-        self.max_capacity = max_capacity  # Max capacity = 2h storage = 2 x max power Wh
+    def __init__(self, max_capacity, rte, soc_min=0.10, soc_max=0.90, eta_dc_dc=0.95):
+        # Max capacity in Wh
+        self.max_power_charging = 0.5 * max_capacity  # In W
+        self.max_power_discharging = max_capacity  # In W
+        self.max_capacity = max_capacity
         self.rte = rte
         self.eta_dc_dc = eta_dc_dc
         self.soc_min = soc_min

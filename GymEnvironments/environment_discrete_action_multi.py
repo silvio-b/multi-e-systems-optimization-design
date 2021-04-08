@@ -105,10 +105,10 @@ class RelicEnv(gym.Env):
         else:
             self.day_shift = 152
 
-        if "pv_surface" in config:
-            self.pv_surface = config["pv_surface"]
+        if "pv_nominal_power" in config:
+            self.pv_nominal_power = config["pv_nominal_power"]
         else:
-            self.pv_surface = 10
+            self.pv_nominal_power = 1500
 
         if "battery_size" in config:
             self.battery_size = config["battery_size"]
@@ -194,9 +194,9 @@ class RelicEnv(gym.Env):
         self.min_price = self.electricity_price_schedule.values.min()
 
         # PV & Battery Initialization
-        self.pv = PV(surface=self.pv_surface, tilt_angle=40, azimuth=180 - 64)
+        self.pv = PV(nominal_power=self.pv_nominal_power, tilt_angle=33, azimuth=180 - 64)
 
-        self.battery = Battery(max_power=4500, max_capacity=self.battery_size, rte=0.96)
+        self.battery = Battery(max_capacity=self.battery_size, rte=0.96)
 
         self.eta_ac_dc = 0.9
 
@@ -313,10 +313,10 @@ class RelicEnv(gym.Env):
         # PV has always priority
         # agent_battery_energy = abs(action_batt * self.battery.max_power * 60 * 60 / self.epTimeStep)
 
-        max_charge_dc = min(self.battery.max_power * 60 * 60 / self.ep_time_step,
+        max_charge_dc = min(self.battery.max_power_charging * 60 * 60 / self.ep_time_step,
                             (self.battery.soc_max - self.battery.soc) * self.battery.max_capacity * 3600 /
                             self.battery.eta_dc_dc)
-        max_discharge_dc = min(self.battery.max_power * 60 * 60 / self.ep_time_step,
+        max_discharge_dc = min(self.battery.max_power_discharging * 60 * 60 / self.ep_time_step,
                                (self.battery.soc - self.battery.soc_min) * self.battery.max_capacity * 3600 *
                                self.battery.eta_dc_dc)
 
