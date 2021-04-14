@@ -11,7 +11,7 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_05'
+    test_id = 'test_06'
     test_schedule = pd.read_csv('testSchedules'+'\\'+ test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
@@ -30,21 +30,21 @@ if __name__ == '__main__':
         batch_size = test_schedule['batch_size'][test]
         replay_buffer_capacity = 24 * 30 * 100
         prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
-        prediction_horizon = 24
+        prediction_horizon = test_schedule['prediction_horizon'][test]
 
         # physical parameters
         min_temperature_limit = 10  # Below this value no charging
         min_charging_temperature = 12  # Charging begins above this threshold
         max_temperature_limit = 18  # Above this threshold no discharging
 
-        pv_surface = test_schedule['pv_surface'][test]
+        pv_nominal_power = test_schedule['pv_nominal_power'][test]
         battery_size = test_schedule['battery_size'][test]
 
         tank_volume = test_schedule['tank_volume'][test]
         tank_heat_gain_coefficient = test_schedule['tank_heat_gain_coefficient'][test]
 
         # price schedule
-        price_schedule_name = 'electricity_price_schedule.csv'
+        price_schedule_name = 'electricity_price_schedule_hour.csv'
 
         num_episodes = test_schedule['num_episodes'][test]
 
@@ -72,8 +72,8 @@ if __name__ == '__main__':
             'tank_max_temperature': max_temperature_limit,
             'tank_volume': tank_volume,
             'tank_heat_gain_coefficient': tank_heat_gain_coefficient,
-            'pv_nominal_power': 2000,
-            'battery_size': 2400,
+            'pv_nominal_power': pv_nominal_power,
+            'battery_size': battery_size,
             'price_schedule_name': price_schedule_name}
 
         env = RelicEnv(config)
@@ -120,7 +120,7 @@ if __name__ == '__main__':
         #
         observation = env_baseline.reset(name_save='baseline')
         # append prediction
-        electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
+        electricity_price = electricity_price_schedule[0][env_baseline.kStep]
         storage_soc = observation[3]
 
         while not done:
@@ -141,7 +141,7 @@ if __name__ == '__main__':
                 break
 
             # append predictions
-            electricity_price = electricity_price_schedule[0][env_baseline.kStep + 1]
+            electricity_price = electricity_price_schedule[0][env_baseline.kStep]
             storage_soc = new_observation[3]
 
             # print(new_observation)
@@ -162,7 +162,7 @@ if __name__ == '__main__':
                                                 cooling_load_predictions=cooling_load_predictions,
                                                 electricity_price_predictions=electricity_price_predictions,
                                                 pv_power_generation_predictions=pv_power_generation_predictions,
-                                                horizon=24,
+                                                horizon=prediction_horizon,
                                                 step=episode_step)
             # Scale observations
             observation = min_max_scaling(observation, env.state_mins, env.state_maxs, np.array([0]),
@@ -217,7 +217,7 @@ if __name__ == '__main__':
                                                         cooling_load_predictions=cooling_load_predictions,
                                                         electricity_price_predictions=electricity_price_predictions,
                                                         pv_power_generation_predictions=pv_power_generation_predictions,
-                                                        horizon=24,
+                                                        horizon=prediction_horizon,
                                                         step=episode_step)
 
                 # Scale observations
@@ -237,6 +237,7 @@ if __name__ == '__main__':
 
             if env.episode_electricity_cost < best_score:
                 best_score = env.episode_electricity_cost
+                best_episode = episode
 
             print(f'Episode: {episode}, Score: {score}')
 
@@ -245,6 +246,7 @@ if __name__ == '__main__':
         test_schedule['score'][test] = last_episode_cost
         test_schedule['best_score'][test] = best_score
         test_schedule['baseline'][test] = baseline_cost
+        test_schedule['best_episode'][test] = best_episode
 
         agent.save_models(path=result_directory_final)
 

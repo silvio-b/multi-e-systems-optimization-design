@@ -1,11 +1,12 @@
 import os
 from GymEnvironments.environment_continuous_stable import RelicEnv
 import json
+import torch as th
 
 from stable_baselines3 import SAC
 
 result_directory_path = 'D:\\OneDrive - Politecnico di Torino\\PhD_Silvio\\14_Projects\\002_PVZenControl\\Thermal_Electrical_Storage_Control\\'
-result_directory = 'test_07'
+result_directory = 'test_stable_01'
 safe_exploration = -1
 discount_factor = 0.99
 alpha = 0.1
@@ -18,7 +19,7 @@ n_neurons = 256
 batch_size = 256
 replay_buffer_capacity = 24 * 30 * 100
 prediction_observations = ['electricity_price', 'pv_power_generation', 'cooling_load']
-prediction_horizon = 0
+prediction_horizon = 4
 min_temperature_limit = 10  # Below this value no charging
 min_charging_temperature = 12  # Charging begins above this threshold
 max_temperature_limit = 18  # Above this threshold no discharging
@@ -35,7 +36,7 @@ config = {
     'simulation_days': 90,
     'tank_min_temperature': min_temperature_limit,
     'tank_max_temperature': max_temperature_limit,
-    'price_schedule_name': 'electricity_price_schedule.csv',
+    'price_schedule_name': 'electricity_price_schedule_hour.csv',
     'horizon': prediction_horizon,
     'pv_nominal_power': 2000,
     'battery_size': 2400}
@@ -51,6 +52,7 @@ with open('supportFiles//state_space_variables.json', 'w') as json_file:
     json.dump(building_states, json_file)
 
 env = RelicEnv(config)
-
-model = SAC("MlpPolicy", env, verbose=1, learning_rate=0.0001)
+policy_kwargs = dict(activation_fn=th.nn.ReLU,
+                     net_arch=[256, 256])
+model = SAC("MlpPolicy", env, verbose=1, learning_rate=0.0001, policy_kwargs=policy_kwargs)
 model.learn(total_timesteps=90*24*10, log_interval=4)

@@ -16,96 +16,25 @@ IDD file    : C:\EnergyPlusV9-2-0\Energy+.idd
 Weather File: C:\EnergyPlusV9-2-0\WeatherData\ITA_TORINO-CASELLE_IGDG.epw
 Begin EnergyPlus processing . . . 
 EnergyPlus Starting
-EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.04.01 07:13
+EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.04.14 15:38
 Initializing Response Factors
 Calculating CTFs for "PAVIMENTO", Construction # 1
 Calculating CTFs for "PAVIMENTO", Construction # 1
-Calculating CTFs for "PAVIMENTO", Construction # 1
-Calculating CTFs for "PAVIMENTO", Construction # 1
-Calculating CTFs for "PAVIMENTO", Construction # 1
-Calculating CTFs for "COPERTURA LEGNO", Construction # 2
-Calculating CTFs for "COPERTURA LEGNO", Construction # 2
-Calculating CTFs for "COPERTURA LEGNO", Construction # 2
-Calculating CTFs for "COPERTURA LEGNO", Construction # 2
-Calculating CTFs for "COPERTURA LEGNO", Construction # 2
-Calculating CTFs for "COPERTURA LEGNO", Construction # 2
 Calculating CTFs for "COPERTURA LEGNO", Construction # 2
 Calculating CTFs for "COPERTURA PAGLIA", Construction # 3
-Calculating CTFs for "COPERTURA PAGLIA", Construction # 3
-Calculating CTFs for "COPERTURA PAGLIA", Construction # 3
-Calculating CTFs for "COPERTURA PAGLIA", Construction # 3
-Calculating CTFs for "PARETE 4", Construction # 4
-Calculating CTFs for "PARETE 4", Construction # 4
-Calculating CTFs for "PARETE 4", Construction # 4
 Calculating CTFs for "PARETE 4", Construction # 4
 Calculating CTFs for "PARETE 5", Construction # 5
-Calculating CTFs for "PARETE 5", Construction # 5
-Calculating CTFs for "PARETE 5", Construction # 5
-Calculating CTFs for "PARETE 5", Construction # 5
-Calculating CTFs for "PARETE 6", Construction # 6
-Calculating CTFs for "PARETE 6", Construction # 6
-Calculating CTFs for "PARETE 6", Construction # 6
-Calculating CTFs for "PARETE 6", Construction # 6
 Calculating CTFs for "PARETE 6", Construction # 6
 Calculating CTFs for "PARETE 7", Construction # 7
 Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 7", Construction # 7
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
-Calculating CTFs for "PARETE 8", Construction # 8
 Calculating CTFs for "PARETE 8", Construction # 8
 Calculating CTFs for "PARETE 9", Construction # 9
-Calculating CTFs for "PARETE 9", Construction # 9
-Calculating CTFs for "PARETE 9", Construction # 9
-Calculating CTFs for "PARETE 9", Construction # 9
-Calculating CTFs for "PARETE 10", Construction # 10
-Calculating CTFs for "PARETE 10", Construction # 10
-Calculating CTFs for "PARETE 10", Construction # 10
-Calculating CTFs for "PARETE 10", Construction # 10
 Calculating CTFs for "PARETE 10", Construction # 10
 Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 11", Construction # 11
-Calculating CTFs for "PARETE 12", Construction # 12
-Calculating CTFs for "PARETE 12", Construction # 12
-Calculating CTFs for "PARETE 12", Construction # 12
-Calculating CTFs for "PARETE 12", Construction # 12
-Calculating CTFs for "PARETE 12", Construction # 12
-Calculating CTFs for "PARETE 12", Construction # 12
-Calculating CTFs for "PARETE 12", Construction # 12
 Calculating CTFs for "PARETE 12", Construction # 12
 Calculating CTFs for "PARETE 13", Construction # 13
-Calculating CTFs for "PARETE 13", Construction # 13
-Calculating CTFs for "PARETE 13", Construction # 13
-Calculating CTFs for "PARETE SC - AS2", Construction # 14
-Calculating CTFs for "PARETE SC - AS2", Construction # 14
-Calculating CTFs for "PARETE SC - AS2", Construction # 14
-Calculating CTFs for "PARETE SC - AS2", Construction # 14
 Calculating CTFs for "PARETE SC - AS2", Construction # 14
 Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
-Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
-Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
-Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
-Calculating CTFs for "PARETE AS2 - AS1", Construction # 16
-Calculating CTFs for "PARETE AS1 - LT", Construction # 18
-Calculating CTFs for "PARETE AS1 - LT", Construction # 18
-Calculating CTFs for "PARETE AS1 - LT", Construction # 18
 Calculating CTFs for "PARETE AS1 - LT", Construction # 18
 Calculating CTFs for "PORTONE IN LEGNO", Construction # 23
 Initializing Window Optical Properties
@@ -178,38 +107,3 @@ Continuing Simulation at 06/14/2010 for TYPOYEAR
 Continuing Simulation at 06/28/2010 for TYPOYEAR
 Continuing Simulation at 07/12/2010 for TYPOYEAR
 Continuing Simulation at 07/26/2010 for TYPOYEAR
-Continuing Simulation at 08/09/2010 for TYPOYEAR
-Continuing Simulation at 08/23/2010 for TYPOYEAR
-Writing tabular output file results using HTML format.
-Writing final SQL reports
-EnergyPlus Run Time=00hr 05min 33.17sec
- ReadVarsESO program starting.
- ReadVars Run Time=00hr 00min  5.59sec
- ReadVarsESO program completed successfully.
- ReadVarsESO program starting.
- Requested ESO file=eplusout.mtr
- does not exist.  ReadVarsESO program terminated.
- ReadVarsESO program terminated.
-  Started HVAC Diagram
-  ERROR: ReadBND, Did not recognize: Controlled Zone Return,1,THERMAL ZONE 1,THERMAL ZONE 1 RETURN OUTLET                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  ERROR: ReadBND, Did not recognize: Controlled Zone Return,1,THERMAL ZONE 2,THERMAL ZONE 2 RETURN OUTLET                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  ERROR: ReadBND, Did not recognize: Controlled Zone Return,1,THERMAL ZONE 3,THERMAL ZONE 3 RETURN OUTLET                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  Complete
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-Removing extra files . . .
-        1 file spostato/i.
-===== C:\EnergyPlusV9-2-0//RunEplus C:\Users\BAEDA\PycharmProjects\multi-e-systems-optimization-design\eplusModels/StorageTank_Model\eplusModel ===== Complete =====

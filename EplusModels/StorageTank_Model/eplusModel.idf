@@ -28,7 +28,7 @@ ShadowCalculation,
     SimpleSkyDiffuseModeling;    !- Sky Diffuse Modeling Algorithm
 
 Timestep,
-    12;                       !- Number of Timesteps per Hour
+    1;                        !- Number of Timesteps per Hour
 
 ConvergenceLimits,
     1,                        !- Minimum System Timestep

@@ -44,7 +44,7 @@ class RelicEnv(gym.Env):
         if "ep_time_step" in config:
             self.ep_time_step = config["ep_time_step"]
         else:
-            self.ep_time_step = 12
+            self.ep_time_step = 1
 
         # Number of days of a simulation as specified in the RunPeriod object of the .idf file
         if "simulation_days" in config:

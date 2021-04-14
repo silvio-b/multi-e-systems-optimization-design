@@ -44,7 +44,7 @@ class RelicEnv(gym.Env):
         if "ep_time_step" in config:
             self.ep_time_step = config["ep_time_step"]
         else:
-            self.ep_time_step = 12
+            self.ep_time_step = 1
 
         # Number of days of a simulation as specified in the RunPeriod object of the .idf file
         if "simulation_days" in config:
@@ -55,7 +55,7 @@ class RelicEnv(gym.Env):
         if "reward_multiplier" in config:
             self.reward_multiplier = config["reward_multiplier"]
         else:
-            self.reward_multiplier = 10
+            self.reward_multiplier = 1
 
         # Tank properties
         if "tank_volume" in config:
@@ -292,18 +292,18 @@ class RelicEnv(gym.Env):
                                                      min_temperature=self.tank_min_temperature,
                                                      max_temperature=self.tank_max_temperature)
 
-            time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
+            time_of_day, day_of_week, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
             storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-            pump_energy_consumption, time_of_day, day_of_week = self.outputs
+            pump_energy_consumption = self.outputs
 
             self.SOC = storage_soc
 
             building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption
 
             # PV model from PV class, PV power in W, PV energy in Joule
-            incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time)
+            incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time_of_day)
             pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
-                                                                  day=day_of_the_year, time=time,
+                                                                  day=day_of_the_year, time=time_of_day,
                                                                   t_out=outdoor_air_temperature)
 
             pv_energy_production_dc = pv_power * 60 * 60 / self.ep_time_step
@@ -536,12 +536,12 @@ class RelicEnv(gym.Env):
                                                  min_temperature=self.tank_min_temperature,
                                                  max_temperature=self.tank_max_temperature)
 
-        time, day, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
+        time_of_day, day_of_week, outdoor_air_temperature, cooling_load, chiller_energy_consumption, storage_soc, storage_soc_l1, \
         storage_soc_l2, storage_soc_l3, storage_soc_l4, diff_i, dir_i, auxiliary_energy_consumption, \
-        pump_energy_consumption, time_of_day, day_of_week = self.outputs
+        pump_energy_consumption = self.outputs
 
         pv_power, efficiency = self.pv.electricity_prediction(direct_radiation=dir_i, diffuse_radiation=diff_i,
-                                                              day=self.day_shift, time=time,
+                                                              day=self.day_shift, time=time_of_day,
                                                               t_out=outdoor_air_temperature)
 
         self.SOC = storage_soc
