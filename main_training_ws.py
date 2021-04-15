@@ -31,6 +31,7 @@ if __name__ == '__main__':
         replay_buffer_capacity = 24 * 30 * 100
         prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
         prediction_horizon = test_schedule['prediction_horizon'][test]
+        seed = test_schedule['seed'][test]
 
         # physical parameters
         min_temperature_limit = 10  # Below this value no charging
@@ -105,7 +106,7 @@ if __name__ == '__main__':
                          action_dim=n_actions, hidden_dim=hidden_size, discount=discount_factor, tau=tau,
                          lr_critic=learning_rate_critic, lr_actor=learning_rate_actor,
                          batch_size=batch_size, replay_buffer_capacity=replay_buffer_capacity, learning_start=30 * 24,
-                         reward_scaling=10., seed=0, rbc_controller=None, safe_exploration=safe_exploration,
+                         reward_scaling=10., seed=seed, rbc_controller=None, safe_exploration=safe_exploration,
                          automatic_entropy_tuning=automatic_entropy_tuning, alpha=alpha)
 
         rbc_controller = RBCAgent(min_storage_soc=min_storage_soc,
