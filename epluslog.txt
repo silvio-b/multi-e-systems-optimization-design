@@ -16,7 +16,7 @@ IDD file    : C:\EnergyPlusV9-2-0\Energy+.idd
 Weather File: C:\EnergyPlusV9-2-0\WeatherData\ITA_TORINO-CASELLE_IGDG.epw
 Begin EnergyPlus processing . . . 
 EnergyPlus Starting
-EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.04.14 15:38
+EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.04.15 15:18
 Initializing Response Factors
 Calculating CTFs for "PAVIMENTO", Construction # 1
 Calculating CTFs for "PAVIMENTO", Construction # 1
@@ -74,7 +74,6 @@ Warming up
 Warming up
 Warming up
 Warming up
-Warming up
 Performing Zone Sizing Simulation
 ...for Sizing Period: #1 INVERNO
 Warming up
@@ -107,3 +106,4 @@ Continuing Simulation at 06/14/2010 for TYPOYEAR
 Continuing Simulation at 06/28/2010 for TYPOYEAR
 Continuing Simulation at 07/12/2010 for TYPOYEAR
 Continuing Simulation at 07/26/2010 for TYPOYEAR
+Continuing Simulation at 08/09/2010 for TYPOYEAR
