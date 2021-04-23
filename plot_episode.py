@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 directory = 'C:\\Users\\agall\\OneDrive\\Desktop\\Results_PV2000\\'
+directory_plot = 'C:\\Users\\agall\\OneDrive\\Desktop\\Plots\\'
 # Line plot for storage tank and battery over time
 # Area plot for  charge/Discharge power for tank and battery
 
@@ -17,160 +18,161 @@ data_rb6 = pd.read_csv(directory+'test_08/configuration_015/baseline.csv', sep='
 price = data_rl10['Price'].to_numpy()
 assex = data_rl10.index.to_numpy()
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True)
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 2400 Wh and seed 137')
 
-ax1.plot(assex, data_rl10['Tank SOC'])
-ax1.plot(assex, data_rb10['Tank SOC'])
+ax1.plot(assex, data_rl10['Tank SOC'], label='RL Control')
+ax1.plot(assex, data_rb10['Tank SOC'], label='RB Control')
 ax1.set_title('10 m^3 volume')
-ax1.legend(['RL Control', 'RB Control'])
+ax1.legend(bbox_to_anchor=(0.5, 1.02, 0.5, .102), loc='lower right', ncol=2, borderaxespad=0.)
 ax1.set_ylim([-0.1, 1.2])
 ax1.grid()
 
 ax2.plot(assex, data_rl8['Tank SOC'])
 ax2.plot(assex, data_rb8['Tank SOC'])
 ax2.set_title('8 m^3 volume')
-ax2.legend(['RL Control', 'RB Control'])
 ax2.set_ylim([-0.1, 1.2])
 ax2.grid()
 
 ax3.plot(assex, data_rl6['Tank SOC'])
 ax3.plot(assex, data_rb6['Tank SOC'])
 ax3.set_title('6 m^3 volume')
-ax3.legend(['RL Control', 'RB Control'])
 ax3.set_ylim([-0.1, 1.2])
 ax3.grid()
 
 plt.xticks([])
+plt.savefig(directory_plot + 'Storage tank SoC at 2400 Wh and seed 137.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 2400 Wh and seed 137')
 
-ax1.fill_between(assex, data_rl10['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax1.fill_between(assex, data_rl10['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
+ax1.fill_between(assex, data_rl10['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='royalblue')
+ax1.fill_between(assex, data_rl10['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='red')
+ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
 ax1.set_ylim([-10000, 8000])
 ax1.set_title('10 m^3 volume with RL')
 ax1.grid()
 
-ax2.fill_between(assex, data_rl8['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax2.fill_between(assex, data_rl8['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
+ax2.fill_between(assex, data_rl8['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='royalblue')
+ax2.fill_between(assex, data_rl8['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='red')
+ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
 ax2.set_ylim([-10000, 8000])
 ax2.set_title('8 m^3 volume with RL')
+ax2.set_ylabel('Power [W]', fontsize='large')
 ax2.grid()
 
-ax3.fill_between(assex, data_rl6['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax3.fill_between(assex, data_rl6['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
+ax3.fill_between(assex, data_rl6['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='royalblue')
+ax3.fill_between(assex, data_rl6['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='red')
+ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r', label='High price ')
+ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y', label='Medium price')
+ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g', label='Low price')
 ax3.set_ylim([-10000, 8000])
 ax3.set_title('6 m^3 volume with RL')
+ax3.legend(bbox_to_anchor=(0.5, -0.15), loc='upper center', ncol=3, borderaxespad=0.)
 ax3.grid()
 
-ax4.fill_between(assex, data_rb10['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax4.fill_between(assex, data_rb10['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
+ax4.fill_between(assex, data_rb10['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='royalblue')
+ax4.fill_between(assex, data_rb10['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='red')
+ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
 ax4.set_ylim([-10000, 8000])
 ax4.set_title('10 m^3 volume with RB')
-ax4.legend(['Charge', 'Discharge'])
-ax3.grid()
+# ax4.legend(['Charge', 'Discharge'])
+ax4.grid()
 
-ax5.fill_between(assex, data_rb8['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax5.fill_between(assex, data_rb8['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
+ax5.fill_between(assex, data_rb8['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='royalblue')
+ax5.fill_between(assex, data_rb8['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), alpha=1, color='red')
+ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
 ax5.set_ylim([-10000, 8000])
 ax5.set_title('8 m^3 volume with RB')
-ax5.legend(['Charge', 'Discharge'])
+# ax5.legend(['Charge', 'Discharge'])
 ax5.grid()
 
-ax6.fill_between(assex, data_rb6['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax6.fill_between(assex, data_rb6['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
-ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
+ax6.fill_between(assex, data_rb6['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), label='Discharge power', alpha=1, color='royalblue')
+ax6.fill_between(assex, data_rb6['STORAGETANK:Chilled Water Thermal Storage Source Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600), label='Charge power', alpha=1, color='red')
+ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
 ax6.set_ylim([-10000, 8000])
 ax6.set_title('6 m^3 volume with RB')
-ax6.legend(['Charge', 'Discharge'])
+ax6.legend(bbox_to_anchor=(0.5, -0.15), loc='upper center', ncol=2, borderaxespad=0.)
+# ax6.legend(['Charge', 'Discharge'])
 ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-
+plt.savefig(directory_plot + 'Storage tank SoC at 2400 Wh and seed 137 2 weeks.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 2400 Wh and seed 137')
 
-ax1.fill_between(assex, data_rl10['PV energy to battery [J]'].mul(1/3600))
-ax1.fill_between(assex, data_rl10['battery energy to building [J]'].mul(-1/3600))
-ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
-ax1.set_ylim([-2500, 2500])
+ax1.fill_between(assex, data_rl10['PV energy to battery [J]'].mul(1/3600), alpha=1, color='royalblue')
+ax1.fill_between(assex, data_rl10['battery energy to building [J]'].mul(-1/3600), alpha=1, color='tab:red')
+ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax1.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
+ax1.set_ylim([-2000, 2000])
 ax1.set_title('10 m^3 volume with RL')
 ax1.grid()
 
-ax2.fill_between(assex, data_rl8['PV energy to battery [J]'].mul(1/3600))
-ax2.fill_between(assex, data_rl8['battery energy to building [J]'].mul(-1/3600))
-ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
-ax2.set_ylim([-2500, 2500])
+ax2.fill_between(assex, data_rl8['PV energy to battery [J]'].mul(1/3600), alpha=1, color='royalblue')
+ax2.fill_between(assex, data_rl8['battery energy to building [J]'].mul(-1/3600), alpha=1, color='tab:red')
+ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax2.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
+ax2.set_ylim([-2000, 2000])
 ax2.set_title('8 m^3 volume with RL')
 ax2.grid()
 
-ax3.fill_between(assex, data_rl6['PV energy to battery [J]'].mul(1/3600))
-ax3.fill_between(assex, data_rl6['battery energy to building [J]'].mul(-1/3600))
-ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
-ax3.set_ylim([-2500, 2500])
+ax3.fill_between(assex, data_rl6['PV energy to battery [J]'].mul(1/3600), alpha=1, color='royalblue')
+ax3.fill_between(assex, data_rl6['battery energy to building [J]'].mul(-1/3600), alpha=1, color='tab:red')
+ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax3.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
+ax3.set_ylim([-2000, 2000])
 ax3.set_title('6 m^3 volume with RL')
 ax3.grid()
 
-ax4.fill_between(assex, data_rb10['PV energy to battery [J]'].mul(1/3600))
-ax4.fill_between(assex, data_rb10['battery energy to building [J]'].mul(-1/3600))
-ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
-ax4.set_ylim([-2500, 2500])
+ax4.fill_between(assex, data_rb10['PV energy to battery [J]'].mul(1/3600), alpha=1, color='royalblue')
+ax4.fill_between(assex, data_rb10['battery energy to building [J]'].mul(-1/3600), alpha=1, color='tab:red')
+ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax4.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
+ax4.set_ylim([-2000, 2000])
 ax4.set_title('10 m^3 volume with RB')
 ax4.legend(['Charge', 'Discharge'])
 ax3.grid()
 
-ax5.fill_between(assex, data_rb8['PV energy to battery [J]'].mul(1/3600))
-ax5.fill_between(assex, data_rb8['battery energy to building [J]'].mul(-1/3600))
-ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
-ax5.set_ylim([-2500, 2500])
+ax5.fill_between(assex, data_rb8['PV energy to battery [J]'].mul(1/3600), alpha=1, color='royalblue')
+ax5.fill_between(assex, data_rb8['battery energy to building [J]'].mul(-1/3600), alpha=1, color='tab:red')
+ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax5.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
+ax5.set_ylim([-2000, 2000])
 ax5.set_title('8 m^3 volume with RB')
 ax5.legend(['Charge', 'Discharge'])
 ax5.grid()
 
-ax6.fill_between(assex, data_rb6['PV energy to battery [J]'].mul(1/3600))
-ax6.fill_between(assex, data_rb6['battery energy to building [J]'].mul(-1/3600))
-ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.25, color='r')
-ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.25, color='y')
-ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.25, color='g')
-ax6.set_ylim([-2500, 2500])
+ax6.fill_between(assex, data_rb6['PV energy to battery [J]'].mul(1/3600), alpha=1, color='royalblue')
+ax6.fill_between(assex, data_rb6['battery energy to building [J]'].mul(-1/3600), alpha=1, color='tab:red')
+ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.3), alpha=0.15, color='r')
+ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.165), alpha=0.15, color='y')
+ax6.fill_between(assex, price*9999999, -price*9999999, where=(price == 0.03), alpha=0.15, color='g')
+ax6.set_ylim([-2000, 2000])
 ax6.set_title('6 m^3 volume with RB')
 ax6.legend(['Charge', 'Discharge'])
 ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-# plt.savefig(file_dir + file_name + 'Battery SOC.png')
-
+plt.savefig(directory_plot + 'Battery SoC at 2400 Wh and seed 137 2 weeks.png')
 ########################################################################################################################
 # 2) Seed 137 - Battery 4800 - Volume 10, 8, 6 - Best 30, 23, 23
 data_rl10 = pd.read_csv(directory+'test_09/configuration_004/episode_30.csv', sep=';', decimal=',', index_col=0)
@@ -180,7 +182,7 @@ data_rb10 = pd.read_csv(directory+'test_09/configuration_004/baseline.csv', sep=
 data_rb8 = pd.read_csv(directory+'test_09/configuration_005/baseline.csv', sep=';', decimal=',', index_col=0)
 data_rb6 = pd.read_csv(directory+'test_09/configuration_006/baseline.csv', sep=';', decimal=',', index_col=0)
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True)
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 4800 Wh and seed 137')
 
 ax1.plot(assex, data_rl10['Tank SOC'])
@@ -205,8 +207,9 @@ ax3.set_ylim([-0.1, 1.2])
 ax3.grid()
 
 plt.xticks([])
+plt.savefig(directory_plot + 'Storage tank SoC at 4800 Wh and seed 137.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 4800 Wh and seed 137')
 
 ax1.fill_between(assex, data_rl10['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
@@ -268,9 +271,9 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-
+plt.savefig(directory_plot + 'Storage tank SoC at 4800 Wh and seed 137 2 weeks.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 4800 Wh and seed 137')
 
 ax1.fill_between(assex, data_rl10['PV energy to battery [J]'].mul(1/3600))
@@ -332,7 +335,7 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-# plt.savefig(file_dir + file_name + 'Battery SOC.png')
+plt.savefig(directory_plot + 'Battery SoC at 4800 Wh and seed 137 2 weeks.png')
 ########################################################################################################################
 # 3) Seed 137 - Battery 7200 - Volume 10, 8, 6 - Best 30, 24, 17
 data_rl10 = pd.read_csv(directory+'test_09/configuration_013/episode_30.csv', sep=';', decimal=',', index_col=0)
@@ -342,7 +345,7 @@ data_rb10 = pd.read_csv(directory+'test_09/configuration_013/baseline.csv', sep=
 data_rb8 = pd.read_csv(directory+'test_09/configuration_014/baseline.csv', sep=';', decimal=',', index_col=0)
 data_rb6 = pd.read_csv(directory+'test_09/configuration_015/baseline.csv', sep=';', decimal=',', index_col=0)
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True)
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 7200 Wh and seed 137')
 
 ax1.plot(assex, data_rl10['Tank SOC'])
@@ -367,8 +370,9 @@ ax3.set_ylim([-0.1, 1.2])
 ax3.grid()
 
 plt.xticks([])
+plt.savefig(directory_plot + 'Storage tank SoC at 7200 Wh and seed 137.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 7200 Wh and seed 137')
 
 ax1.fill_between(assex, data_rl10['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
@@ -430,9 +434,9 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-
+plt.savefig(directory_plot + 'Storage tank SoC at 7200 Wh and seed 137 2 weeks.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 7200 Wh and seed 137')
 
 ax1.fill_between(assex, data_rl10['PV energy to battery [J]'].mul(1/3600))
@@ -494,7 +498,7 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-# plt.savefig(file_dir + file_name + 'Battery SOC.png')
+plt.savefig(directory_plot + 'Battery SoC at 7200 Wh and seed 137 2 weeks.png')
 ########################################################################################################################
 # 4) Seed 137 - Battery 2400, 4800, 7200 - Volume 10 - Best 27, 30, 30
 data_rl2400 = pd.read_csv(directory+'test_08/configuration_013/episode_27.csv', sep=';', decimal=',', index_col=0)
@@ -504,7 +508,7 @@ data_rb2400 = pd.read_csv(directory+'test_08/configuration_013/baseline.csv', se
 data_rb4800 = pd.read_csv(directory+'test_09/configuration_004/baseline.csv', sep=';', decimal=',', index_col=0)
 data_rb7200 = pd.read_csv(directory+'test_09/configuration_013/baseline.csv', sep=';', decimal=',', index_col=0)
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True)
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 10 m^3 and seed 137')
 
 ax1.plot(assex, data_rl2400['Battery soc'])
@@ -530,8 +534,9 @@ ax3.grid()
 
 plt.xticks([])
 plt.xlim([' 07/01  01:00:00', ' 08/01  01:00:00'])
+plt.savefig(directory_plot + 'Battery SoC at 10 m^3 and seed 137.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 10 m^3 and seed 137')
 
 ax1.fill_between(assex, data_rl2400['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
@@ -593,9 +598,9 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-
+plt.savefig(directory_plot + 'Storage SoC at 10 m^3 and seed 137 2 weeks.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 10 m^3 and seed 137')
 
 ax1.fill_between(assex, data_rl2400['PV energy to battery [J]'].mul(1/3600))
@@ -657,6 +662,7 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
+plt.savefig(directory_plot + 'Battery SoC at 10 m^3 and seed 137 2 weeks.png')
 ########################################################################################################################
 # 5) Seed 137 - Battery 2400, 4800, 7200 - Volume 8 - Best 27, 23, 24
 data_rl2400 = pd.read_csv(directory+'test_08/configuration_014/episode_27.csv', sep=';', decimal=',', index_col=0)
@@ -666,7 +672,7 @@ data_rb2400 = pd.read_csv(directory+'test_08/configuration_014/baseline.csv', se
 data_rb4800 = pd.read_csv(directory+'test_09/configuration_005/baseline.csv', sep=';', decimal=',', index_col=0)
 data_rb7200 = pd.read_csv(directory+'test_09/configuration_014/baseline.csv', sep=';', decimal=',', index_col=0)
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True)
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 8 m^3 and seed 137')
 
 ax1.plot(assex, data_rl2400['Battery soc'])
@@ -692,9 +698,9 @@ ax3.grid()
 
 plt.xticks([])
 plt.xlim([' 07/01  01:00:00', ' 08/01  01:00:00'])
-
+plt.savefig(directory_plot + 'Battery SoC at 8 m^3 and seed 137.png')
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 8 m^3 and seed 137')
 
 ax1.fill_between(assex, data_rl2400['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
@@ -756,9 +762,10 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
+plt.savefig(directory_plot + 'Storage tank SoC at 8 m^3 and seed 137 2 weeks.png')
 
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 8 m^3 and seed 137')
 
 ax1.fill_between(assex, data_rl2400['PV energy to battery [J]'].mul(1/3600))
@@ -820,6 +827,7 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
+plt.savefig(directory_plot + 'Battery SoC at 8 m^3 and seed 137 2 weeks.png')
 
 ########################################################################################################################
 # 6) Seed 137 - Battery 2400, 4800, 7200 - Volume 6 - Best 23, 23, 17
@@ -830,7 +838,7 @@ data_rb2400 = pd.read_csv(directory+'test_08/configuration_015/baseline.csv', se
 data_rb4800 = pd.read_csv(directory+'test_09/configuration_006/baseline.csv', sep=';', decimal=',', index_col=0)
 data_rb7200 = pd.read_csv(directory+'test_09/configuration_015/baseline.csv', sep=';', decimal=',', index_col=0)
 
-fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True)
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 6 m^3 and seed 137')
 
 ax1.plot(assex, data_rl2400['Battery soc'])
@@ -856,9 +864,10 @@ ax3.grid()
 
 plt.xticks([])
 plt.xlim([' 07/01  01:00:00', ' 08/01  01:00:00'])
-########################################################################################################################
+plt.savefig(directory_plot + 'Battery SoC at 6 m^3 and seed 137.png')
 
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+########################################################################################################################
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Storage tank SoC at 6 m^3 and seed 137')
 
 ax1.fill_between(assex, data_rl2400['STORAGETANK:Chilled Water Thermal Storage Use Side Heat Transfer Energy [J](TimeStep)'].mul(1/3600))
@@ -920,9 +929,10 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
+plt.savefig(directory_plot + 'Storage tank SoC at 6 m^3 and seed 137 2 weeks.png')
 
 ########################################################################################################################
-fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True)
+fig, ((ax1, ax4), (ax2, ax5), (ax3, ax6)) = plt.subplots(nrows=3, ncols=2, sharex=True, sharey=True, figsize=(15, 6))
 fig.suptitle('Battery SoC at 6 m^3 and seed 137')
 
 ax1.fill_between(assex, data_rl2400['PV energy to battery [J]'].mul(1/3600))
@@ -984,7 +994,5 @@ ax6.grid()
 
 plt.xticks([])
 plt.xlim([' 07/18  01:00:00', ' 08/01  01:00:00'])
-plt.show()
+plt.savefig(directory_plot + 'Battery SoC at 6 m^3 and seed 137 2 weeks.png')
 ########################################################################################################################
-
-

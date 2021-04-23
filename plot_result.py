@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Access data
+directory_plot = 'C:\\Users\\agall\\OneDrive\\Desktop\\Plots\\'
 directory = 'C:\\Users\\agall\\OneDrive\\Desktop\\Results_PV2000\\'
 file = 'test_09.csv'
 
@@ -44,7 +45,7 @@ ax1.legend(loc='lower left')
 ax2.set_ylim(10, 20.0)
 ax2.set_ylabel('Euro')
 ax2.legend(loc='lower right')
-
+plt.savefig(directory_plot + 'SS and SC for RB and RL at 4800 Wh and seed 137 with energy cost.png')
 ########################################################################################################################
 configurations = [22, 4, 13]
 labels = ['2400 Wh', '4800 Wh', '7200 Wh']
@@ -75,7 +76,7 @@ ax1.legend(loc='lower left')
 ax2.set_ylim(10, 25.0)
 ax2.set_ylabel('Euro')
 ax2.legend(loc='lower right')
-
+plt.savefig(directory_plot + 'SS and SC for RB and RL at 8 m^3 and seed 137 with energy cost.png')
 ########################################################################################################################
 configurations = [3, 4, 5]
 data_energy = data[['RL Energy consumption [kWh]', 'RL Energy battery [kWh]', 'RBC Energy consumption [kWh]', 'RBC Energy battery [kWh]']]
@@ -106,7 +107,7 @@ ax1.set_ylim(0.0, 1100.0)
 ax2.set_ylim(10, 25.0)
 ax2.set_ylabel('Euro')
 ax2.legend(loc='upper right')
-
+plt.savefig(directory_plot + 'Energy consumption and from battery for RB and RL at 4800 Wh and seed 137 with energy cost.png')
 ########################################################################################################################
 configurations = [22, 4, 13]
 labels = ['2400 Wh', '4800 Wh', '7200 Wh']
@@ -136,7 +137,7 @@ ax1.set_ylim(0.0, 1100.0)
 ax2.set_ylim(10, 25.0)
 ax2.set_ylabel('Euro')
 ax2.legend(loc='lower right')
-
+plt.savefig(directory_plot + 'Energy consumption and from battery for RB and RL at 8 m^3 and seed 137 with energy cost.png')
 ########################################################################################################################
 ########################################################################################################################
 # Same as before but with COP instead of cost
@@ -170,7 +171,7 @@ ax1.legend(loc='lower left')
 
 ax2.set_ylim(0, 5.0)
 ax2.legend(loc='lower right')
-
+plt.savefig(directory_plot + 'SS and SC for RB and RL at 4800 Wh and seed 137 with COP.png')
 ########################################################################################################################
 configurations = [22, 4, 13]
 labels = ['2400 Wh', '4800 Wh', '7200 Wh']
@@ -199,7 +200,7 @@ ax1.legend(loc='lower left')
 
 ax2.set_ylim(0.0, 5.0)
 ax2.legend(loc='lower right')
-
+plt.savefig(directory_plot + 'SS and SC for RB and RL at 8 m^3 and seed 137 with CoP.png')
 ########################################################################################################################
 configurations = [3, 4, 5]
 data_energy = data[['RL Energy consumption [kWh]', 'RL Energy battery [kWh]', 'RBC Energy consumption [kWh]', 'RBC Energy battery [kWh]']]
@@ -229,7 +230,7 @@ ax1.set_ylim(0.0, 1300.0)
 
 ax2.set_ylim(0.0, 5.0)
 ax2.legend(loc='upper right')
-
+plt.savefig(directory_plot + 'Energy consumption and from battery for RB and RL at 4800 Wh and seed 137 with CoP.png')
 ########################################################################################################################
 configurations = [22, 4, 13]
 labels = ['2400 Wh', '4800 Wh', '7200 Wh']
@@ -258,5 +259,5 @@ ax1.set_ylim(0.0, 1300.0)
 
 ax2.set_ylim(0.0, 5.0)
 ax2.legend(loc='lower right')
-
+plt.savefig(directory_plot + 'Energy consumption and from battery for RB and RL at 8 m^3 and seed 137 with CoP.png')
 ########################################################################################################################
