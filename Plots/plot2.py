@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # Load data
 directory = 'C:\\Users\\agall\\OneDrive\\Desktop\\Results_PV2000\\'
-directory_plot = 'C:\\Users\\agall\\OneDrive\\Desktop\\Plots\\'
+directory_plot = 'C:\\Users\\agall\\OneDrive\\Desktop\\Plots\\Area/'
 
 data_ep = pd.read_csv(directory + 'test_09/configuration_008/episode_25.csv', sep=';', decimal=',', index_col=0)
 data_base = pd.read_csv(directory + 'test_09/configuration_008/baseline.csv', sep=';', decimal=',', index_col=0)
@@ -105,4 +105,4 @@ ax_heat_ep.set_xticklabels(assex[day], rotation=90)
 
 fig.text(0.0, 0.5, 'Power [kW]', ha='center', va='center', rotation='vertical', fontsize='large')
 plt.xlim([' 08/02  21:00:00', ' 08/04  23:00:00'])
-plt.show()
+plt.savefig(directory_plot + 'RL vs RB thermal and electricity.png')
