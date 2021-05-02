@@ -1,9 +1,8 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
 # Access data
-directory_plot = 'C:\\Users\\agall\\OneDrive\\Desktop\\Plots\\Bar/'
+directory_plot = 'C:\\Users\\agall\\OneDrive\\Desktop\\Plots\\Bar/Best/'
 directory = 'C:\\Users\\agall\\OneDrive\\Desktop\\Results_PV2000\\'
 file = 'best_seeds.csv'
 
@@ -20,9 +19,7 @@ energy_rb = data['RBC Energy consumption [kWh]']
 
 
 # setup the figure and axes
-fig = plt.figure(figsize=(8, 3))
-ax1 = fig.add_subplot(121, projection='3d')
-ax2 = fig.add_subplot(122, projection='3d')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3), subplot_kw={'projection': '3d'})
 
 # Plot data
 _x = np.arange(3)
@@ -57,13 +54,13 @@ ax2.set_xlabel('BESS capacity [Wh]')
 ax2.set_ylabel('Tank volume [$m^3$]')
 ax2.set_zlabel('%')
 
-plt.savefig(directory_plot + 'bar3d_percento.png')
 
+plt.savefig(directory_plot + 'bar3d_percento.png')
+# plt.show()
+plt.close()
 # Energy consumption
 # setup the figure and axes
-fig = plt.figure(figsize=(8, 3))
-ax1 = fig.add_subplot(121, projection='3d')
-ax2 = fig.add_subplot(122, projection='3d')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5), subplot_kw={'projection': '3d', 'sharez': ax1})
 
 plt.suptitle('Energy consumption')
 
@@ -73,6 +70,7 @@ ax1.set_title('Advanced control strategy')
 ax1.set_xticks(_x)
 ax1.set_xticklabels(['2400', '4800', '7200'])
 ax1.set_yticks(_y)
+# ax1.set_ylim([0, 1200])
 ax1.set_yticklabels(['10', '8', '6'])
 ax1.set_xlabel('BESS capacity [Wh]')
 ax1.set_ylabel('Tank volume [$m^3$]')
@@ -84,24 +82,25 @@ ax2.set_title('Baseline')
 ax2.set_xticks(_x)
 ax2.set_xticklabels(['2400', '4800', '7200'])
 ax2.set_yticks(_y)
+# ax2.set_ylim([0, 1200])
 ax2.set_yticklabels(['10', '8', '6'])
 ax2.set_xlabel('BESS capacity [Wh]')
 ax2.set_ylabel('Tank volume [$m^3$]')
 ax2.set_zlabel('Energy consumption [kWh]')
 
 plt.savefig(directory_plot + 'bar3d_energy.png')
-
+# plt.show()
+plt.close()
 # Energy cost
 # setup the figure and axes
-fig = plt.figure(figsize=(8, 3))
-ax1 = fig.add_subplot(121, projection='3d')
-ax2 = fig.add_subplot(122, projection='3d')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5), subplot_kw={'projection': '3d', 'sharez': ax1})
 
 plt.suptitle('Energy cost')
 
 ax1.bar3d(x-width/2, y-width/2, bottom, width, depth, cost_rl, shade=True, ec='black',
           color=['cornflowerblue', 'cornflowerblue', 'cornflowerblue', 'limegreen', 'limegreen', 'limegreen', 'firebrick', 'firebrick', 'firebrick'])
 ax1.set_title('Advanced control strategy')
+# ax1.set_ylim([0, 25])
 ax1.set_xticks(_x)
 ax1.set_xticklabels(['2400', '4800', '7200'])
 ax1.set_yticks(_y)
@@ -113,6 +112,7 @@ ax1.set_zlabel('Energy cost [€]')
 ax2.bar3d(x-width/2, y-width/2, bottom, width, depth, cost_rb, shade=True, ec='black',
           color=['cornflowerblue', 'cornflowerblue', 'cornflowerblue', 'limegreen', 'limegreen', 'limegreen', 'firebrick', 'firebrick', 'firebrick'])
 ax2.set_title('Baseline')
+# ax2.set_ylim([0, 25])
 ax2.set_xticks(_x)
 ax2.set_xticklabels(['2400', '4800', '7200'])
 ax2.set_yticks(_y)
@@ -122,3 +122,4 @@ ax2.set_ylabel('Tank volume [$m^3$]')
 ax2.set_zlabel('Energy cost [€]')
 
 plt.savefig(directory_plot + 'bar3d_cost.png')
+# plt.show()
