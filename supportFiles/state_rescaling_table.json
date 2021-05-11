@@ -1,7 +1,7 @@
 {
   "outdoor_air_temperature":{
     "min": 7.0,
-    "max": 33.0
+    "max": 40.0
   },
   "ambient_air_temperature":{
     "min": 13.0,
@@ -32,7 +32,7 @@
     "max": 1.0
   },
   "time_of_day":{
-    "min": 1.0,
+    "min": 0.0,
     "max": 24.0
   },
   "day_of_week":{

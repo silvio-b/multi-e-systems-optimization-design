@@ -1,4 +1,0 @@
-id;pv_surface;battery_size;tank_volume;tank_heat_gain_coefficient;alpha;lr;num_episodes;batch_size;dim;neurons;baseline;score;best_score
-_001;10;2400;10;12;0,05;0,0001;30;256;2;256;;;
-_002;10;2400;8;10;0,05;0,0001;30;256;2;256;;;
-_003;10;2400;6;8;0,05;0,0001;30;256;2;256;;;

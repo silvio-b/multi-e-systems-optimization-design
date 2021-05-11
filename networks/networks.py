@@ -128,7 +128,7 @@ class PolicyNetworkDiscrete(nn.Module):
 
         self.input_layer = nn.Linear(num_inputs, hidden_size[0])
         self.hidden_layers = nn.ModuleList()
-        for k in range(len(hidden_size)):
+        for k in range(len(hidden_size) - 1):
             self.hidden_layers.append(nn.Linear(hidden_size[k], hidden_size[k]))
 
         self.output_layer = nn.Linear(hidden_size[len(hidden_size)-1], num_actions)
