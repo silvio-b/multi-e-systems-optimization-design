@@ -11,13 +11,13 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_07'
+    test_id = 'test_10'
     test_schedule = pd.read_csv('testSchedules'+'\\'+ test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
     for test in range(0, test_schedule.shape[0]):
         best_score = 1000
-        result_directory = '\\' + test_id + '\\configuration' + test_schedule['id'][test]
+        result_directory = '\\' + test_id + '_AUX' + '\\configuration' + test_schedule['id'][test]
         safe_exploration = -1
         discount_factor = 0.99
         alpha = test_schedule['alpha'][test]
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
 
         # Set the number of actions
-        n_actions = 2
+        n_actions = 3
         input_dims = env.observation_space.shape[0]
 
         # define period for RBC control and

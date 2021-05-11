@@ -231,7 +231,7 @@ class RelicEnv(gym.Env):
 
         self.episode_electricity_cost = 0
 
-        self.action_space_physical = [-1, 1]
+        self.action_space_physical = [-1, 0, 1]
 
     def step(self, action: np.ndarray):
 
@@ -288,7 +288,8 @@ class RelicEnv(gym.Env):
 
         self.SOC = storage_soc
 
-        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption
+        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption + \
+                                         (auxiliary_energy_consumption*60*60)
 
         # PV model from PV class, PV power in W, PV energy in Joule
         incidence, zenith = self.pv.solar_angles_calculation(day=day_of_the_year, time=time)
