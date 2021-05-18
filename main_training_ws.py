@@ -11,11 +11,11 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_10'
+    test_id = 'test_11'
     test_schedule = pd.read_csv('testSchedules'+'\\'+ test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
-    for test in range(0, test_schedule.shape[0]):
+    for test in range(11, test_schedule.shape[0]):
         best_score = 1000
         result_directory = '\\' + test_id + '_AUX' + '\\configuration' + test_schedule['id'][test]
         safe_exploration = -1
