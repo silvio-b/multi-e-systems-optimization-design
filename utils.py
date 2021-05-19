@@ -235,7 +235,7 @@ def min_max_scaling(mat, mins, maxs, min_val, max_val):
 
 def set_occupancy_schedule(schedule, index):
     if index == 0:
-        schedule['Field_3'] = 'Until 8:30'
+        schedule['Field_3'] = 'Until 8:00'
         schedule['Field_5'] = 'Until 18:00'
 
     elif index == 1:

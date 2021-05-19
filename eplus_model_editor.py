@@ -9,31 +9,18 @@ import pandas as pd
 from agents.RBC_discrete import RBCAgent
 from utils import calculate_tank_soc, set_occupancy_schedule
 
-idf_dir = 'eplusModels\\StorageTank_Model'
-occupancy_schedule_index = 1
-idd_file = 'supportFiles\\Energy+9-2-0.idd'
-file_name = idf_dir + '\\eplusModel.idf'
-
-IDF.setiddname(idd_file)
-idf_file = IDF(file_name)
-
-occupancy_schedule = idf_file.idfobjects['Schedule:Compact'][0]
-occupancy_schedule = set_occupancy_schedule(occupancy_schedule, occupancy_schedule_index)
-
-idf_file.save(idf_dir + '\\eplusModel.idf', encoding='UTF-8')
-
-
 # Run a simple RBC simulation in order to generate the new forcing variables resulting from the modification of the
 # .idf file performed in the lines above. Even if the RBC does not obtain satisfying performance the only purpose of
 # this step is to generate the forcing variables of the control problem which are not influenced by the control action.
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
+    occupancy_schedule_index = 1
+
     result_directory = 'data/'
     min_temperature_limit = 10  # Below this value no charging
     min_charging_temperature = 12  # Charging begins above this threshold
     max_temperature_limit = 18  # Above this threshold no discharging
-
 
     price_schedule_name = 'electricity_price_schedule_base.csv'
 
@@ -46,7 +33,8 @@ if __name__ == '__main__':
         'tank_max_temperature': max_temperature_limit,
         'end_day_of_month': 31,
         'price_schedule_name': price_schedule_name,
-        'pv_nominal_power': 2000}
+        'pv_nominal_power': 2000,
+        'occupancy_schedule_index': occupancy_schedule_index}
 
     env = RelicEnv(config)
 
