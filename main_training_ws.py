@@ -81,7 +81,7 @@ if __name__ == '__main__':
         state_rescaling['electricity_price']['max'] = max_price
 
         with open('supportFiles\\state_rescaling_table.json', 'w') as json_file:
-            json.dump(building_states, json_file)
+            json.dump(state_rescaling, json_file)
 
         hidden_size = n_hidden_layers * [n_neurons]
 

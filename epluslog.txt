@@ -5,7 +5,7 @@ Impossibile trovare il file specificato.
 ExpandObjects Started.
  Begin reading Energy+.idd file.
  Done reading Energy+.idd file.
-ExpandObjects Finished. Time:     0.141
+ExpandObjects Finished. Time:     0.125
         1 file copiati.
         1 file spostato/i.
         1 file copiati.
@@ -16,7 +16,7 @@ IDD file    : C:\EnergyPlusV9-2-0\Energy+.idd
 Weather File: C:\EnergyPlusV9-2-0\WeatherData\ITA_TORINO-CASELLE_IGDG.epw
 Begin EnergyPlus processing . . . 
 EnergyPlus Starting
-EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.05.19 11:10
+EnergyPlus, Version 9.2.0-921312fa1d, YMD=2021.05.19 19:19
 Initializing Response Factors
 Calculating CTFs for "PAVIMENTO", Construction # 1
 Calculating CTFs for "PAVIMENTO", Construction # 1
@@ -102,42 +102,3 @@ Warming up {5}
 Warming up {6}
 Starting Simulation at 06/01/2010 for TYPOYEAR
 ExternalInterface starts first data exchange.
-Continuing Simulation at 06/14/2010 for TYPOYEAR
-Continuing Simulation at 06/28/2010 for TYPOYEAR
-Continuing Simulation at 07/12/2010 for TYPOYEAR
-Continuing Simulation at 07/26/2010 for TYPOYEAR
-Continuing Simulation at 08/09/2010 for TYPOYEAR
-Continuing Simulation at 08/23/2010 for TYPOYEAR
-Writing tabular output file results using HTML format.
-Writing final SQL reports
-EnergyPlus Run Time=00hr 00min 19.51sec
- ReadVarsESO program starting.
- ReadVars Run Time=00hr 00min  0.75sec
- ReadVarsESO program completed successfully.
- ReadVarsESO program starting.
- Requested ESO file=eplusout.mtr
- does not exist.  ReadVarsESO program terminated.
- ReadVarsESO program terminated.
-  Started HVAC Diagram
-  ERROR: ReadBND, Did not recognize: Controlled Zone Return,1,THERMAL ZONE 1,THERMAL ZONE 1 RETURN OUTLET                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  ERROR: ReadBND, Did not recognize: Controlled Zone Return,1,THERMAL ZONE 2,THERMAL ZONE 2 RETURN OUTLET                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  ERROR: ReadBND, Did not recognize: Controlled Zone Return,1,THERMAL ZONE 3,THERMAL ZONE 3 RETURN OUTLET                                                                                                                                                                                                                                                                                                                                                                                                                                                
-  Complete
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-        1 file spostato/i.
-Removing extra files . . .
-        1 file spostato/i.
-===== C:\EnergyPlusV9-2-0//RunEplus C:\Users\silvi\PycharmProjects\multi-e-systems-optimization-design\eplusModels/StorageTank_Model\eplusModel ===== Complete =====

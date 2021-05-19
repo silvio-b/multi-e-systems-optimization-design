@@ -144,8 +144,8 @@ def evaluate_perfect_predictions(data, variable_name, horizhon, n_days, ep_times
     data['hour'] = np.ceil(data.time)
 
     data['day_index'] = np.repeat(range(1, n_days + 1), ep_timestep * 24)
-
-    data_hour = data.groupby(['day_index', 'hour'], as_index=False)[variable_name].mean()
+    data_hour = data
+    # data_hour = data.groupby(['day_index', 'hour'], as_index=False)[variable_name].mean()
 
     var_prediction = []
     for i in range(1, horizhon + 1):

@@ -10,7 +10,7 @@ from agents.RBC_discrete import RBCAgent
 from utils import calculate_tank_soc, set_occupancy_schedule
 
 idf_dir = 'eplusModels\\StorageTank_Model'
-occupancy_schedule_index = 0
+occupancy_schedule_index = 1
 idd_file = 'supportFiles\\Energy+9-2-0.idd'
 file_name = idf_dir + '\\eplusModel.idf'
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         'tank_max_temperature': max_temperature_limit,
         'end_day_of_month': 31,
         'price_schedule_name': price_schedule_name,
-        'pv_nominal_power': 3000}
+        'pv_nominal_power': 2000}
 
     env = RelicEnv(config)
 
