@@ -11,13 +11,13 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_11'
-    test_schedule = pd.read_csv('testSchedules'+'\\'+ test_id + '.csv', decimal=',', sep=';')
+    test_id = 'test_10'
+    test_schedule = pd.read_csv('testSchedules'+'\\' + test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
 
-    for test in range(11, test_schedule.shape[0]):
+    for test in range(0, test_schedule.shape[0]):
         best_score = 1000
-        result_directory = '\\' + test_id + '_AUX' + '\\configuration' + test_schedule['id'][test]
+        result_directory = '\\' + test_id + '\\configuration' + test_schedule['id'][test]
         safe_exploration = -1
         discount_factor = 0.99
         alpha = test_schedule['alpha'][test]
@@ -32,6 +32,9 @@ if __name__ == '__main__':
         prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
         prediction_horizon = test_schedule['prediction_horizon'][test]
         seed = test_schedule['seed'][test]
+        occupancy_schedule_index = test_schedule['occupancy_schedule_index'][test]
+        appliances = test_schedule['appliances'][test]
+        price_schedule_type = test_schedule['price_schedule_type'][test]
 
         # physical parameters
         min_temperature_limit = 10  # Below this value no charging
@@ -45,7 +48,10 @@ if __name__ == '__main__':
         tank_heat_gain_coefficient = test_schedule['tank_heat_gain_coefficient'][test]
 
         # price schedule
-        price_schedule_name = 'electricity_price_schedule_hour.csv'
+        price_schedule_name = 'electricity_price_schedule_{}.csv'.format(price_schedule_type)
+        electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
+        min_price = float(electricity_price_schedule[0].min())
+        max_price = float(electricity_price_schedule[0].max())
 
         num_episodes = test_schedule['num_episodes'][test]
 
@@ -59,7 +65,22 @@ if __name__ == '__main__':
         building_states['predicted_observations']['horizon'] = int(prediction_horizon)
         building_states['predicted_observations']['variables'] = prediction_observations
 
+        if appliances == 0:
+            building_states['eplus_observations']["auxiliary_load"] = "False"
+        else:
+            building_states['eplus_observations']["auxiliary_load"] = "True"
+
         with open('supportFiles\\state_space_variables.json', 'w') as json_file:
+            json.dump(building_states, json_file)
+
+        with open('supportFiles\\state_rescaling_table.json', 'r') as json_file:
+            state_rescaling = json.load(json_file)
+
+        state_rescaling['pv_power_generation']['max'] = pv_nominal_power
+        state_rescaling['electricity_price']['min'] = min_price
+        state_rescaling['electricity_price']['max'] = max_price
+
+        with open('supportFiles\\state_rescaling_table.json', 'w') as json_file:
             json.dump(building_states, json_file)
 
         hidden_size = n_hidden_layers * [n_neurons]
@@ -75,23 +96,27 @@ if __name__ == '__main__':
             'tank_heat_gain_coefficient': tank_heat_gain_coefficient,
             'pv_nominal_power': pv_nominal_power,
             'battery_size': battery_size,
-            'price_schedule_name': price_schedule_name}
+            'price_schedule_name': price_schedule_name,
+            'occupancy_schedule_index': occupancy_schedule_index,
+            'appliances': appliances}
 
         env = RelicEnv(config)
         env_baseline = RelicEnvBaseline(config)
 
         # Import predictions
-        cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect.csv')
-        electricity_price_predictions = pd.read_csv('supportFiles\\prediction-electricity_price_perfect.csv')
-        pv_power_generation_predictions = pd.read_csv('supportFiles\\prediction-pv_power_generation_perfect.csv')
-        electricity_price_schedule = pd.read_csv('supportFiles\\' + price_schedule_name, header=None)
+        cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect_occ{}.csv'.format(
+            occupancy_schedule_index
+        ))
+        electricity_price_predictions = pd.read_csv('supportFiles/prediction-electricity_price_{}_perfect.csv'.format(
+            price_schedule_type
+        ))
+        pv_power_generation_predictions = pd.read_csv('supportFiles\\prediction-pv_power_generation_perfect_{}.csv'.format(
+            str(pv_nominal_power)
+        ))
 
         # Set the number of actions
         n_actions = 3
         input_dims = env.observation_space.shape[0]
-
-        # define period for RBC control and
-        min_price = float(electricity_price_schedule[0].min())
 
         # evaluate SOC
         max_storage_soc = calculate_tank_soc(min_temperature_limit, min_temperature_limit,

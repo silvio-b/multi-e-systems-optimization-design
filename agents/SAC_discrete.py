@@ -1,7 +1,6 @@
 import torch as t
 import torch.optim as optim
 import torch.nn.functional as f
-import torch.nn as nn
 import numpy as np
 from agents.buffer import ReplayBuffer
 from networks.networks import SoftQNetworkDiscrete, PolicyNetworkDiscrete
@@ -56,7 +55,7 @@ class SACAgent():
             target_param.data.copy_(param.data)
 
         # Policy
-        self.policy_net = PolicyNetworkDiscrete(state_dim, action_dim, hidden_dim).to(self.device)
+        self.policy_net = PolicyNetworkDiscrete(state_dim, action_dim, [64, 64]).to(self.device)
         self.soft_q_optimizer1 = optim.Adam(self.soft_q_net1.parameters(), lr=lr_critic)
         self.soft_q_optimizer2 = optim.Adam(self.soft_q_net2.parameters(), lr=lr_critic)
         self.policy_optimizer = optim.Adam(self.policy_net.parameters(), lr=lr_actor)

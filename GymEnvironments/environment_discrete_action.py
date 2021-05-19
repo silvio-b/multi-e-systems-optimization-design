@@ -7,7 +7,7 @@ import pandas as pd
 from pyEp import pyEp
 from gym import spaces
 import json
-from utils import get_state_variables, get_eplus_action_encoding, calculate_tank_soc
+from utils import get_state_variables, get_eplus_action_encoding, calculate_tank_soc, set_occupancy_schedule
 from eppy.modeleditor import IDF
 from EnergyModels.PVmodel import PV
 from EnergyModels.battery_model import Battery
@@ -108,12 +108,22 @@ class RelicEnv(gym.Env):
         if "pv_nominal_power" in config:
             self.pv_nominal_power = config["pv_nominal_power"]
         else:
-            self.pv_nominal_power = 1500
+            self.pv_nominal_power = 2000
 
         if "battery_size" in config:
             self.battery_size = config["battery_size"]
         else:
             self.battery_size = 2400
+
+        if "occupancy_schedule_index" in config:
+            self.occupancy_schedule_index = config["occupancy_schedule_index"]
+        else:
+            self.occupancy_schedule_index = 0
+
+        if "appliances" in config:
+            self.appliances = config["appliances"]
+        else:
+            self.appliances = 0
 
         self.price_schedule_name = config["price_schedule_name"]
 
@@ -128,6 +138,9 @@ class RelicEnv(gym.Env):
         runperiod.Begin_Day_of_Month = self.begin_day_of_month
         runperiod.End_Month = self.end_month
         runperiod.End_Day_of_Month = self.end_day_of_month
+
+        occupancy_schedule = idf_file.idfobjects['Schedule:Compact'][0]
+        occupancy_schedule = set_occupancy_schedule(occupancy_schedule, self.occupancy_schedule_index)
 
         storage_tank = idf_file.idfobjects['ThermalStorage:ChilledWater:Mixed'][0]
         storage_tank.Tank_Volume = self.tank_volume
@@ -271,7 +284,7 @@ class RelicEnv(gym.Env):
         if not self.outputs:
             print("Outputs:", self.outputs)
             print("Actions:", action)
-            next_state = self.reset()
+            next_state = self.reset(self.name_save)
             return next_state, 0, False, {}
 
         # Unpack Eplus output
@@ -287,8 +300,10 @@ class RelicEnv(gym.Env):
         pump_energy_consumption = self.outputs
 
         self.SOC = storage_soc
-
-        building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption + \
+        if self.appliances == 0:
+            building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption
+        else:
+            building_energy_consumption_ac = chiller_energy_consumption + pump_energy_consumption + \
                                          (auxiliary_energy_consumption*60*60)
 
         # PV model from PV class, PV power in W, PV energy in Joule

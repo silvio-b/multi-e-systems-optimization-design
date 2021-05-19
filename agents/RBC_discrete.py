@@ -34,7 +34,7 @@ class RBCAgent:
             if storage_soc > self.min_storage_soc:
                 action = 0  # DisCharge the storage at nominal mass flow rate
             else:
-                action = 0  # the storage is empty. stop the charging phase
+                action = 1  # the storage is empty. stop the charging phase
 
         if self.random_choice:
             if np.random.uniform() < self.random_probability:

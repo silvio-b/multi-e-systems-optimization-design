@@ -105,7 +105,7 @@ RunPeriod,
     1,                        !- Begin Day of Month
     ,                         !- Begin Year
     8,                        !- End Month
-    29,                       !- End Day of Month
+    31,                       !- End Day of Month
     ,                         !- End Year
     Tuesday,                  !- Day of Week for Start Day
     No,                       !- Use Weather File Holidays and Special Days
@@ -157,28 +157,13 @@ ScheduleTypeLimits,
     CONTINUOUS;               !- Numeric Type
 
 Schedule:Compact,
-    AS OCCUPANCY SCHEDULE,    !- Name
+    OCCUPANCY SCHEDULE,       !- Name
     Fraction,                 !- Schedule Type Limits Name
     Through: 12/31,           !- Field 1
     For: Weekdays SummerDesignDay,    !- Field 2
-    Until: 8:30,              !- Field 3
+    Until 8:30,               !- Field 3
     0.0,                      !- Field 4
-    Until:18:00,              !- Field 5
-    1.0,                      !- Field 6
-    Until:24:00,              !- Field 7
-    0.0,                      !- Field 8
-    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
-    Until:24:00,              !- Field 10
-    0.0;                      !- Field 11
-
-Schedule:Compact,
-    SC OCCUPANCY SCHEDULE,    !- Name
-    Fraction,                 !- Schedule Type Limits Name
-    Through: 12/31,           !- Field 1
-    For: Weekdays SummerDesignDay,    !- Field 2
-    Until: 8:30,              !- Field 3
-    0.0,                      !- Field 4
-    Until:18:00,              !- Field 5
+    Until 18:00,              !- Field 5
     1.0,                      !- Field 6
     Until:24:00,              !- Field 7
     0.0,                      !- Field 8
@@ -215,36 +200,6 @@ Schedule:Compact,
     For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
     Until:24:00,              !- Field 10
     1.0;                      !- Field 11
-
-Schedule:Compact,
-    AS ELEC_HEATGAINS SCHEDULE,    !- Name
-    Fraction,                 !- Schedule Type Limits Name
-    Through: 12/31,           !- Field 1
-    For: Weekdays SummerDesignDay,    !- Field 2
-    Until: 8:30,              !- Field 3
-    0.0,                      !- Field 4
-    Until:18:00,              !- Field 5
-    1.0,                      !- Field 6
-    Until:24:00,              !- Field 7
-    0.0,                      !- Field 8
-    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
-    Until:24:00,              !- Field 10
-    0.0;                      !- Field 11
-
-Schedule:Compact,
-    SC ELEC_HEATGAINS SCHEDULE,    !- Name
-    Fraction,                 !- Schedule Type Limits Name
-    Through: 12/31,           !- Field 1
-    For: Weekdays SummerDesignDay,    !- Field 2
-    Until: 8:30,              !- Field 3
-    0.0,                      !- Field 4
-    Until:18:00,              !- Field 5
-    1.0,                      !- Field 6
-    Until:24:00,              !- Field 7
-    0.0,                      !- Field 8
-    For: Weekends WinterDesignDay AllOtherDays,    !- Field 9
-    Until:24:00,              !- Field 10
-    0.0;                      !- Field 11
 
 Schedule:Compact,
     ActivityLevel,            !- Name
@@ -2337,7 +2292,7 @@ Shading:Zone:Detailed,
 People,
     Occupancy_AS2,            !- Name
     Thermal Zone 2,           !- Zone or ZoneList Name
-    AS OCCUPANCY SCHEDULE,    !- Number of People Schedule Name
+    OCCUPANCY SCHEDULE,       !- Number of People Schedule Name
     People,                   !- Number of People Calculation Method
     10,                       !- Number of People
     ,                         !- People per Zone Floor Area
@@ -2355,7 +2310,7 @@ People,
 People,
     Occupancy_AS1,            !- Name
     Thermal Zone 3,           !- Zone or ZoneList Name
-    AS OCCUPANCY SCHEDULE,    !- Number of People Schedule Name
+    OCCUPANCY SCHEDULE,       !- Number of People Schedule Name
     People,                   !- Number of People Calculation Method
     10,                       !- Number of People
     ,                         !- People per Zone Floor Area
@@ -2373,7 +2328,7 @@ People,
 People,
     Occupancy_SC,             !- Name
     Thermal Zone 1,           !- Zone or ZoneList Name
-    SC OCCUPANCY SCHEDULE,    !- Number of People Schedule Name
+    OCCUPANCY SCHEDULE,       !- Number of People Schedule Name
     People,                   !- Number of People Calculation Method
     3,                        !- Number of People
     ,                         !- People per Zone Floor Area
@@ -2391,7 +2346,7 @@ People,
 Lights,
     LED AS2,                  !- Name
     Thermal Zone 2,           !- Zone or ZoneList Name
-    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     LightingLevel,            !- Design Level Calculation Method
     90,                       !- Lighting Level
     ,                         !- Watts per Zone Floor Area
@@ -2405,7 +2360,7 @@ Lights,
 Lights,
     LED AS1,                  !- Name
     Thermal Zone 3,           !- Zone or ZoneList Name
-    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     LightingLevel,            !- Design Level Calculation Method
     90,                       !- Lighting Level
     ,                         !- Watts per Zone Floor Area
@@ -2419,7 +2374,7 @@ Lights,
 Lights,
     LED SC,                   !- Name
     Thermal Zone 1,           !- Zone or ZoneList Name
-    SC ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     LightingLevel,            !- Design Level Calculation Method
     27,                       !- Lighting Level
     ,                         !- Watts per Zone Floor Area
@@ -2433,7 +2388,7 @@ Lights,
 Lights,
     Plafoniere SC,            !- Name
     Thermal Zone 1,           !- Zone or ZoneList Name
-    SC ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     LightingLevel,            !- Design Level Calculation Method
     26,                       !- Lighting Level
     ,                         !- Watts per Zone Floor Area
@@ -2447,7 +2402,7 @@ Lights,
 Lights,
     Plafoniere AS2,           !- Name
     Thermal Zone 2,           !- Zone or ZoneList Name
-    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     LightingLevel,            !- Design Level Calculation Method
     52,                       !- Lighting Level
     ,                         !- Watts per Zone Floor Area
@@ -2461,7 +2416,7 @@ Lights,
 Lights,
     Plafoniere AS1,           !- Name
     Thermal Zone 3,           !- Zone or ZoneList Name
-    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     LightingLevel,            !- Design Level Calculation Method
     52,                       !- Lighting Level
     ,                         !- Watts per Zone Floor Area
@@ -2475,7 +2430,7 @@ Lights,
 ElectricEquipment,
     PC SC,                    !- Name
     Thermal Zone 1,           !- Zone or ZoneList Name
-    SC ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     EquipmentLevel,           !- Design Level Calculation Method
     150,                      !- Design Level
     ,                         !- Watts per Zone Floor Area
@@ -2488,7 +2443,7 @@ ElectricEquipment,
 ElectricEquipment,
     PC AS2,                   !- Name
     Thermal Zone 2,           !- Zone or ZoneList Name
-    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     EquipmentLevel,           !- Design Level Calculation Method
     200,                      !- Design Level
     ,                         !- Watts per Zone Floor Area
@@ -2501,7 +2456,7 @@ ElectricEquipment,
 ElectricEquipment,
     PC AS1,                   !- Name
     Thermal Zone 3,           !- Zone or ZoneList Name
-    AS ELEC_HEATGAINS SCHEDULE,    !- Schedule Name
+    OCCUPANCY SCHEDULE,       !- Schedule Name
     EquipmentLevel,           !- Design Level Calculation Method
     200,                      !- Design Level
     ,                         !- Watts per Zone Floor Area
@@ -2591,7 +2546,7 @@ HVACTemplate:Thermostat,
 HVACTemplate:Zone:IdealLoadsAirSystem,
     Thermal Zone 1,           !- Zone Name
     ZONE1 THERMOSTAT,         !- Template Thermostat Name
-    HVAC OPERATION SCHEDULE,    !- System Availability Schedule Name
+    OCCUPANCY SCHEDULE,       !- System Availability Schedule Name
     50,                       !- Maximum Heating Supply Air Temperature
     13,                       !- Minimum Cooling Supply Air Temperature
     0.02,                     !- Maximum Heating Supply Air Humidity Ratio
@@ -2623,7 +2578,7 @@ HVACTemplate:Zone:IdealLoadsAirSystem,
 HVACTemplate:Zone:IdealLoadsAirSystem,
     Thermal Zone 2,           !- Zone Name
     ZONE2 THERMOSTAT,         !- Template Thermostat Name
-    HVAC OPERATION SCHEDULE,    !- System Availability Schedule Name
+    OCCUPANCY SCHEDULE,       !- System Availability Schedule Name
     50,                       !- Maximum Heating Supply Air Temperature
     13,                       !- Minimum Cooling Supply Air Temperature
     0.02,                     !- Maximum Heating Supply Air Humidity Ratio
@@ -2655,7 +2610,7 @@ HVACTemplate:Zone:IdealLoadsAirSystem,
 HVACTemplate:Zone:IdealLoadsAirSystem,
     Thermal Zone 3,           !- Zone Name
     ZONE3 THERMOSTAT,         !- Template Thermostat Name
-    HVAC OPERATION SCHEDULE,    !- System Availability Schedule Name
+    OCCUPANCY SCHEDULE,       !- System Availability Schedule Name
     50,                       !- Maximum Heating Supply Air Temperature
     13,                       !- Minimum Cooling Supply Air Temperature
     0.02,                     !- Maximum Heating Supply Air Humidity Ratio
@@ -3005,7 +2960,7 @@ Chiller:Electric:EIR,
 
 ThermalStorage:ChilledWater:Mixed,
     StorageTank,              !- Name
-    6,                        !- Tank Volume
+    10,                       !- Tank Volume
     StorageTank Temp Schedule,    !- Setpoint Temperature Schedule Name
     0.1,                      !- Deadband Temperature Difference
     1,                        !- Minimum Temperature Limit
@@ -3014,7 +2969,7 @@ ThermalStorage:ChilledWater:Mixed,
     ,                         !- Ambient Temperature Schedule Name
     Thermal Zone 4,           !- Ambient Temperature Zone Name
     ,                         !- Ambient Temperature Outdoor Air Node Name
-    8,                        !- Heat Gain Coefficient from Ambient Temperature
+    12,                       !- Heat Gain Coefficient from Ambient Temperature
     ChW Supply Side StorageBranch Inlet Node,    !- Use Side Inlet Node Name
     ChW Supply Side StorageBranch Outlet Node,    !- Use Side Outlet Node Name
     1,                        !- Use Side Heat Transfer Effectiveness

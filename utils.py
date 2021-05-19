@@ -131,7 +131,7 @@ def get_eplus_action_encoding(action):
     return eplus_commands
 
 
-def evaluate_perfect_predictions(data, variable_name, horizhon, n_days):
+def evaluate_perfect_predictions(data, variable_name, horizhon, n_days, ep_timestep):
     """
 
     :param data:
@@ -143,7 +143,7 @@ def evaluate_perfect_predictions(data, variable_name, horizhon, n_days):
 
     data['hour'] = np.ceil(data.time)
 
-    data['day_index'] = np.repeat(range(1, n_days + 1), 12 * 24)
+    data['day_index'] = np.repeat(range(1, n_days + 1), ep_timestep * 24)
 
     data_hour = data.groupby(['day_index', 'hour'], as_index=False)[variable_name].mean()
 
@@ -237,69 +237,9 @@ def set_occupancy_schedule(schedule, index):
     if index == 0:
         schedule['Field_3'] = 'Until 8:30'
         schedule['Field_5'] = 'Until 18:00'
-        schedule['Field_10'] = 'Until 8:30'
-        schedule['Field_12'] = 'Until 18:00'
-        schedule['Field_13'] = 0
-        schedule['Field_18'] = 'Until 8:30'
-        schedule['Field_20'] = 'Until 18:00'
-        schedule['Field_25'] = 'Until 8:30'
-        schedule['Field_27'] = 'Until 18:00'
-        schedule['Field_28'] = 0
-        schedule['Field_33'] = 'Until 8:30'
-        schedule['Field_35'] = 'Until 18:00'
-        schedule['Field_40'] = 'Until 8:30'
-        schedule['Field_42'] = 'Until 18:00'
-        schedule['Field_43'] = 0
 
     elif index == 1:
-        schedule['Field_3'] = 'Until 8:30'
-        schedule['Field_5'] = 'Until 18:00'
-        schedule['Field_10'] = 'Until 8:30'
-        schedule['Field_12'] = 'Until 18:00'
-        schedule['Field_13'] = 0
-        schedule['Field_18'] = 'Until 8:00'
-        schedule['Field_20'] = 'Until 19:00'
-        schedule['Field_25'] = 'Until 8:30'
-        schedule['Field_27'] = 'Until 18:00'
-        schedule['Field_28'] = 0
-        schedule['Field_33'] = 'Until 8:30'
-        schedule['Field_35'] = 'Until 18:00'
-        schedule['Field_40'] = 'Until 8:30'
-        schedule['Field_42'] = 'Until 18:00'
-        schedule['Field_43'] = 0
-
-    elif index == 2:
-        schedule['Field_3'] = 'Until 8:30'
-        schedule['Field_5'] = 'Until 18:00'
-        schedule['Field_10'] = 'Until 8:30'
-        schedule['Field_12'] = 'Until 18:00'
-        schedule['Field_13'] = 0
-        schedule['Field_18'] = 'Until 8:30'
-        schedule['Field_20'] = 'Until 18:00'
-        schedule['Field_25'] = 'Until 8:30'
-        schedule['Field_27'] = 'Until 18:00'
-        schedule['Field_28'] = 0
-        schedule['Field_33'] = 'Until 8:00'
-        schedule['Field_35'] = 'Until 19:00'
-        schedule['Field_40'] = 'Until 8:30'
-        schedule['Field_42'] = 'Until 18:00'
-        schedule['Field_43'] = 0
-
-    elif index == 3:
-        schedule['Field_3'] = 'Until 8:30'
-        schedule['Field_5'] = 'Until 18:00'
-        schedule['Field_10'] = 'Until 8:30'
-        schedule['Field_12'] = 'Until 18:00'
-        schedule['Field_13'] = 0
-        schedule['Field_18'] = 'Until 8:30'
-        schedule['Field_20'] = 'Until 18:00'
-        schedule['Field_25'] = 'Until 8:30'
-        schedule['Field_27'] = 'Until 14:00'
-        schedule['Field_28'] = 1
-        schedule['Field_33'] = 'Until 8:00'
-        schedule['Field_35'] = 'Until 19:00'
-        schedule['Field_40'] = 'Until 8:30'
-        schedule['Field_42'] = 'Until 14:00'
-        schedule['Field_43'] = 1
+        schedule['Field_3'] = 'Until 7:00'
+        schedule['Field_5'] = 'Until 20:00'
 
     return schedule

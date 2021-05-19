@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # Import predictions
     cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect.csv')
-    electricity_price_predictions = pd.read_csv('supportFiles\\prediction-electricity_price_perfect.csv')
+    electricity_price_predictions = pd.read_csv('supportFiles/prediction-electricity_price_base_perfect.csv')
     electricity_price_schedule = pd.read_csv('supportFiles\\electricity_price_schedule.csv', header=None)
 
     min_price = float(electricity_price_schedule[0].min())
