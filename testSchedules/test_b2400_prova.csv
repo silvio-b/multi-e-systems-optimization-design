@@ -1,0 +1,2 @@
+id;pv_nominal_power;battery_size;tank_volume;tank_heat_gain_coefficient;alpha;lr;prediction_horizon;num_episodes;batch_size;dim;neurons;seed;occupancy_schedule_index;appliances;price_schedule_type;baseline;score;best_score;best_episode
+_004;2000;2400;8;10;2;0,0001;24;30;256;2;256;137;0;0;base;;;;

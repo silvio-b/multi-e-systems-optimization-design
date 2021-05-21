@@ -113,7 +113,7 @@ class SACAgent():
         self.memory.store_transition(state, action, reward, new_state, done)
 
     def learn(self):
-        if self.memory.mem_ctr < self.batch_size:
+        if self.memory.mem_ctr < self.learning_start:
             return
 
         state, action, reward, next_state, done = self.memory.sample_buffer(self.batch_size)

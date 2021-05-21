@@ -11,9 +11,9 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_10'
+    test_id = 'test_b2400_pBASE_2'
     test_schedule = pd.read_csv('testSchedules'+'\\' + test_id + '.csv', decimal=',', sep=';')
-    result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\SAC_Offline'
+    result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\DiscreteTests'
 
     for test in range(0, test_schedule.shape[0]):
         best_score = 1000
@@ -73,15 +73,15 @@ if __name__ == '__main__':
         with open('supportFiles\\state_space_variables.json', 'w') as json_file:
             json.dump(building_states, json_file)
 
-        with open('supportFiles\\state_rescaling_table.json', 'r') as json_file:
-            state_rescaling = json.load(json_file)
+        with open('supportFiles\\state_rescaling_table.json', 'r') as json_file_2:
+            state_rescaling = json.load(json_file_2)
 
-        state_rescaling['pv_power_generation']['max'] = pv_nominal_power
+        state_rescaling['pv_power_generation']['max'] = float(pv_nominal_power)
         state_rescaling['electricity_price']['min'] = min_price
         state_rescaling['electricity_price']['max'] = max_price
 
-        with open('supportFiles\\state_rescaling_table.json', 'w') as json_file:
-            json.dump(state_rescaling, json_file)
+        with open('supportFiles\\state_rescaling_table.json', 'w') as json_file_2:
+            json.dump(state_rescaling, json_file_2)
 
         hidden_size = n_hidden_layers * [n_neurons]
 
