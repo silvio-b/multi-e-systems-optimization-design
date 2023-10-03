@@ -6,7 +6,7 @@ F1 = 0.3
 F2 = 0.165
 F3 = 0.03
 
-simulation_time_step = 12
+simulation_time_step = 1
 
 electricity_price_schedule = get_electricity_price_schedule(F1=F1,
                                                             F2=F2,

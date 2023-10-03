@@ -125,7 +125,7 @@ class RelicEnv(gym.Env):
         else:
             self.appliances = 0
 
-        self.price_schedule_name = config["price_schedule_name"]
+        self.price_schedule_name = pd.read_csv('supportFiles\\electricity_price_schedule.csv', header=None)
 
         idd_file = 'supportFiles\\Energy+9-2-0.idd'
         file_name = 'EplusModels\\' + self.idf_directory_name + '\\eplusModel.idf'
@@ -468,8 +468,8 @@ class RelicEnv(gym.Env):
                 dataep.to_csv(path_or_buf=self.res_directory + '/' + 'episode_' + str(self.episode_number) + '.csv',
                               sep=';', decimal=',', index=False)
                 self.episode_number = self.episode_number + 1
-            elif self.name_save == 'baseline':
-                dataep.to_csv(path_or_buf=self.res_directory + '/' + 'baseline.csv',
+            else:
+                dataep.to_csv(path_or_buf=self.res_directory + '/' + self.name_save + '.csv',
                               sep=';', decimal=',', index=False)
 
             self.ep = None

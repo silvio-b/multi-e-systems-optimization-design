@@ -105,7 +105,7 @@ RunPeriod,
     1,                        !- Begin Day of Month
     ,                         !- Begin Year
     8,                        !- End Month
-    31,                       !- End Day of Month
+    29,                       !- End Day of Month
     ,                         !- End Year
     Tuesday,                  !- Day of Week for Start Day
     No,                       !- Use Weather File Holidays and Special Days
@@ -161,9 +161,9 @@ Schedule:Compact,
     Fraction,                 !- Schedule Type Limits Name
     Through: 12/31,           !- Field 1
     For: Weekdays SummerDesignDay,    !- Field 2
-    Until 7:00,               !- Field 3
+    Until 8:00,               !- Field 3
     0.0,                      !- Field 4
-    Until 20:00,              !- Field 5
+    Until 18:00,              !- Field 5
     1.0,                      !- Field 6
     Until:24:00,              !- Field 7
     0.0,                      !- Field 8
@@ -2960,7 +2960,7 @@ Chiller:Electric:EIR,
 
 ThermalStorage:ChilledWater:Mixed,
     StorageTank,              !- Name
-    10,                       !- Tank Volume
+    3,                        !- Tank Volume
     StorageTank Temp Schedule,    !- Setpoint Temperature Schedule Name
     0.1,                      !- Deadband Temperature Difference
     1,                        !- Minimum Temperature Limit
@@ -2969,7 +2969,7 @@ ThermalStorage:ChilledWater:Mixed,
     ,                         !- Ambient Temperature Schedule Name
     Thermal Zone 4,           !- Ambient Temperature Zone Name
     ,                         !- Ambient Temperature Outdoor Air Node Name
-    12,                       !- Heat Gain Coefficient from Ambient Temperature
+    6,                        !- Heat Gain Coefficient from Ambient Temperature
     ChW Supply Side StorageBranch Inlet Node,    !- Use Side Inlet Node Name
     ChW Supply Side StorageBranch Outlet Node,    !- Use Side Outlet Node Name
     1,                        !- Use Side Heat Transfer Effectiveness
@@ -3194,10 +3194,10 @@ EnergyManagementSystem:Program,
 
 EnergyManagementSystem:Program,
     trend_variables,          !- Name
-    SET ttank_m_1=@TrendValue ttank_trend 12,    !- Program Line 1
-    SET ttank_m_2=@TrendValue ttank_trend 24,    !- Program Line 2
-    SET ttank_m_3=@TrendValue ttank_trend 36,    !- Program Line 3
-    SET ttank_m_4=@TrendValue ttank_trend 48;    !- Program Line 4
+    SET ttank_m_1=@TrendValue ttank_trend 1,    !- Program Line 1
+    SET ttank_m_2=@TrendValue ttank_trend 2,    !- Program Line 2
+    SET ttank_m_3=@TrendValue ttank_trend 3,    !- Program Line 3
+    SET ttank_m_4=@TrendValue ttank_trend 4;    !- Program Line 4
 
 EnergyManagementSystem:GlobalVariable,
     ttank_m_1,                !- Erl Variable 1 Name

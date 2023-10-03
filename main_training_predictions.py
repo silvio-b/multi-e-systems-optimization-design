@@ -1,9 +1,7 @@
 import os
 from GymEnvironments.environment_discrete_action import RelicEnv
-from GymEnvironments.environment_discrete_action import RelicEnv as RelicEnvBaseline
 import pandas as pd
 from agents.SAC_discrete import SACAgent
-from agents.RBC_discrete import RBCAgent
 from utils import order_state_variables, min_max_scaling, calculate_tank_soc
 import numpy as np
 import json
@@ -11,11 +9,11 @@ import json
 directory = os.path.dirname(os.path.realpath(__file__))
 if __name__ == '__main__':
 
-    test_id = 'test_bALL_small_TESS'
+    test_id = 'test_predictions_1'
     test_schedule = pd.read_csv('testSchedules'+'\\' + test_id + '.csv', decimal=',', sep=';')
     result_directory_path = 'D:\\Projects\\PhD_Silvio\\MultiEnergyOptimizationDesign\\DiscreteTests'
 
-    for test in range(0, test_schedule.shape[0]):
+    for test in range(8, test_schedule.shape[0]):
         best_score = 1000
         result_directory = '\\' + test_id + '\\configuration' + test_schedule['id'][test]
         safe_exploration = -1
@@ -29,12 +27,18 @@ if __name__ == '__main__':
         n_neurons = test_schedule['neurons'][test]
         batch_size = test_schedule['batch_size'][test]
         replay_buffer_capacity = 24 * 30 * 100
-        prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
+        prediction_observations_index = test_schedule['predictions_observations_index'][test]
+
         prediction_horizon = test_schedule['prediction_horizon'][test]
         seed = test_schedule['seed'][test]
-        occupancy_schedule_index = test_schedule['occupancy_schedule_index'][test]
+        occupancy_schedule_index = 0
         appliances = test_schedule['appliances'][test]
         price_schedule_type = test_schedule['price_schedule_type'][test]
+
+        if prediction_observations_index == 0:
+            prediction_observations = ['electricity_price', 'cooling_load', 'pv_power_generation']
+        else:
+            prediction_observations = ['electricity_price']
 
         # physical parameters
         min_temperature_limit = 10  # Below this value no charging
@@ -54,7 +58,7 @@ if __name__ == '__main__':
         max_price = float(electricity_price_schedule[0].max())
 
         num_episodes = test_schedule['num_episodes'][test]
-
+        # num_episodes = 2
         result_directory_final = result_directory_path + result_directory
         if not os.path.exists(result_directory_final):
             os.makedirs(result_directory_final)
@@ -101,7 +105,6 @@ if __name__ == '__main__':
             'appliances': appliances}
 
         env = RelicEnv(config)
-        env_baseline = RelicEnvBaseline(config)
 
         # Import predictions
         cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect_occ{}.csv'.format(
@@ -134,47 +137,11 @@ if __name__ == '__main__':
                          reward_scaling=10., seed=seed, rbc_controller=None, safe_exploration=safe_exploration,
                          automatic_entropy_tuning=automatic_entropy_tuning, alpha=alpha)
 
-        rbc_controller = RBCAgent(min_storage_soc=min_storage_soc,
-                                  min_charging_storage_soc=min_charging_storage_soc,
-                                  max_storage_soc=max_storage_soc,
-                                  min_electricity_price=min_price)
-
         # Define the number of episodes
         score_history = []
         done = False
         # baseline simulation
         #
-        observation = env_baseline.reset(name_save='baseline')
-        # append prediction
-        electricity_price = electricity_price_schedule[0][env_baseline.kStep]
-        storage_soc = observation[3]
-
-        while not done:
-
-            action = rbc_controller.choose_action(electricity_price=electricity_price,
-                                                  storage_soc=storage_soc)
-
-            step = 1
-            reward = 0
-            while step <= env_baseline.ep_time_step:
-                new_observation, reward_step, done, info = env_baseline.step(action)
-                reward += reward_step
-                step += 1
-                # if done:
-                #     break
-
-            if done:
-                break
-
-            # append predictions
-            electricity_price = electricity_price_schedule[0][env_baseline.kStep]
-            storage_soc = new_observation[3]
-
-            # print(new_observation)
-
-            observation = new_observation
-
-        baseline_cost = env_baseline.episode_electricity_cost
 
         # Training Loop
         for episode in range(1, num_episodes + 1):
@@ -264,16 +231,122 @@ if __name__ == '__main__':
             if env.episode_electricity_cost < best_score:
                 best_score = env.episode_electricity_cost
                 best_episode = episode
+                agent.save_models(path=result_directory_final)
 
             print(f'Episode: {episode}, Score: {score}')
 
         last_episode_cost = env.episode_electricity_cost
 
+        # Deploy for 1 episode with different occupancy
+        agent.load_models(path=result_directory_final)
+
+        occupancy_schedule_index = 1
+
+        config = {
+            'res_directory': result_directory_final,
+            # Change this folder to the path where you want to save the output of each episode
+            'weather_file': 'ITA_TORINO-CASELLE_IGDG',
+            'simulation_days': 90,
+            'tank_min_temperature': min_temperature_limit,
+            'tank_max_temperature': max_temperature_limit,
+            'tank_volume': tank_volume,
+            'tank_heat_gain_coefficient': tank_heat_gain_coefficient,
+            'pv_nominal_power': pv_nominal_power,
+            'battery_size': battery_size,
+            'price_schedule_name': price_schedule_name,
+            'occupancy_schedule_index': occupancy_schedule_index,
+            'appliances': appliances}
+
+        env = RelicEnv(config)
+
+        cooling_load_predictions = pd.read_csv('supportFiles\\prediction-cooling_load_perfect_occ{}.csv'.format(
+            occupancy_schedule_index
+        ))
+
+        episode_step = 0
+        observation = env.reset(name_save='deploy')
+        # append prediction
+        electricity_price = electricity_price_schedule[0][env.kStep + 1]
+        storage_soc = observation[3]
+        observation = order_state_variables(env_names=env.state_names,
+                                            observation=observation,
+                                            cooling_load_predictions=cooling_load_predictions,
+                                            electricity_price_predictions=electricity_price_predictions,
+                                            pv_power_generation_predictions=pv_power_generation_predictions,
+                                            horizon=prediction_horizon,
+                                            step=episode_step)
+        # Scale observations
+        observation = min_max_scaling(observation, env.state_mins, env.state_maxs, np.array([0]),
+                                      np.array([1]))
+
+        score = 0
+        done = False
+        actions_probabilities = []
+        q_values_1 = []
+        q_values_2 = []
+
+        while not done:
+
+            action = agent.choose_action(simulation_step=env.kStep + (episode - 1) * 10000,
+                                         electricity_price=electricity_price,
+                                         storage_soc=storage_soc,
+                                         observation=observation)
+
+            step = 1
+            reward = 0
+            cooling_load = 0  # the cooling load needs to be averaged across simulation steps
+            auxiliary_load = 0
+            pv_power = 0
+            while step <= env.ep_time_step:
+                new_observation, reward_step, done, info = env.step(action)
+                cooling_load += new_observation[1]
+                auxiliary_load += new_observation[9]
+                pv_power += new_observation[8]
+                reward += reward_step
+                step += 1
+
+            cooling_load = cooling_load / env.ep_time_step  # calculate average value
+            pv_power = pv_power / env.ep_time_step
+            auxiliary_load = auxiliary_load / env.ep_time_step
+            episode_step += 1
+
+            if done:
+                break
+
+            # append predictions
+            electricity_price = electricity_price_schedule[0][env.kStep + 1]
+
+            storage_soc = new_observation[3]
+            new_observation = list(new_observation)
+            new_observation[1] = cooling_load
+            new_observation[8] = pv_power
+            new_observation[9] = auxiliary_load
+            new_observation = tuple(new_observation)
+
+            new_observation = order_state_variables(env_names=env.state_names,
+                                                    observation=new_observation,
+                                                    cooling_load_predictions=cooling_load_predictions,
+                                                    electricity_price_predictions=electricity_price_predictions,
+                                                    pv_power_generation_predictions=pv_power_generation_predictions,
+                                                    horizon=prediction_horizon,
+                                                    step=episode_step)
+
+            # Scale observations
+            new_observation = min_max_scaling(new_observation, env.state_mins, env.state_maxs, np.array([0]),
+                                              np.array([1]))
+            # true_action = info['true_action'][0]
+            # print(new_observation)
+            # agent.remember(observation, action, reward, new_observation, done)
+
+            score += reward
+
+            observation = new_observation
+
+        deploy_cost = env.episode_electricity_cost
+
         test_schedule['score'][test] = last_episode_cost
         test_schedule['best_score'][test] = best_score
-        test_schedule['baseline'][test] = baseline_cost
         test_schedule['best_episode'][test] = best_episode
+        test_schedule['deploy'][test] = deploy_cost
 
-        agent.save_models(path=result_directory_final)
-
-        test_schedule.to_csv(result_directory_path + '\\' + test_id + '_2.csv', decimal=',', sep=';', index=False)
+        test_schedule.to_csv(result_directory_path + '\\' + test_id + '.csv', decimal=',', sep=';', index=False)
